@@ -60,14 +60,16 @@ enum systemTypes{ LYNX, PCE, PCFX, PSX, VB, WS };
 MednafenGameCore *current;
 @implementation MednafenGameCore
 
+NSUInteger PSXEmulatorValues[] = { OEPSXButtonUp, OEPSXButtonDown, OEPSXButtonLeft, OEPSXButtonRight, OEPSXButtonTriangle, OEPSXButtonCircle, OEPSXButtonCross, OEPSXButtonSquare, OEPSXButtonL1, OEPSXButtonL2, OEPSXButtonL3, OEPSXButtonR1, OEPSXButtonR2, OEPSXButtonR3, OEPSXButtonStart, OEPSXButtonSelect };
+
 - (oneway void)didPushPSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
 {
-    //pad[player-1][PSXEmulatorValues[button]] = 1;
+    pad[player-1][PSXEmulatorValues[button]] = 1;
 }
 
 - (oneway void)didReleasePSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
 {
-    //pad[player-1][PSXEmulatorValues[button]] = 0;
+    pad[player-1][PSXEmulatorValues[button]] = 0;
 }
 
 static int16_t input_state_callback(unsigned port, unsigned device, unsigned index, unsigned id)
