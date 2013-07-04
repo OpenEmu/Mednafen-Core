@@ -30,6 +30,114 @@
 		94454E3917852E44006C057B /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454E3617852E44006C057B /* thread.cpp */; };
 		94454E3C17852E62006C057B /* stubs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454E3B17852E61006C057B /* stubs.cpp */; };
 		94454E3E17852F23006C057B /* OpenEmuBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94454E3D17852F23006C057B /* OpenEmuBase.framework */; };
+		94454E40178534F5006C057B /* cdplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944543F41785296A006C057B /* cdplay.cpp */; };
+		94454E4117853506006C057B /* audioreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944543F61785296A006C057B /* audioreader.cpp */; };
+		94454E421785356E006C057B /* CDAccess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944543FA1785296A006C057B /* CDAccess.cpp */; };
+		94454E4317853573006C057B /* CDAccess_Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944543FC1785296A006C057B /* CDAccess_Image.cpp */; };
+		94454E4417853580006C057B /* cdromif.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544001785296A006C057B /* cdromif.cpp */; };
+		94454E451785358D006C057B /* CDUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544021785296A006C057B /* CDUtility.cpp */; };
+		94454E4617853592006C057B /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544041785296A006C057B /* crc32.cpp */; };
+		94454E4717853597006C057B /* galois.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544071785296A006C057B /* galois.cpp */; };
+		94454E481785359C006C057B /* l-ec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544081785296A006C057B /* l-ec.cpp */; };
+		94454E49178535A1006C057B /* lec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544091785296A006C057B /* lec.cpp */; };
+		94454E4A178535B0006C057B /* pcecd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445440C1785296A006C057B /* pcecd.cpp */; };
+		94454E4B178535B6006C057B /* recover-raw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445440E1785296A006C057B /* recover-raw.cpp */; };
+		94454E4C178535BB006C057B /* scsicd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544101785296A006C057B /* scsicd.cpp */; };
+		94454E4D178535E1006C057B /* SimpleFIFO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544121785296A006C057B /* SimpleFIFO.cpp */; };
+		94454E4E17853A5A006C057B /* blz.c in Sources */ = {isa = PBXBuildFile; fileRef = 944544161785296A006C057B /* blz.c */; };
+		94454E4F17853A5F006C057B /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 944544181785296A006C057B /* ioapi.c */; };
+		94454E5017853A6B006C057B /* minilzo.c in Sources */ = {isa = PBXBuildFile; fileRef = 9445441D1785296A006C057B /* minilzo.c */; };
+		94454E5117853A75006C057B /* quicklz.c in Sources */ = {isa = PBXBuildFile; fileRef = 9445441F1785296A006C057B /* quicklz.c */; };
+		94454E5217853A86006C057B /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 944544221785296A006C057B /* unzip.c */; };
+		94454E5317853AE0006C057B /* endian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445449F1785296A006C057B /* endian.cpp */; };
+		94454E5417853B02006C057B /* error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544A11785296A006C057B /* error.cpp */; };
+		94454E5517853B05006C057B /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544A31785296A006C057B /* file.cpp */; };
+		94454E5617853B12006C057B /* FileWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544A71785296A006C057B /* FileWrapper.cpp */; };
+		94454E5717853B24006C057B /* general.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544DD1785296B006C057B /* general.cpp */; };
+		94454E5817853BC2006C057B /* md5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944545BF1785296C006C057B /* md5.cpp */; };
+		94454E5917853BE7006C057B /* mednafen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944545C21785296C006C057B /* mednafen.cpp */; };
+		94454E5A17853BF7006C057B /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944545C41785296C006C057B /* memory.cpp */; };
+		94454E5B17853C0D006C057B /* mempatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944545C91785296C006C057B /* mempatcher.cpp */; };
+		94454E5C17853C1E006C057B /* movie.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944545CC1785296C006C057B /* movie.cpp */; };
+		94454E5D17853C6E006C057B /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 944545D41785296C006C057B /* crc32.c */; };
+		94454E5E17853C6E006C057B /* fastmath.c in Sources */ = {isa = PBXBuildFile; fileRef = 944545D71785296C006C057B /* fastmath.c */; };
+		94454E5F17853C6E006C057B /* huffman-bcl.c in Sources */ = {isa = PBXBuildFile; fileRef = 944545D81785296C006C057B /* huffman-bcl.c */; };
+		94454E6017853C6E006C057B /* huffman.c in Sources */ = {isa = PBXBuildFile; fileRef = 944545D91785296C006C057B /* huffman.c */; };
+		94454E6117853C6E006C057B /* mpc_bits_reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 944545DF1785296C006C057B /* mpc_bits_reader.c */; };
+		94454E6217853C6E006C057B /* mpc_decoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 944545E11785296C006C057B /* mpc_decoder.c */; };
+		94454E6317853C6E006C057B /* mpc_demux.c in Sources */ = {isa = PBXBuildFile; fileRef = 944545E21785296C006C057B /* mpc_demux.c */; };
+		94454E6417853C6E006C057B /* mpc_reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 944545E31785296C006C057B /* mpc_reader.c */; };
+		94454E6517853C6E006C057B /* requant.c in Sources */ = {isa = PBXBuildFile; fileRef = 944545EA1785296C006C057B /* requant.c */; };
+		94454E6617853C6E006C057B /* streaminfo.c in Sources */ = {isa = PBXBuildFile; fileRef = 944545EC1785296C006C057B /* streaminfo.c */; };
+		94454E6717853C6E006C057B /* synth_filter.c in Sources */ = {isa = PBXBuildFile; fileRef = 944545EE1785296C006C057B /* synth_filter.c */; };
+		94454E6817853C6E006C057B /* tags.c in Sources */ = {isa = PBXBuildFile; fileRef = 944545EF1785296C006C057B /* tags.c */; };
+		94454E6917853CB7006C057B /* netplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944546A51785296D006C057B /* netplay.cpp */; };
+		94454E6A17853D08006C057B /* okiadpcm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944546E91785296D006C057B /* okiadpcm.cpp */; };
+		94454E6B17853D1B006C057B /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547491785296E006C057B /* player.cpp */; };
+		94454E6C17853D3C006C057B /* PSFLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445474B1785296E006C057B /* PSFLoader.cpp */; };
+		94454E6D17853DD0006C057B /* cdc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445474E1785296E006C057B /* cdc.cpp */; };
+		94454E6E17853DD4006C057B /* cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547501785296E006C057B /* cpu.cpp */; };
+		94454E6F17853DD8006C057B /* dis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547541785296E006C057B /* dis.cpp */; };
+		94454E7017853DDD006C057B /* dma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547561785296E006C057B /* dma.cpp */; };
+		94454E7117853DE1006C057B /* frontio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547581785296E006C057B /* frontio.cpp */; };
+		94454E7217853DE4006C057B /* gpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445475A1785296E006C057B /* gpu.cpp */; };
+		94454E7317853E04006C057B /* gte.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547601785296E006C057B /* gte.cpp */; };
+		94454E7417853E3D006C057B /* dualanalog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547641785296E006C057B /* dualanalog.cpp */; };
+		94454E7517853E4C006C057B /* dualshock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547661785296E006C057B /* dualshock.cpp */; };
+		94454E7617853E54006C057B /* gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547681785296E006C057B /* gamepad.cpp */; };
+		94454E7717853E58006C057B /* guncon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445476A1785296E006C057B /* guncon.cpp */; };
+		94454E7817853E5E006C057B /* justifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445476C1785296E006C057B /* justifier.cpp */; };
+		94454E7917853E67006C057B /* memcard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445476E1785296E006C057B /* memcard.cpp */; };
+		94454E7A17853E69006C057B /* mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547701785296E006C057B /* mouse.cpp */; };
+		94454E7B17853E81006C057B /* multitap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547721785296E006C057B /* multitap.cpp */; };
+		94454E7C17853E8E006C057B /* negcon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547741785296E006C057B /* negcon.cpp */; };
+		94454E7D17853EC8006C057B /* FileStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544A51785296A006C057B /* FileStream.cpp */; };
+		94454E7E17853ED6006C057B /* MemoryStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944545C61785296C006C057B /* MemoryStream.cpp */; };
+		94454E7F17853F27006C057B /* irq.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547761785296E006C057B /* irq.cpp */; };
+		94454E8017853F31006C057B /* mdec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445477A1785296E006C057B /* mdec.cpp */; };
+		94454E8117853F43006C057B /* psx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445477E1785296E006C057B /* psx.cpp */; };
+		94454E8217853F48006C057B /* sio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547811785296E006C057B /* sio.cpp */; };
+		94454E8317853F4E006C057B /* spu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547841785296E006C057B /* spu.cpp */; };
+		94454E8417853F53006C057B /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547891785296E006C057B /* timer.cpp */; };
+		94454E8517853F6A006C057B /* qtrecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445478B1785296E006C057B /* qtrecord.cpp */; };
+		94454E8617853F9D006C057B /* resample.c in Sources */ = {isa = PBXBuildFile; fileRef = 944547911785296E006C057B /* resample.c */; };
+		94454E8717853FCB006C057B /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547971785296E006C057B /* settings.cpp */; };
+		94454E8817853FD6006C057B /* Blip_Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944549FC17852971006C057B /* Blip_Buffer.cpp */; };
+		94454E8917853FD9006C057B /* Fir_Resampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944549FD17852971006C057B /* Fir_Resampler.cpp */; };
+		94454E8A17853FE3006C057B /* Stereo_Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A0017852971006C057B /* Stereo_Buffer.cpp */; };
+		94454E8B17853FE7006C057B /* WAVRecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A0117852971006C057B /* WAVRecord.cpp */; };
+		94454E8C17853FF9006C057B /* state.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A0517852971006C057B /* state.cpp */; };
+		94454E8D17853FFD006C057B /* Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A0717852971006C057B /* Stream.cpp */; };
+		94454E8E1785401E006C057B /* ConvertUTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A0A17852971006C057B /* ConvertUTF.cpp */; };
+		94454E8F17854021006C057B /* escape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A0C17852971006C057B /* escape.cpp */; };
+		94454E9017854024006C057B /* world_strtod.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A0F17852971006C057B /* world_strtod.c */; };
+		94454E9117854040006C057B /* tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A1117852971006C057B /* tests.cpp */; };
+		94454E9217854064006C057B /* bitwise.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A1717852972006C057B /* bitwise.c */; };
+		94454E9317854067006C057B /* block.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A1817852972006C057B /* block.c */; };
+		94454E9417854080006C057B /* codebook.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A1B17852972006C057B /* codebook.c */; };
+		94454E9517854089006C057B /* floor0.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A2117852972006C057B /* floor0.c */; };
+		94454E961785408C006C057B /* floor1.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A2217852972006C057B /* floor1.c */; };
+		94454E9717854097006C057B /* framing.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A2317852972006C057B /* framing.c */; };
+		94454E981785409F006C057B /* info.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A2417852972006C057B /* info.c */; };
+		94454E99178540B1006C057B /* mapping0.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A2C17852972006C057B /* mapping0.c */; };
+		94454E9A178540B9006C057B /* mdct.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A2D17852972006C057B /* mdct.c */; };
+		94454E9B178540C3006C057B /* registry.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A3517852972006C057B /* registry.c */; };
+		94454E9C178540CD006C057B /* res012.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A3717852972006C057B /* res012.c */; };
+		94454E9D178540D4006C057B /* sharedbook.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A3817852972006C057B /* sharedbook.c */; };
+		94454E9E178540DB006C057B /* synthesis.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A3917852972006C057B /* synthesis.c */; };
+		94454E9F178540E2006C057B /* vorbisfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A3B17852972006C057B /* vorbisfile.c */; };
+		94454EA0178540E9006C057B /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A3D17852972006C057B /* window.c */; };
+		94454EA1178540FC006C057B /* trio.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A4417852972006C057B /* trio.c */; };
+		94454EA217854100006C057B /* trionan.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A4517852972006C057B /* trionan.c */; };
+		94454EA317854104006C057B /* triostr.c in Sources */ = {isa = PBXBuildFile; fileRef = 94454A4617852972006C057B /* triostr.c */; };
+		94454EA41785411D006C057B /* Deinterlacer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A5917852972006C057B /* Deinterlacer.cpp */; };
+		94454EA517854123006C057B /* font-data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A5D17852972006C057B /* font-data.cpp */; };
+		94454EA61785412E006C057B /* png.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A6617852972006C057B /* png.cpp */; };
+		94454EA717854136006C057B /* resize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A6A17852972006C057B /* resize.cpp */; };
+		94454EA81785413C006C057B /* surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A6E17852972006C057B /* surface.cpp */; };
+		94454EA917854144006C057B /* tblur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A7017852972006C057B /* tblur.cpp */; };
+		94454EAA1785414B006C057B /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A7217852972006C057B /* text.cpp */; };
+		94454EAB17854150006C057B /* video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A7517852972006C057B /* video.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -382,7 +490,7 @@
 		944545501785296B006C057B /* Stereo_Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stereo_Buffer.h; sourceTree = "<group>"; };
 		944545511785296B006C057B /* config.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.h.in; sourceTree = "<group>"; };
 		944545521785296B006C057B /* Fir_Resampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fir_Resampler.h; sourceTree = "<group>"; };
-		944545541785296B006C057B /* CHANGES */ = {isa = PBXFileReference; lastKnownFileType = file; path = CHANGES; sourceTree = "<group>"; };
+		944545541785296B006C057B /* CHANGES */ = {isa = PBXFileReference; lastKnownFileType = text; path = CHANGES; sourceTree = "<group>"; };
 		944545551785296B006C057B /* trio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trio.h; sourceTree = "<group>"; };
 		944545561785296B006C057B /* triodef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = triodef.h; sourceTree = "<group>"; };
 		944545571785296B006C057B /* trionan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trionan.h; sourceTree = "<group>"; };
@@ -1605,7 +1713,7 @@
 		94454E3617852E44006C057B /* thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thread.cpp; sourceTree = "<group>"; };
 		94454E3717852E44006C057B /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
 		94454E3B17852E61006C057B /* stubs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stubs.cpp; sourceTree = "<group>"; };
-		94454E3D17852F23006C057B /* OpenEmuBase.framework */ = {isa = PBXFileReference; lastKnownFileType = file; name = OpenEmuBase.framework; path = "../OpenEmu-SDK/build/Release/OpenEmuBase.framework"; sourceTree = "<group>"; };
+		94454E3D17852F23006C057B /* OpenEmuBase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenEmuBase.framework; path = "../OpenEmu-SDK/build/Release/OpenEmuBase.framework"; sourceTree = "<group>"; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -4664,6 +4772,114 @@
 				824088360FFDDCF400F0FE7D /* MednafenGameCore.mm in Sources */,
 				94454E3917852E44006C057B /* thread.cpp in Sources */,
 				94454E3C17852E62006C057B /* stubs.cpp in Sources */,
+				94454E40178534F5006C057B /* cdplay.cpp in Sources */,
+				94454E4117853506006C057B /* audioreader.cpp in Sources */,
+				94454E421785356E006C057B /* CDAccess.cpp in Sources */,
+				94454E4317853573006C057B /* CDAccess_Image.cpp in Sources */,
+				94454E4417853580006C057B /* cdromif.cpp in Sources */,
+				94454E451785358D006C057B /* CDUtility.cpp in Sources */,
+				94454E4617853592006C057B /* crc32.cpp in Sources */,
+				94454E4717853597006C057B /* galois.cpp in Sources */,
+				94454E481785359C006C057B /* l-ec.cpp in Sources */,
+				94454E49178535A1006C057B /* lec.cpp in Sources */,
+				94454E4A178535B0006C057B /* pcecd.cpp in Sources */,
+				94454E4B178535B6006C057B /* recover-raw.cpp in Sources */,
+				94454E4C178535BB006C057B /* scsicd.cpp in Sources */,
+				94454E4D178535E1006C057B /* SimpleFIFO.cpp in Sources */,
+				94454E4E17853A5A006C057B /* blz.c in Sources */,
+				94454E4F17853A5F006C057B /* ioapi.c in Sources */,
+				94454E5017853A6B006C057B /* minilzo.c in Sources */,
+				94454E5117853A75006C057B /* quicklz.c in Sources */,
+				94454E5217853A86006C057B /* unzip.c in Sources */,
+				94454E5317853AE0006C057B /* endian.cpp in Sources */,
+				94454E5417853B02006C057B /* error.cpp in Sources */,
+				94454E5517853B05006C057B /* file.cpp in Sources */,
+				94454E7D17853EC8006C057B /* FileStream.cpp in Sources */,
+				94454E5617853B12006C057B /* FileWrapper.cpp in Sources */,
+				94454E5717853B24006C057B /* general.cpp in Sources */,
+				94454E5817853BC2006C057B /* md5.cpp in Sources */,
+				94454E5917853BE7006C057B /* mednafen.cpp in Sources */,
+				94454E5A17853BF7006C057B /* memory.cpp in Sources */,
+				94454E7E17853ED6006C057B /* MemoryStream.cpp in Sources */,
+				94454E5B17853C0D006C057B /* mempatcher.cpp in Sources */,
+				94454E5C17853C1E006C057B /* movie.cpp in Sources */,
+				94454E5D17853C6E006C057B /* crc32.c in Sources */,
+				94454E5E17853C6E006C057B /* fastmath.c in Sources */,
+				94454E5F17853C6E006C057B /* huffman-bcl.c in Sources */,
+				94454E6017853C6E006C057B /* huffman.c in Sources */,
+				94454E6117853C6E006C057B /* mpc_bits_reader.c in Sources */,
+				94454E6217853C6E006C057B /* mpc_decoder.c in Sources */,
+				94454E6317853C6E006C057B /* mpc_demux.c in Sources */,
+				94454E6417853C6E006C057B /* mpc_reader.c in Sources */,
+				94454E6517853C6E006C057B /* requant.c in Sources */,
+				94454E6617853C6E006C057B /* streaminfo.c in Sources */,
+				94454E6717853C6E006C057B /* synth_filter.c in Sources */,
+				94454E6817853C6E006C057B /* tags.c in Sources */,
+				94454E6917853CB7006C057B /* netplay.cpp in Sources */,
+				94454E6A17853D08006C057B /* okiadpcm.cpp in Sources */,
+				94454E6B17853D1B006C057B /* player.cpp in Sources */,
+				94454E6C17853D3C006C057B /* PSFLoader.cpp in Sources */,
+				94454E6D17853DD0006C057B /* cdc.cpp in Sources */,
+				94454E6E17853DD4006C057B /* cpu.cpp in Sources */,
+				94454E6F17853DD8006C057B /* dis.cpp in Sources */,
+				94454E7017853DDD006C057B /* dma.cpp in Sources */,
+				94454E7117853DE1006C057B /* frontio.cpp in Sources */,
+				94454E7217853DE4006C057B /* gpu.cpp in Sources */,
+				94454E7317853E04006C057B /* gte.cpp in Sources */,
+				94454E7417853E3D006C057B /* dualanalog.cpp in Sources */,
+				94454E7517853E4C006C057B /* dualshock.cpp in Sources */,
+				94454E7617853E54006C057B /* gamepad.cpp in Sources */,
+				94454E7717853E58006C057B /* guncon.cpp in Sources */,
+				94454E7817853E5E006C057B /* justifier.cpp in Sources */,
+				94454E7917853E67006C057B /* memcard.cpp in Sources */,
+				94454E7A17853E69006C057B /* mouse.cpp in Sources */,
+				94454E7B17853E81006C057B /* multitap.cpp in Sources */,
+				94454E7C17853E8E006C057B /* negcon.cpp in Sources */,
+				94454E7F17853F27006C057B /* irq.cpp in Sources */,
+				94454E8017853F31006C057B /* mdec.cpp in Sources */,
+				94454E8117853F43006C057B /* psx.cpp in Sources */,
+				94454E8217853F48006C057B /* sio.cpp in Sources */,
+				94454E8317853F4E006C057B /* spu.cpp in Sources */,
+				94454E8417853F53006C057B /* timer.cpp in Sources */,
+				94454E8517853F6A006C057B /* qtrecord.cpp in Sources */,
+				94454E8617853F9D006C057B /* resample.c in Sources */,
+				94454E8717853FCB006C057B /* settings.cpp in Sources */,
+				94454E8817853FD6006C057B /* Blip_Buffer.cpp in Sources */,
+				94454E8917853FD9006C057B /* Fir_Resampler.cpp in Sources */,
+				94454E8A17853FE3006C057B /* Stereo_Buffer.cpp in Sources */,
+				94454E8B17853FE7006C057B /* WAVRecord.cpp in Sources */,
+				94454E8C17853FF9006C057B /* state.cpp in Sources */,
+				94454E8D17853FFD006C057B /* Stream.cpp in Sources */,
+				94454E8E1785401E006C057B /* ConvertUTF.cpp in Sources */,
+				94454E8F17854021006C057B /* escape.cpp in Sources */,
+				94454E9017854024006C057B /* world_strtod.c in Sources */,
+				94454E9117854040006C057B /* tests.cpp in Sources */,
+				94454E9217854064006C057B /* bitwise.c in Sources */,
+				94454E9317854067006C057B /* block.c in Sources */,
+				94454E9417854080006C057B /* codebook.c in Sources */,
+				94454E9517854089006C057B /* floor0.c in Sources */,
+				94454E961785408C006C057B /* floor1.c in Sources */,
+				94454E9717854097006C057B /* framing.c in Sources */,
+				94454E981785409F006C057B /* info.c in Sources */,
+				94454E99178540B1006C057B /* mapping0.c in Sources */,
+				94454E9A178540B9006C057B /* mdct.c in Sources */,
+				94454E9B178540C3006C057B /* registry.c in Sources */,
+				94454E9C178540CD006C057B /* res012.c in Sources */,
+				94454E9D178540D4006C057B /* sharedbook.c in Sources */,
+				94454E9E178540DB006C057B /* synthesis.c in Sources */,
+				94454E9F178540E2006C057B /* vorbisfile.c in Sources */,
+				94454EA0178540E9006C057B /* window.c in Sources */,
+				94454EA1178540FC006C057B /* trio.c in Sources */,
+				94454EA217854100006C057B /* trionan.c in Sources */,
+				94454EA317854104006C057B /* triostr.c in Sources */,
+				94454EA41785411D006C057B /* Deinterlacer.cpp in Sources */,
+				94454EA517854123006C057B /* font-data.cpp in Sources */,
+				94454EA61785412E006C057B /* png.cpp in Sources */,
+				94454EA717854136006C057B /* resize.cpp in Sources */,
+				94454EA81785413C006C057B /* surface.cpp in Sources */,
+				94454EA917854144006C057B /* tblur.cpp in Sources */,
+				94454EAA1785414B006C057B /* text.cpp in Sources */,
+				94454EAB17854150006C057B /* video.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
