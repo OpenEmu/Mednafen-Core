@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2009, OpenEmu Team
+ Copyright (c) 2013, OpenEmu Team
 
 
  Redistribution and use in source and binary forms, with or without
@@ -26,203 +26,80 @@
  */
 
 #import "MednafenGameCore.h"
-#include <map>
-#include "types.h"
-#include "git.h"
-#include "trio.h"
-#include "input.h"
-#include "state-driver.h"
+#import <OERingBuffer.h>
+//#import "OELynxSystemResponderClient.h"
+//#import "OEPCESystemResponderClient.h"
+//#import "OEPCFXSystemResponderClient.h"
+//#import "OEPSXSystemResponderClient.h"
+//#import "OEVBSystemResponderClient.h"
+//#import "OEWSSystemResponderClient.h"
 
-uint16_t input_buffer[2];
-
-void BuildPortInfo(MDFNGI *gi);
-
+//@interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
 @interface MednafenGameCore ()
 {
-    unsigned char *videoBuffer;
-    unsigned char *tempBuffer;
-    NSLock        *soundLock;
-    NSLock        *bufLock;
-    uint16        *sndBuf;
-    int            oldrun;
-    int            position;
-
-    BOOL           paused;
-    MDFNGI        *gameInfo;
-    MDFN_Rect     *lineWidths;
-    // FIXME: this C++ thing would be better hidden.
-    std::vector<MDFNSetting> *driverSettings;
-    int16         *sound;
-    int32          ssize;
+    uint32_t *videoBuffer;
+    int videoWidth, videoHeight;
+    int16_t pad[2][16];
+    NSString *romName;
+    double sampleRate;
 }
 
 @end
 
+MednafenGameCore *current;
 @implementation MednafenGameCore
 
-enum {
-    GBA_BUTTON_A       = 0x001,
-    GBA_BUTTON_B       = 0x002,
-    GBA_BUTTON_SELECT  = 0x004,
-    GBA_BUTTON_START   = 0x008,
-    GBA_RIGHT          = 0x010,
-    GBA_LEFT           = 0x020,
-    GBA_UP             = 0x040,
-    GBA_DOWN           = 0x080,
-    GBA_BUTTON_R       = 0x100,
-    GBA_BUTTON_L       = 0x200,
-    GBA_BUTTON_SPEED   = 0x400, // randomly given
-    GBA_BUTTON_CAPTURE = 0x800  // randomly given
-};
-/*
- bit 0 - cursor up
- bit 1 - cursor right
- bit 2 - cursor down
- bit 3 - cursor left
- Meaning of the bits when reading buttons:
- bit 0 - ???
- bit 1 - START
- bit 2 - A
- bit 3 - B
- */
-enum {
-    WS_UP           = 0x010,
-    WS_RIGHT        = 0x020,
-    WS_DOWN         = 0x040,
-    WS_LEFT         = 0x080,
-
-    WS_BUTTON_START = 0x002,
-    WS_BUTTON_A     = 0x004,
-    WS_BUTTON_B     = 0x008,
-};
-
-NSUInteger MednafenControlValues[] = {
-    GBA_BUTTON_A,
-    GBA_BUTTON_B,
-    GBA_BUTTON_SELECT,
-    GBA_BUTTON_START,
-    GBA_RIGHT,
-    GBA_LEFT,
-    GBA_UP,
-    GBA_DOWN,
-    GBA_BUTTON_R,
-    GBA_BUTTON_L,
-
-    WS_UP,
-    WS_LEFT,
-    WS_RIGHT,
-    WS_DOWN,
-    WS_BUTTON_START,
-    WS_BUTTON_A,
-    WS_BUTTON_B ,
-};
-
-NSString *MednafenControlNames[] = {
-    @"GBA@_BUTTON_A",
-    @"GBA@_BUTTON_B",
-    @"GBA@_BUTTON_SELECT",
-    @"GBA@_BUTTON_START",
-    @"GBA@_RIGHT",
-    @"GBA@_LEFT",
-    @"GBA@_UP",
-    @"GBA@_DOWN",
-    @"GBA@_BUTTON_R",
-    @"GBA@_BUTTON_L",
-
-    @"WS@_UP",
-    @"WS@_LEFT" ,
-    @"WS@_RIGHT",
-    @"WS@_DOWN",
-    @"WS@_BUTTON_START",
-    @"WS@_BUTTON_A" ,
-    @"WS@_BUTTON_B" ,
-};
+//- (oneway void)didPushPSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
+//{
+//    pad[player-1][PSXEmulatorValues[button]] = 1;
+//}
+//
+//- (oneway void)didReleasePSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
+//{
+//    pad[player-1][PSXEmulatorValues[button]] = 0;
+//}
 
 - (id)init
 {
     if((self = [super init]))
     {
-        driverSettings = new std::vector<MDFNSetting>();
-        soundLock = [[NSLock alloc] init];
-        bufLock   = [[NSLock alloc] init];
-
-        NSLog(@"Inited? %d", MDFNI_Initialize((char *)[[[NSBundle bundleForClass:[self class]] resourcePath] UTF8String] , *driverSettings));
-        position = 0;
-        sndBuf = (uint16 *)malloc(100000 * sizeof(UInt16));
+        videoBuffer = (uint32_t*)malloc(700 * 576 * 4);
     }
+    
+    current = self;
+    
     return self;
 }
 
 - (void)dealloc
 {
-    DLog(@"releasing/deallocating Mednafen memory");
-    free(sndBuf);
-    [soundLock release];
-    [bufLock release];
-
-    [super dealloc];
+    free(videoBuffer);
 }
 
 - (void)executeFrame
 {
-    //DLog(@"Executing");
-    //Get a reference to the emulator
-    [bufLock lock];
-    EmulateSpecStruct espec;
-    memset(&espec, 0, sizeof(EmulateSpecStruct));
-    //NSLog(@"Executing frame");
-    //espec.pixels = (uint32*)videoBuffer;
-    //espec.LineWidths = lineWidths;
-    //espec.SoundBuf = (int16**)(&sndBuf);
-    //espec.SoundBufSize = &ssize;
-    //espec.skip = 0;
-    //espec.soundmultiplier = 1;
-    //espec.NeedRewind = 0;
+    [self executeFrameSkippingFrame:NO];
+}
 
-    //input_buffer[0] = 255;
-    //input_buffer[1] = 255;
-    //gameInfo->Emulate(&espec);
-    //NSLog(@"Writing %d samples", ssize);
-    MDFNI_Emulate(&espec);
-    [[self ringBufferAtIndex:0] write:(const uint8_t *)sndBuf maxLength:ssize * [self channelCount] * 2];
-    //oldrun = sms_frame(oldrun);
-    [bufLock unlock];
-    //NSLog(@"Unlocked");
+- (void)executeFrameSkippingFrame: (BOOL) skip
+{
+    
 }
 
 - (void)setupEmulation
 {
+    
 }
 
 - (BOOL)loadFileAtPath:(NSString *)path
 {
-    DLog(@"Loaded File");
-    //TODO: add choice NTSC/PAL
-
-    //MDFNI_Initialize(<#char * dir#>, <#const std * #>);
-
-    //if(gameInfo = MDFNI_LoadGame([path UTF8String]))
-    //{
-    //    MDFNI_SetPixelFormat(8,16,24,0);
-    //    NSLog(@"Really loaded file");
-    //    videoBuffer = (unsigned char *)malloc(gameInfo->pitch * 256);
-    //    tempBuffer = (unsigned char *)malloc(gameInfo->pitch * 256);
-    //
-    //    MDFNI_SetSoundVolume(100);
-    //
-    //    MDFNI_Sound( gameInfo->soundrate ? gameInfo->soundrate : 48000 );
-    //    NSLog(@"Alloced vid");
-    //    lineWidths = (MDFN_Rect *)calloc(256, sizeof(MDFN_Rect));
-    //
-    //    BuildPortInfo(gameInfo);
-    //    return YES;
-    //}
-
+    memset(pad, 0, sizeof(int16_t) * 10);
     return NO;
 }
+
 - (void)resetEmulation
 {
-    MDFNI_Reset();
+    
 }
 
 - (void)stopEmulation
@@ -230,26 +107,18 @@ NSString *MednafenControlNames[] = {
     [super stopEmulation];
 }
 
-- (IBAction)pauseEmulation:(id)sender
-{
-    [bufLock lock];
-    paused = YES;
-    [bufLock unlock];
-}
-
 - (OEIntRect)screenRect
 {
-    return (OEIntRect){ 0, 0 };//OEIntRectMake(gameInfo->DisplayRect.x, gameInfo->DisplayRect.y, gameInfo->DisplayRect.w, gameInfo->DisplayRect.h);
+    return OEIntRectMake(0, 0, current->videoWidth, current->videoHeight);
 }
 
 - (OEIntSize)bufferSize
 {
-    return (OEIntSize){ 0, 0 };//OEIntSizeMake(gameInfo->pitch / 4, gameInfo->height);
+    return OEIntSizeMake(700, 576);
 }
 
 - (const void *)videoBuffer
 {
-    //NSLog(@"Buffer request");
     return videoBuffer;
 }
 
@@ -260,7 +129,7 @@ NSString *MednafenControlNames[] = {
 
 - (GLenum)pixelType
 {
-    return GL_UNSIGNED_INT_8_8_8_8;
+    return GL_UNSIGNED_INT_8_8_8_8_REV;
 }
 
 - (GLenum)internalPixelFormat
@@ -270,86 +139,27 @@ NSString *MednafenControlNames[] = {
 
 - (double)audioSampleRate
 {
-    return 0;//FSettings.SndRate;
+    return sampleRate ? sampleRate : 44100;
+}
+
+- (NSTimeInterval)frameInterval
+{
+    return frameInterval ? frameInterval : 59.94;
 }
 
 - (NSUInteger)channelCount
 {
-    return gameInfo->soundchan;
+    return 2; //gameInfo->soundchan;
 }
 
-//- (OEEmulatorKey)emulatorKeyForKeyIndex:(NSUInteger)index player:(NSUInteger)thePlayer
-//{
-//    return 0;//OEMakeEmulatorKey(thePlayer, MednafenControlValues[index]);
-//}
-//
-//- (void)pressEmulatorKey:(OEEmulatorKey)aKey
-//{
-//    //input_buffer[aKey.player - 1] |= aKey.key;
-//}
-//
-//- (void)releaseEmulatorKey:(OEEmulatorKey)aKey
-//{
-//   // input_buffer[aKey.player - 1] &= ~aKey.key;
-//}
-
-void MDFND_Message(const char *s)
+- (BOOL)saveStateToFileAtPath:(NSString *)fileName
 {
-    NSLog(@"Message: %s", s);
+    return NO;
 }
 
-void MDFND_PrintError(const char *s)
+- (BOOL)loadStateFromFileAtPath:(NSString *)fileName
 {
-    NSLog(@"Error: %s", s);
-}
-
-void MDFND_SetMovieStatus(StateStatusStruct *)
-{
-
-}
-
-uint32 MDFND_GetTime()
-{
-    NSLog(@"Asked for tiem");
-    return 1;
-}
-
-bool MDFND_ExitBlockingLoop()
-{
-    return YES;
-}
-
-void BuildPortInfo(MDFNGI *gi)
-{
-    InputInfoStruct *info = gi->InputInfo;
-    const InputPortInfoStruct *portInfo = info->Types;
-    for(int i = 0; i < portInfo->NumTypes; i++)
-    {
-        InputDeviceInfoStruct *idii = &portInfo->DeviceInfo[i];
-        for(int j = 0; j < idii->NumInputs; j++)
-        {
-            const InputDeviceInputInfoStruct *inputDevice = &idii->IDII[j];
-
-            NSLog(@"Button %s on device %s", inputDevice->Name, idii->FullName);
-        }
-    }
-
-    MDFNI_SetInput(0, portInfo->DeviceInfo[0].ShortName,  input_buffer, 2);//void MDFNI_SetInput(int port, const char *type, void *ptr, uint32 ptr_len_thingy)
-}
-
-void MDFND_DispMessage(unsigned char *msg)
-{
-    NSLog(@"Message: %s", msg);
-}
-
-void MDFND_SetStateStatus(StateStatusStruct *)
-{
-
-}
-
-void MDFN_WriteWaveData(int16 *buffer, int count)
-{
-
+    return NO;
 }
 
 @end

@@ -6,50 +6,42 @@
 	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
-	<key>CFBundleName</key>
-	<string>${PRODUCT_NAME}</string>
 	<key>CFBundleIconFile</key>
 	<string>Mednafen</string>
 	<key>CFBundleIdentifier</key>
 	<string>org.openemu.${PRODUCT_NAME:identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>${PRODUCT_NAME}</string>
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
-	<key>OEProjectURL</key>
-	<string>http://mednafen.sourceforge.net/</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>0.9.28</string>
 	<key>NSPrincipalClass</key>
 	<string>OEGameCoreController</string>
 	<key>OEGameCoreClass</key>
 	<string>MednafenGameCore</string>
 	<key>OEGameCorePlayerCount</key>
 	<string>2</string>
-	<key>CFBundleDocumentTypes</key>
+	<key>OEProjectURL</key>
+	<string>http://mednafen.sourceforge.net/</string>
+	<key>OESystemIdentifiers</key>
 	<array>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>ws</string>
-				<string>nes</string>
-				<string>npc</string>
-				<string>cue</string>
-				<string>pce</string>
-				<string>gba</string>
-				<string>lnx</string>
-				<string>sms</string>
-				<string>gg</string>
-				<string>sc</string>
-				<string>sg</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>Sega Master System Game</string>
-			<key>LSTypeIsPackage</key>
-			<false/>
-		</dict>
+		<string>openemu.system.lynx</string>
+		<string>openemu.system.pce</string>
+		<string>openemu.system.pcfx</string>
+		<string>openemu.system.psx</string>
+		<string>openemu.system.vb</string>
+		<string>openemu.system.ws</string>
 	</array>
+	<key>SUEnableAutomaticChecks</key>
+	<string>1</string>
+	<key>SUFeedURL</key>
+	<string>http://openemu.org/updater/mednafen_appcast.xml</string>
+	<key>SUPublicDSAKeyFile</key>
+	<string>dsa_pub.pem</string>
 </dict>
 </plist>

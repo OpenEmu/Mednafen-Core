@@ -1,7 +1,7 @@
 /*
- Copyright (c) 2009, OpenEmu Team
+ Copyright (c) 2013, OpenEmu Team
  
-
+ 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
      * Redistributions of source code must retain the above copyright
@@ -12,7 +12,7 @@
      * Neither the name of the OpenEmu Team nor the
        names of its contributors may be used to endorse or promote products
        derived from this software without specific prior written permission.
-
+ 
  THIS SOFTWARE IS PROVIDED BY OpenEmu Team ''AS IS'' AND ANY
  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -26,15 +26,10 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import <OpenEmuBase/OpenEmuBase.h>
-#include <vector>
-#include "mednafen.h"
+#import <OpenEmuBase/OEGameCore.h>
 
 @class OERingBuffer;
 
-#define GBA_CONTROL_COUNT 17
-extern NSString *MednafenControlNames[];
-
+OE_EXPORTED_CLASS
 @interface MednafenGameCore : OEGameCore
-
 @end
