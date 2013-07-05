@@ -138,6 +138,59 @@
 		94454EA917854144006C057B /* tblur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A7017852972006C057B /* tblur.cpp */; };
 		94454EAA1785414B006C057B /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A7217852972006C057B /* text.cpp */; };
 		94454EAB17854150006C057B /* video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A7517852972006C057B /* video.cpp */; };
+		94454ED917865803006C057B /* v810_cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445450D1785296B006C057B /* v810_cpu.cpp */; };
+		94454EDA17865828006C057B /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A4B17852972006C057B /* input.cpp */; };
+		94454EDB1786582D006C057B /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A4F17852972006C057B /* timer.cpp */; };
+		94454EDC17865830006C057B /* vb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A5117852972006C057B /* vb.cpp */; };
+		94454EDD17865835006C057B /* vip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A5317852972006C057B /* vip.cpp */; };
+		94454EDE1786583F006C057B /* vsu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A5617852972006C057B /* vsu.cpp */; };
+		94454EDF17865A8D006C057B /* softfloat.c in Sources */ = {isa = PBXBuildFile; fileRef = 9445450A1785296B006C057B /* softfloat.c */; };
+		94454EE0178682D2006C057B /* c65c02.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445455D1785296B006C057B /* c65c02.cpp */; };
+		94454EE1178682EC006C057B /* cart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445455F1785296B006C057B /* cart.cpp */; };
+		94454EE2178682F0006C057B /* memmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944545671785296B006C057B /* memmap.cpp */; };
+		94454EE3178682F9006C057B /* mikie.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944545691785296B006C057B /* mikie.cpp */; };
+		94454EE417868302006C057B /* ram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445456B1785296B006C057B /* ram.cpp */; };
+		94454EE517868305006C057B /* rom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445456D1785296C006C057B /* rom.cpp */; };
+		94454EE617868309006C057B /* susie.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445456F1785296C006C057B /* susie.cpp */; };
+		94454EE717868310006C057B /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944545721785296C006C057B /* system.cpp */; };
+		94454EE81786855C006C057B /* eeprom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A8417852972006C057B /* eeprom.cpp */; };
+		94454EE91786856F006C057B /* gfx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A8617852972006C057B /* gfx.cpp */; };
+		94454EEA1786857A006C057B /* interrupt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A8817852972006C057B /* interrupt.cpp */; };
+		94454EEB17868585006C057B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A8A17852972006C057B /* main.cpp */; };
+		94454EEC17868588006C057B /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A8D17852972006C057B /* memory.cpp */; };
+		94454EED17868592006C057B /* rtc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A8F17852972006C057B /* rtc.cpp */; };
+		94454EEE178685AA006C057B /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A9117852972006C057B /* sound.cpp */; };
+		94454EEF178685B7006C057B /* tcache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A9417852972006C057B /* tcache.cpp */; };
+		94454EF0178685BE006C057B /* v30mz.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454A9817852972006C057B /* v30mz.cpp */; };
+		94454EF1178689CA006C057B /* hes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944546F41785296E006C057B /* hes.cpp */; };
+		94454EF2178689CD006C057B /* huc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944546F61785296E006C057B /* huc.cpp */; };
+		94454EF3178689D5006C057B /* gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944546F91785296E006C057B /* gamepad.cpp */; };
+		94454EF4178689E5006C057B /* mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944546FB1785296E006C057B /* mouse.cpp */; };
+		94454EF5178689ED006C057B /* tsushinkb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944546FD1785296E006C057B /* tsushinkb.cpp */; };
+		94454EF6178689F9006C057B /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944546FF1785296E006C057B /* input.cpp */; };
+		94454EF7178689FC006C057B /* mcgenjin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547031785296E006C057B /* mcgenjin.cpp */; };
+		94454EF817868A00006C057B /* pce.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547061785296E006C057B /* pce.cpp */; };
+		94454EF917868A0E006C057B /* subhw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547081785296E006C057B /* subhw.cpp */; };
+		94454EFA17868A13006C057B /* tsushin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445470C1785296E006C057B /* tsushin.cpp */; };
+		94454EFB17868A17006C057B /* vce.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445470E1785296E006C057B /* vce.cpp */; };
+		94454EFC17868A5E006C057B /* c68k.c in Sources */ = {isa = PBXBuildFile; fileRef = 944544E31785296B006C057B /* c68k.c */; };
+		94454EFD17868A6A006C057B /* c68kexec.c in Sources */ = {isa = PBXBuildFile; fileRef = 944544F61785296B006C057B /* c68kexec.c */; };
+		94454EFE17868A80006C057B /* huc6280.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944544FE1785296B006C057B /* huc6280.cpp */; };
+		94454EFF17868A9D006C057B /* arcade_card.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944545211785296B006C057B /* arcade_card.cpp */; };
+		94454F0017868AB9006C057B /* pce_psg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944545321785296B006C057B /* pce_psg.cpp */; };
+		94454F0117868AC8006C057B /* vdc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944545451785296B006C057B /* vdc.cpp */; };
+		94454F081786A3E9006C057B /* fxscsi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547281785296E006C057B /* fxscsi.cpp */; };
+		94454F091786A3F2006C057B /* huc6273.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445472B1785296E006C057B /* huc6273.cpp */; };
+		94454F0A1786A401006C057B /* gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445472E1785296E006C057B /* gamepad.cpp */; };
+		94454F0B1786A405006C057B /* mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547301785296E006C057B /* mouse.cpp */; };
+		94454F0C1786A413006C057B /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547321785296E006C057B /* input.cpp */; };
+		94454F0D1786A41B006C057B /* interrupt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547341785296E006C057B /* interrupt.cpp */; };
+		94454F0E1786A426006C057B /* jrevdct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547371785296E006C057B /* jrevdct.cpp */; };
+		94454F0F1786A42F006C057B /* king.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9445473B1785296E006C057B /* king.cpp */; };
+		94454F101786A43A006C057B /* pcfx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547411785296E006C057B /* pcfx.cpp */; };
+		94454F111786A440006C057B /* rainbow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547431785296E006C057B /* rainbow.cpp */; };
+		94454F121786A458006C057B /* soundbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547451785296E006C057B /* soundbox.cpp */; };
+		94454F131786A45E006C057B /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 944547471785296E006C057B /* timer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -4880,6 +4933,59 @@
 				94454EA917854144006C057B /* tblur.cpp in Sources */,
 				94454EAA1785414B006C057B /* text.cpp in Sources */,
 				94454EAB17854150006C057B /* video.cpp in Sources */,
+				94454ED917865803006C057B /* v810_cpu.cpp in Sources */,
+				94454EDF17865A8D006C057B /* softfloat.c in Sources */,
+				94454EDA17865828006C057B /* input.cpp in Sources */,
+				94454EDB1786582D006C057B /* timer.cpp in Sources */,
+				94454EDC17865830006C057B /* vb.cpp in Sources */,
+				94454EDD17865835006C057B /* vip.cpp in Sources */,
+				94454EDE1786583F006C057B /* vsu.cpp in Sources */,
+				94454EE0178682D2006C057B /* c65c02.cpp in Sources */,
+				94454EE1178682EC006C057B /* cart.cpp in Sources */,
+				94454EE2178682F0006C057B /* memmap.cpp in Sources */,
+				94454EE3178682F9006C057B /* mikie.cpp in Sources */,
+				94454EE417868302006C057B /* ram.cpp in Sources */,
+				94454EE517868305006C057B /* rom.cpp in Sources */,
+				94454EE617868309006C057B /* susie.cpp in Sources */,
+				94454EE717868310006C057B /* system.cpp in Sources */,
+				94454EE81786855C006C057B /* eeprom.cpp in Sources */,
+				94454EE91786856F006C057B /* gfx.cpp in Sources */,
+				94454EEA1786857A006C057B /* interrupt.cpp in Sources */,
+				94454EEB17868585006C057B /* main.cpp in Sources */,
+				94454EEC17868588006C057B /* memory.cpp in Sources */,
+				94454EED17868592006C057B /* rtc.cpp in Sources */,
+				94454EEE178685AA006C057B /* sound.cpp in Sources */,
+				94454EEF178685B7006C057B /* tcache.cpp in Sources */,
+				94454EF0178685BE006C057B /* v30mz.cpp in Sources */,
+				94454EF1178689CA006C057B /* hes.cpp in Sources */,
+				94454EF2178689CD006C057B /* huc.cpp in Sources */,
+				94454EF3178689D5006C057B /* gamepad.cpp in Sources */,
+				94454EF4178689E5006C057B /* mouse.cpp in Sources */,
+				94454EF5178689ED006C057B /* tsushinkb.cpp in Sources */,
+				94454EF6178689F9006C057B /* input.cpp in Sources */,
+				94454EF7178689FC006C057B /* mcgenjin.cpp in Sources */,
+				94454EF817868A00006C057B /* pce.cpp in Sources */,
+				94454EF917868A0E006C057B /* subhw.cpp in Sources */,
+				94454EFA17868A13006C057B /* tsushin.cpp in Sources */,
+				94454EFB17868A17006C057B /* vce.cpp in Sources */,
+				94454EFC17868A5E006C057B /* c68k.c in Sources */,
+				94454EFD17868A6A006C057B /* c68kexec.c in Sources */,
+				94454EFE17868A80006C057B /* huc6280.cpp in Sources */,
+				94454EFF17868A9D006C057B /* arcade_card.cpp in Sources */,
+				94454F0017868AB9006C057B /* pce_psg.cpp in Sources */,
+				94454F0117868AC8006C057B /* vdc.cpp in Sources */,
+				94454F081786A3E9006C057B /* fxscsi.cpp in Sources */,
+				94454F091786A3F2006C057B /* huc6273.cpp in Sources */,
+				94454F0A1786A401006C057B /* gamepad.cpp in Sources */,
+				94454F0B1786A405006C057B /* mouse.cpp in Sources */,
+				94454F0C1786A413006C057B /* input.cpp in Sources */,
+				94454F0D1786A41B006C057B /* interrupt.cpp in Sources */,
+				94454F0E1786A426006C057B /* jrevdct.cpp in Sources */,
+				94454F0F1786A42F006C057B /* king.cpp in Sources */,
+				94454F101786A43A006C057B /* pcfx.cpp in Sources */,
+				94454F111786A440006C057B /* rainbow.cpp in Sources */,
+				94454F121786A458006C057B /* soundbox.cpp in Sources */,
+				94454F131786A45E006C057B /* timer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4942,7 +5048,12 @@
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
+					"-DWANT_LYNX_EMU",
+					"-DWANT_PCE_EMU",
+					"-DWANT_PCFX_EMU",
 					"-DWANT_PSX_EMU",
+					"-DWANT_VB_EMU",
+					"-DWANT_WSWAN_EMU",
 					"-DSTDC_HEADERS",
 					"-D__STDC_LIMIT_MACROS",
 				);
@@ -4991,7 +5102,12 @@
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
+					"-DWANT_LYNX_EMU",
+					"-DWANT_PCE_EMU",
+					"-DWANT_PCFX_EMU",
 					"-DWANT_PSX_EMU",
+					"-DWANT_VB_EMU",
+					"-DWANT_WSWAN_EMU",
 					"-DSTDC_HEADERS",
 					"-D__STDC_LIMIT_MACROS",
 				);

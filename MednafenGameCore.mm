@@ -27,12 +27,12 @@
 
 #import "MednafenGameCore.h"
 #import <OpenEmuBase/OERingBuffer.h>
-//#import "OELynxSystemResponderClient.h"
-//#import "OEPCESystemResponderClient.h"
-//#import "OEPCFXSystemResponderClient.h"
+#import "OELynxSystemResponderClient.h"
+#import "OEPCESystemResponderClient.h"
+#import "OEPCFXSystemResponderClient.h"
 #import "OEPSXSystemResponderClient.h"
-//#import "OEVBSystemResponderClient.h"
-//#import "OEWSSystemResponderClient.h"
+#import "OEVBSystemResponderClient.h"
+#import "OEWSSystemResponderClient.h"
 
 #include "mednafen/mednafen-types.h"
 #include "mednafen/mednafen.h"
@@ -42,10 +42,9 @@
 static MDFNGI *game;
 static MDFN_Surface *surf;
 
-enum systemTypes{ LYNX, PCE, PCFX, PSX, VB, WS };
+enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
 
-//@interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
-@interface MednafenGameCore () <OEPSXSystemResponderClient>
+@interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
 {
     int systemType;
     uint32_t *videoBuffer;
@@ -53,6 +52,12 @@ enum systemTypes{ LYNX, PCE, PCFX, PSX, VB, WS };
     int16_t pad[2][16];
     NSString *romName;
     double sampleRate;
+    
+    NSString *mednafenCoreModule;
+    NSTimeInterval mednafenCoreTiming;
+    int mednafenCoreFBWidth;
+    int mednafenCoreFBHeight;
+    OEIntSize mednafenCoreAspect;
 }
 
 @end
@@ -176,7 +181,7 @@ static void update_video(const void *data, unsigned width, unsigned height, size
     
     dispatch_apply(height, the_queue, ^(size_t y){
         const uint32_t *src = (uint32_t*)data + y * (pitch >> 2); //pitch is in bytes not pixels
-        uint32_t *dst = current->videoBuffer + y * 700;
+        uint32_t *dst = current->videoBuffer + y * current->mednafenCoreFBWidth;
         
         memcpy(dst, src, sizeof(uint32_t)*width);
     });
@@ -191,7 +196,7 @@ static void mednafen_init()
 {
     MDFN_PixelFormat pix_fmt(MDFN_COLORSPACE_RGB, 16, 8, 0, 24);
     //memset(&last_pixel_format, 0, sizeof(MDFN_PixelFormat));
-    surf = new MDFN_Surface(current->videoBuffer, 700, 576, 700, pix_fmt);
+    surf = new MDFN_Surface(current->videoBuffer, current->mednafenCoreFBWidth, current->mednafenCoreFBHeight, current->mednafenCoreFBWidth, pix_fmt);
     
     std::vector<MDFNGI*> ext;
     MDFNI_InitializeModules(ext);
@@ -203,15 +208,40 @@ static void mednafen_init()
                           [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject],
                           @"OpenEmu", @"BIOS"]];
     
+    MDFNSetting pce_setting = { "pce.cdbios", MDFNSF_EMU_STATE, "PCE CD BIOS", NULL, MDFNST_STRING, [[[biosPath stringByAppendingPathComponent:@"syscard3"] stringByAppendingPathExtension:@"pce"] UTF8String] };
+    
+    MDFNSetting pcfx_setting = { "pcfx.bios", MDFNSF_EMU_STATE, "PCFX BIOS", NULL, MDFNST_STRING, [[[biosPath stringByAppendingPathComponent:@"pcfx"] stringByAppendingPathExtension:@"rom"] UTF8String] };
+    
     MDFNSetting jp_setting = { "psx.bios_jp", MDFNSF_EMU_STATE, "SCPH-5500 BIOS", NULL, MDFNST_STRING, [[[biosPath stringByAppendingPathComponent:@"scph5500"] stringByAppendingPathExtension:@"bin"] UTF8String] };
     MDFNSetting na_setting = { "psx.bios_na", MDFNSF_EMU_STATE, "SCPH-5501 BIOS", NULL, MDFNST_STRING, [[[biosPath stringByAppendingPathComponent:@"scph5501"] stringByAppendingPathExtension:@"bin"] UTF8String] };
     MDFNSetting eu_setting = { "psx.bios_eu", MDFNSF_EMU_STATE, "SCPH-5502 BIOS", NULL, MDFNST_STRING, [[[biosPath stringByAppendingPathComponent:@"scph5502"] stringByAppendingPathExtension:@"bin"] UTF8String] };
     MDFNSetting filesys = { "filesys.path_sav", MDFNSF_NOFLAGS, "Memcards", NULL, MDFNST_STRING, [batterySavesDirectory UTF8String] };
     
+    // dox http://mednafen.sourceforge.net/documentation/09x/vb.html
+    MDFNSetting vb_parallax = { "vb.disable_parallax", MDFNSF_EMU_STATE, "Disable parallax for BG and OBJ rendering", NULL, MDFNST_BOOL, "1", NULL, NULL, NULL };
+    MDFNSetting vb_anaglyph_preset = { "vb.anaglyph.preset", MDFNSF_EMU_STATE, "Disable anaglyph preset", NULL, MDFNST_BOOL, "disabled", NULL, NULL, NULL };
+    MDFNSetting vb_anaglyph_lcolor = { "vb.anaglyph.lcolor", MDFNSF_EMU_STATE, "Anaglyph l color", NULL, MDFNST_BOOL, "0xFF0000", NULL, NULL, NULL };
+    //MDFNSetting vb_anaglyph_lcolor = { "vb.anaglyph.lcolor", MDFNSF_EMU_STATE, "Anaglyph l color", NULL, MDFNST_BOOL, "0xFFFFFF", NULL, NULL, NULL };
+    MDFNSetting vb_anaglyph_rcolor = { "vb.anaglyph.rcolor", MDFNSF_EMU_STATE, "Anaglyph r color", NULL, MDFNST_BOOL, "0x000000", NULL, NULL, NULL };
+    //MDFNSetting vb_allow_draw_skip = { "vb.allow_draw_skip", MDFNSF_EMU_STATE, "Allow draw skipping", NULL, MDFNST_BOOL, "1", NULL, NULL, NULL };
+    //MDFNSetting vb_instant_display_hack = { "vb.instant_display_hack", MDFNSF_EMU_STATE, "ADisplay latency reduction hack", NULL, MDFNST_BOOL, "1", NULL, NULL, NULL };
+    
+    settings.push_back(pce_setting);
+    
+    settings.push_back(pcfx_setting);
+    
     settings.push_back(jp_setting);
     settings.push_back(na_setting);
     settings.push_back(eu_setting);
     settings.push_back(filesys);
+    
+    settings.push_back(vb_parallax);
+    settings.push_back(vb_anaglyph_preset);
+    settings.push_back(vb_anaglyph_lcolor);
+    settings.push_back(vb_anaglyph_rcolor);
+    //settings.push_back(vb_allow_draw_skip);
+    //settings.push_back(vb_instant_display_hack);
+    
     MDFNI_Initialize([biosPath UTF8String], settings);
 }
 
@@ -220,7 +250,7 @@ static void emulation_run()
     update_input();
     
     static int16_t sound_buf[0x10000];
-    static MDFN_Rect rects[576];
+    MDFN_Rect rects[current->mednafenCoreFBHeight];
     rects[0].w = ~0;
     
     EmulateSpecStruct spec = {0};
@@ -234,46 +264,62 @@ static void emulation_run()
     
     MDFNI_Emulate(&spec);
     
-    unsigned width = rects[0].w;
-    unsigned height = spec.DisplayRect.h;
-    
-    
     const uint32_t *pix = surf->pixels;
     
-    switch (width)
+    if(current->systemType == pce)
     {
-            // The shifts are not simply (padded_width - real_width) / 2.
-        case 350:
-            pix += 14;
-            width = 320;
-            break;
-            
-        case 700:
-            pix += 33;
-            width = 640;
-            break;
-            
-        case 400:
-            pix += 15;
-            width = 364;
-            break;
-            
-        case 280:
-            pix += 10;
-            width = 256;
-            break;
-            
-        case 560:
-            pix += 26;
-            width = 512;
-            break;
-            
-        default:
-            // This shouldn't happen.
-            break;
+        unsigned width = rects[0].w;
+        unsigned height = spec.DisplayRect.h;
+        
+        update_video(pix, width, height, current->mednafenCoreFBWidth << 2);
     }
-    
-    update_video(pix, width, height, 700 << 2);
+    else if(current->systemType == psx)
+    {
+        unsigned width = rects[0].w;
+        unsigned height = spec.DisplayRect.h;
+        
+        switch (width)
+        {
+                // The shifts are not simply (padded_width - real_width) / 2.
+            case 350:
+                pix += 14;
+                width = 320;
+                break;
+                
+            case 700:
+                pix += 33;
+                width = 640;
+                break;
+                
+            case 400:
+                pix += 15;
+                width = 364;
+                break;
+                
+            case 280:
+                pix += 10;
+                width = 256;
+                break;
+                
+            case 560:
+                pix += 26;
+                width = 512;
+                break;
+                
+            default:
+                // This shouldn't happen.
+                break;
+        }
+        
+        update_video(pix, width, height, current->mednafenCoreFBWidth << 2);
+    }
+    else
+    {
+        unsigned width = spec.DisplayRect.w;
+        unsigned height = spec.DisplayRect.h;
+        
+        update_video(pix, width, height, current->mednafenCoreFBWidth << 2);
+    }
     
     update_audio_batch(spec.SoundBuf, spec.SoundBufSize);
 }
@@ -308,20 +354,88 @@ static void emulation_run()
 
 - (BOOL)loadFileAtPath:(NSString *)path
 {
+    if([[self systemIdentifier] isEqualToString:@"openemu.system.lynx"])
+    {
+        systemType = lynx;
+        
+        mednafenCoreModule = @"lynx";
+        mednafenCoreTiming = 75;
+        mednafenCoreFBWidth = 160;
+        mednafenCoreFBHeight = 102;
+        mednafenCoreAspect = OEIntSizeMake(8, 5);
+    }
+    
+    if([[self systemIdentifier] isEqualToString:@"openemu.system.pce"])
+    {
+        systemType = pce;
+        
+        mednafenCoreModule = @"pce";
+        mednafenCoreTiming = 59.82; //7159090.90909090 / 455 / 263 = 59.826
+        mednafenCoreFBWidth = 512; //512 ?
+        mednafenCoreFBHeight = 264; //224 or 242 ?
+        mednafenCoreAspect = OEIntSizeMake(4, 3);
+    }
+    
+    if([[self systemIdentifier] isEqualToString:@"openemu.system.pcfx"])
+    {
+        systemType = pcfx;
+        
+        mednafenCoreModule = @"pcfx";
+        mednafenCoreTiming = 59.94;
+        mednafenCoreFBWidth = 1024; //256 ?
+        mednafenCoreFBHeight = 512; //240 or 232 ?
+        mednafenCoreAspect = OEIntSizeMake(4, 3);
+    }
+    
     if([[self systemIdentifier] isEqualToString:@"openemu.system.psx"])
     {
-        systemType = PSX;
+        systemType = psx;
+        
+        mednafenCoreModule = @"psx";
+        mednafenCoreTiming = 59.94;
+        mednafenCoreFBWidth = 700;
+        mednafenCoreFBHeight = 576;
+        mednafenCoreAspect = OEIntSizeMake(4, 3);
+    }
+    
+    if([[self systemIdentifier] isEqualToString:@"openemu.system.vb"])
+    {
+        systemType = vb;
+        
+        mednafenCoreModule = @"vb";
+        mednafenCoreTiming = 50.27;
+        mednafenCoreFBWidth = 384;
+        mednafenCoreFBHeight = 224;
+        mednafenCoreAspect = OEIntSizeMake(12, 7);
+    }
+    
+    if([[self systemIdentifier] isEqualToString:@"openemu.system.ws"])
+    {
+        systemType = wswan;
+        
+        mednafenCoreModule = @"wswan";
+        mednafenCoreTiming = 75.47;
+        mednafenCoreFBWidth = 224;
+        mednafenCoreFBHeight = 144;
+        mednafenCoreAspect = OEIntSizeMake(14, 9);
     }
     
     mednafen_init();
     
     memset(pad, 0, sizeof(int16_t) * 10);
     
-    game = MDFNI_LoadGame("psx", [path UTF8String]);
+    game = MDFNI_LoadGame([mednafenCoreModule UTF8String], [path UTF8String]);
+    
+    frameInterval = mednafenCoreTiming;
     
     emulation_run();
     
     return YES;
+}
+
+- (void)setupEmulation
+{
+    
 }
 
 - (void)resetEmulation
@@ -343,7 +457,12 @@ static void emulation_run()
 
 - (OEIntSize)bufferSize
 {
-    return OEIntSizeMake(700, 576);
+    return OEIntSizeMake(current->mednafenCoreFBWidth, current->mednafenCoreFBHeight);
+}
+
+- (OEIntSize)aspectSize
+{
+    return mednafenCoreAspect;
 }
 
 - (const void *)videoBuffer
