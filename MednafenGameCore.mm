@@ -349,7 +349,7 @@ static void emulation_run()
 # pragma mark - Audio
 
 static size_t update_audio_batch(const int16_t *data, size_t frames){
-    [[current ringBufferAtIndex:0] write:data maxLength:frames << 2];
+    [[current ringBufferAtIndex:0] write:data maxLength:frames * [current channelCount] * 2];
     return frames;
 }
 
