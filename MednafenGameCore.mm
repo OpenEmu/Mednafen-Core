@@ -306,7 +306,7 @@ static void emulation_run()
 
 - (NSTimeInterval)frameInterval
 {
-    return frameInterval ? frameInterval : 60;
+    return mednafenCoreTiming ?: 60;
 }
 
 # pragma mark - Video
