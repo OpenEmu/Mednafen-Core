@@ -52,6 +52,7 @@ enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
     int16_t pad[2][16];
     NSString *romName;
     double sampleRate;
+    double masterClock;
     
     NSString *mednafenCoreModule;
     NSTimeInterval mednafenCoreTiming;
@@ -149,7 +150,7 @@ static void emulation_run()
 
     MDFNI_Emulate(&spec);
 
-    current->mednafenCoreTiming = (float)game->MasterClock / (1LL << 32) / spec.MasterCycles;
+    current->mednafenCoreTiming = current->masterClock / spec.MasterCycles;
 
     if(current->systemType == psx)
     {
@@ -273,6 +274,8 @@ static void emulation_run()
     // BGRA pixel format
     MDFN_PixelFormat pix_fmt(MDFN_COLORSPACE_RGB, 16, 8, 0, 24);
     surf = new MDFN_Surface(NULL, game->fb_width, game->fb_height, game->fb_width, pix_fmt);
+
+    masterClock = game->MasterClock;
 
     emulation_run();
 
