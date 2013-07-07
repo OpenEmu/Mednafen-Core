@@ -149,6 +149,8 @@ static void emulation_run()
 
     MDFNI_Emulate(&spec);
 
+    current->mednafenCoreTiming = (float)game->MasterClock / (1LL << 32) / spec.MasterCycles;
+
     if(current->systemType == psx)
     {
         current->videoWidth = rects[0].w;
@@ -212,7 +214,6 @@ static void emulation_run()
         systemType = lynx;
 
         mednafenCoreModule = @"lynx";
-        mednafenCoreTiming = 75; // Apparently has variable frame rate up to 75fps but Mednafen reports it as 59.8 yet appears to be running at ~75. How to handle? Also our sound is bad compared to Mednafen official
         mednafenCoreAspect = OEIntSizeMake(8, 5);
         sampleRate         = 48000;
     }
@@ -220,9 +221,8 @@ static void emulation_run()
     if([[self systemIdentifier] isEqualToString:@"openemu.system.pce"])
     {
         systemType = pce;
-        // Video output is off-center to the right bottom corner and the values in pce.cpp for framebuffer/nominal width/height make no sense
+
         mednafenCoreModule = @"pce";
-        mednafenCoreTiming = 59.82; //7159090.90909090 / 455 / 263 = 59.826
         mednafenCoreAspect = OEIntSizeMake(4, 3);
         sampleRate         = 48000;
     }
@@ -232,7 +232,6 @@ static void emulation_run()
         systemType = pcfx;
 
         mednafenCoreModule = @"pcfx";
-        mednafenCoreTiming = 59.82;
         mednafenCoreAspect = OEIntSizeMake(4, 3);
         sampleRate         = 48000;
     }
@@ -242,7 +241,6 @@ static void emulation_run()
         systemType = psx;
 
         mednafenCoreModule = @"psx";
-        mednafenCoreTiming = 59.94;
         mednafenCoreAspect = OEIntSizeMake(4, 3);
         sampleRate         = 44100;
     }
@@ -252,7 +250,6 @@ static void emulation_run()
         systemType = vb;
 
         mednafenCoreModule = @"vb";
-        mednafenCoreTiming = 50.27;
         mednafenCoreAspect = OEIntSizeMake(12, 7);
         sampleRate         = 48000;
     }
@@ -262,7 +259,6 @@ static void emulation_run()
         systemType = wswan;
 
         mednafenCoreModule = @"wswan";
-        mednafenCoreTiming = 75.47; // 159*256/3072000 = 75.47Hz
         mednafenCoreAspect = OEIntSizeMake(14, 9);
         sampleRate         = 48000;
     }
@@ -277,11 +273,6 @@ static void emulation_run()
     // BGRA pixel format
     MDFN_PixelFormat pix_fmt(MDFN_COLORSPACE_RGB, 16, 8, 0, 24);
     surf = new MDFN_Surface(NULL, game->fb_width, game->fb_height, game->fb_width, pix_fmt);
-
-    if (game->isPalPSX)
-        frameInterval = 50;
-    else
-        frameInterval = mednafenCoreTiming;
 
     emulation_run();
 
