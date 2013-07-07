@@ -513,7 +513,7 @@ static void emulation_run()
     
     EmulateSpecStruct spec = {0};
     spec.surface = surf;
-    spec.SoundRate = 44100;
+    spec.SoundRate = 48000;
     spec.SoundBuf = sound_buf;
     spec.LineWidths = rects;
     spec.SoundBufMaxSize = sizeof(sound_buf) / 2;
@@ -536,38 +536,40 @@ static void emulation_run()
         unsigned width = rects[0].w;
         unsigned height = spec.DisplayRect.h;
         
-        switch (width)
-        {
-                // The shifts are not simply (padded_width - real_width) / 2.
-            case 350:
-                pix += 14;
-                width = 320;
-                break;
-                
-            case 700:
-                pix += 33;
-                width = 640;
-                break;
-                
-            case 400:
-                pix += 15;
-                width = 364;
-                break;
-                
-            case 280:
-                pix += 10;
-                width = 256;
-                break;
-                
-            case 560:
-                pix += 26;
-                width = 512;
-                break;
-                
-            default:
-                // This shouldn't happen.
-                break;
-        }
+        // Crop overscan for NTSC. Might remove as this kinda sucks
+        if (!game->isPalPSX)
+            switch (width)
+            {
+                    // The shifts are not simply (padded_width - real_width) / 2.
+                case 350:
+                    pix += 14;
+                    width = 320;
+                    break;
+                    
+                case 700:
+                    pix += 33;
+                    width = 640;
+                    break;
+                    
+                case 400:
+                    pix += 15;
+                    width = 364;
+                    break;
+                    
+                case 280:
+                    pix += 10;
+                    width = 256;
+                    break;
+                    
+                case 560:
+                    pix += 26;
+                    width = 512;
+                    break;
+                    
+                default:
+                    // This shouldn't happen.
+                    break;
+            }
         
         update_video(pix, width, height, current->mednafenCoreFBWidth << 2);
     }
@@ -617,7 +619,7 @@ static void emulation_run()
         systemType = lynx;
         
         mednafenCoreModule = @"lynx";
-        mednafenCoreTiming = 75;
+        mednafenCoreTiming = 75; // Apparently has variable frame rate up to 75fps but Mednafen reports it as 59.8 yet appears to be running at ~75. How to handle? Also our sound is bad compared to Mednafen official
         mednafenCoreFBWidth = 160;
         mednafenCoreFBHeight = 102;
         mednafenCoreAspect = OEIntSizeMake(8, 5);
@@ -626,7 +628,7 @@ static void emulation_run()
     if([[self systemIdentifier] isEqualToString:@"openemu.system.pce"])
     {
         systemType = pce;
-        
+        // Video output is off-center to the right bottom corner and the values in pce.cpp for framebuffer/nominal width/height make no sense
         mednafenCoreModule = @"pce";
         mednafenCoreTiming = 59.82; //7159090.90909090 / 455 / 263 = 59.826
         mednafenCoreFBWidth = 512; //512 ?
@@ -639,7 +641,7 @@ static void emulation_run()
         systemType = pcfx;
         
         mednafenCoreModule = @"pcfx";
-        mednafenCoreTiming = 59.94;
+        mednafenCoreTiming = 59.82;
         mednafenCoreFBWidth = 1024; //256 ?
         mednafenCoreFBHeight = 512; //240 or 232 ?
         mednafenCoreAspect = OEIntSizeMake(4, 3);
@@ -672,7 +674,7 @@ static void emulation_run()
         systemType = wswan;
         
         mednafenCoreModule = @"wswan";
-        mednafenCoreTiming = 75.47;
+        mednafenCoreTiming = 75.47; // 159*256/3072000 = 75.47Hz
         mednafenCoreFBWidth = 224;
         mednafenCoreFBHeight = 144;
         mednafenCoreAspect = OEIntSizeMake(14, 9);
@@ -684,7 +686,10 @@ static void emulation_run()
     
     game = MDFNI_LoadGame([mednafenCoreModule UTF8String], [path UTF8String]);
     
-    frameInterval = mednafenCoreTiming;
+    if (game->isPalPSX)
+        frameInterval = 50;
+    else
+        frameInterval = mednafenCoreTiming;
     
     emulation_run();
     
@@ -745,20 +750,17 @@ static void emulation_run()
 
 - (double)audioSampleRate
 {
-    return sampleRate ? sampleRate : 44100;
-    //return game->soundrate;
+    return sampleRate ? sampleRate : 48000;
 }
 
 - (NSTimeInterval)frameInterval
 {
-    return frameInterval ? frameInterval : 59.94;
-    //return game->isPalPSX? 50.00 : 59.94;
+    return frameInterval ? frameInterval : 60;
 }
 
 - (NSUInteger)channelCount
 {
-    return 2;
-    //return game->soundchan;
+    return game->soundchan;
 }
 
 - (BOOL)saveStateToFileAtPath:(NSString *)fileName
