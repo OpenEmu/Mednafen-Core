@@ -715,6 +715,9 @@ static void emulation_run()
 
 - (OEIntRect)screenRect
 {
+    if(systemType == pce)
+        return OEIntRectMake(32, 20, current->videoWidth, current->videoHeight);
+    
     return OEIntRectMake(0, 0, current->videoWidth, current->videoHeight);
 }
 
