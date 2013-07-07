@@ -275,7 +275,7 @@ static void emulation_run()
     MDFN_PixelFormat pix_fmt(MDFN_COLORSPACE_RGB, 16, 8, 0, 24);
     surf = new MDFN_Surface(NULL, game->fb_width, game->fb_height, game->fb_width, pix_fmt);
 
-    masterClock = game->MasterClock;
+    masterClock = game->MasterClock >> 32;
 
     emulation_run();
 
