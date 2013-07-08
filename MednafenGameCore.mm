@@ -471,20 +471,11 @@ bool mednafen_unserialize(const void *data, size_t size)
 static int16_t input_state_callback(unsigned port, unsigned device, unsigned index, unsigned id)
 {
     //NSLog(@"polled input: port: %d device: %d id: %d", port, device, id);
-    if(current->systemType == lynx || vb)
-    {
-        if (device == 1) {
-            return current->pad[0][id];
-        }
+    if (port == 0 & device == 1) {
+        return current->pad[0][id];
     }
-    else
-    {
-        if (port == 0 & device == 1) {
-            return current->pad[0][id];
-        }
-        else if(port == 1 & device == 1) {
-            return current->pad[1][id];
-        }
+    else if(port == 1 & device == 1) {
+        return current->pad[1][id];
     }
 
     return 0;
@@ -508,7 +499,7 @@ static void update_input()
             9, // Pause
         };
 
-        for (unsigned j = 0; j < 2; j++)
+        for (unsigned j = 0; j < 1; j++)
         {
             for (unsigned i = 0; i < 9; i++)
                 input_buf[j] |= map[i] != -1u &&
@@ -516,7 +507,6 @@ static void update_input()
         }
 
         game->SetInput(0, "gamepad", &input_buf[0]);
-        game->SetInput(1, "gamepad", &input_buf[1]);
     }
     else if(current->systemType == pce)
     {
@@ -677,7 +667,7 @@ static void update_input()
             OEVBButtonRightDown,
         };
 
-        for (unsigned j = 0; j < 2; j++)
+        for (unsigned j = 0; j < 1; j++)
         {
             for (unsigned i = 0; i < 14; i++)
                 input_buf[j] |= map[i] != -1u &&
@@ -685,7 +675,6 @@ static void update_input()
         }
 
         game->SetInput(0, "gamepad", &input_buf[0]);
-        game->SetInput(1, "gamepad", &input_buf[1]);
     }
     else if(current->systemType == wswan)
     {
@@ -705,7 +694,7 @@ static void update_input()
             OEWSButtonB,
         };
 
-        for (unsigned j = 0; j < 2; j++)
+        for (unsigned j = 0; j < 1; j++)
         {
             for (unsigned i = 0; i < 11; i++)
                 input_buf[j] |= map[i] != -1u &&
@@ -713,7 +702,6 @@ static void update_input()
         }
         
         game->SetInput(0, "gamepad", &input_buf[0]);
-        game->SetInput(1, "gamepad", &input_buf[1]);
     }
 }
 
