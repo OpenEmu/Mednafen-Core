@@ -50,6 +50,7 @@ enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
     int videoWidth, videoHeight;
     int videoOffsetX, videoOffsetY;
     int16_t pad[2][16];
+    uint16_t input_buf[2];
     NSString *romName;
     double sampleRate;
     double masterClock;
@@ -276,7 +277,12 @@ static void emulation_run()
     surf = new MDFN_Surface(NULL, game->fb_width, game->fb_height, game->fb_width, pix_fmt);
 
     masterClock = game->MasterClock >> 32;
-
+    
+    game->SetInput(0, "gamepad", &input_buf[0]);
+    // Set P2 gamepad for available systems
+    if (systemType == pce || systemType == pcfx || systemType == psx)
+        game->SetInput(1, "gamepad", &input_buf[1]);
+    
     emulation_run();
 
     return YES;
@@ -485,8 +491,7 @@ static void update_input()
 {
     if(current->systemType == lynx)
     {
-        static uint16_t input_buf[2];
-        input_buf[0] = input_buf[1] = 0;
+        current->input_buf[0] = current->input_buf[1] = 0;
         static unsigned map[] = {
             OELynxButtonA,
             OELynxButtonB,
@@ -502,16 +507,13 @@ static void update_input()
         for (unsigned j = 0; j < 1; j++)
         {
             for (unsigned i = 0; i < 9; i++)
-                input_buf[j] |= map[i] != -1u &&
+                current->input_buf[j] |= map[i] != -1u &&
                 input_state_callback(j, 1, 0, map[i]) ? (1 << i) : 0;
         }
-
-        game->SetInput(0, "gamepad", &input_buf[0]);
     }
     else if(current->systemType == pce)
     {
-        static uint16_t input_buf[2];
-        input_buf[0] = input_buf[1] = 0;
+        current->input_buf[0] = current->input_buf[1] = 0;
         static unsigned map[] = {
             OEPCEButton1,
             OEPCEButton2,
@@ -531,17 +533,13 @@ static void update_input()
         for (unsigned j = 0; j < 2; j++)
         {
             for (unsigned i = 0; i < 13; i++)
-                input_buf[j] |= map[i] != -1u &&
+                current->input_buf[j] |= map[i] != -1u &&
                 input_state_callback(j, 1, 0, map[i]) ? (1 << i) : 0;
         }
-
-        game->SetInput(0, "gamepad", &input_buf[0]);
-        game->SetInput(1, "gamepad", &input_buf[1]);
     }
     else if(current->systemType == pcfx)
     {
-        static uint16_t input_buf[2];
-        input_buf[0] = input_buf[1] = 0;
+        current->input_buf[0] = current->input_buf[1] = 0;
         static unsigned map[] = {
             OEPCFXButton1,
             OEPCFXButton2,
@@ -560,12 +558,9 @@ static void update_input()
         for (unsigned j = 0; j < 2; j++)
         {
             for (unsigned i = 0; i < 12; i++)
-                input_buf[j] |= map[i] != -1u &&
+                current->input_buf[j] |= map[i] != -1u &&
                 input_state_callback(j, 1, 0, map[i]) ? (1 << i) : 0;
         }
-
-        game->SetInput(0, "gamepad", &input_buf[0]);
-        game->SetInput(1, "gamepad", &input_buf[1]);
     }
     else if(current->systemType == psx)
     {
@@ -648,8 +643,7 @@ static void update_input()
     }
     else if(current->systemType == vb)
     {
-        static uint16_t input_buf[2];
-        input_buf[0] = input_buf[1] = 0;
+        current->input_buf[0] = current->input_buf[1] = 0;
         static unsigned map[] = {
             OEVBButtonA,
             OEVBButtonB,
@@ -670,16 +664,13 @@ static void update_input()
         for (unsigned j = 0; j < 1; j++)
         {
             for (unsigned i = 0; i < 14; i++)
-                input_buf[j] |= map[i] != -1u &&
+                current->input_buf[j] |= map[i] != -1u &&
                 input_state_callback(j, 1, 0, map[i]) ? (1 << i) : 0;
         }
-
-        game->SetInput(0, "gamepad", &input_buf[0]);
     }
     else if(current->systemType == wswan)
     {
-        static uint16_t input_buf[2];
-        input_buf[0] = input_buf[1] = 0;
+        current->input_buf[0] = current->input_buf[1] = 0;
         static unsigned map[] = {
             OEWSButtonX1, //X Cursor horizontal-layout games
             OEWSButtonX2, //X Cursor horizontal-layout games
@@ -697,11 +688,9 @@ static void update_input()
         for (unsigned j = 0; j < 1; j++)
         {
             for (unsigned i = 0; i < 11; i++)
-                input_buf[j] |= map[i] != -1u &&
+                current->input_buf[j] |= map[i] != -1u &&
                 input_state_callback(j, 1, 0, map[i]) ? (1 << i) : 0;
         }
-        
-        game->SetInput(0, "gamepad", &input_buf[0]);
     }
 }
 
