@@ -521,11 +521,11 @@ static void update_input()
             OEPCEButtonRight,
             OEPCEButtonDown,
             OEPCEButtonLeft,
-            9,  // Button III
-            10, // Button IV
-            11, // Button V
-            12, // Button VI
-            13, // 2/6 Mode Select
+            OEPCEButton3,  // Button III
+            OEPCEButton4, // Button IV
+            OEPCEButton5, // Button V
+            OEPCEButton6, // Button VI
+            OEPCEButtonMode, // 2/6 Mode Select
         };
 
         for (unsigned j = 0; j < 2; j++)
@@ -707,7 +707,7 @@ static void update_input()
 
 NSUInteger LynxEmulatorValues[] = { OELynxButtonUp, OELynxButtonDown, OELynxButtonLeft, OELynxButtonRight, OELynxButtonA, OELynxButtonB, OELynxButtonOption1, OELynxButtonOption2 };
 
-NSUInteger PCEEmulatorValues[] = { OEPCEButtonUp, OEPCEButtonDown, OEPCEButtonLeft, OEPCEButtonRight, OEPCEButton1, OEPCEButton2, OEPCEButtonRun, OEPCEButtonSelect };
+NSUInteger PCEEmulatorValues[] = { OEPCEButtonUp, OEPCEButtonDown, OEPCEButtonLeft, OEPCEButtonRight, OEPCEButton1, OEPCEButton2, OEPCEButton3, OEPCEButton4, OEPCEButton5, OEPCEButton6, OEPCEButtonRun, OEPCEButtonSelect, OEPCEButtonMode };
 
 NSUInteger PCFXEmulatorValues[] = { OEPCFXButtonUp, OEPCFXButtonDown, OEPCFXButtonLeft, OEPCFXButtonRight, OEPCFXButton1, OEPCFXButton2, OEPCFXButton3, OEPCFXButton4, OEPCFXButton5, OEPCFXButton6, OEPCFXButtonRun, OEPCFXButtonSelect };
 
