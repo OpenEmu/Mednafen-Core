@@ -49,7 +49,6 @@ enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
     int systemType;
     int videoWidth, videoHeight;
     int videoOffsetX, videoOffsetY;
-    int16_t pad[2][16];
     uint16_t input_buf[2];
     NSString *romName;
     double sampleRate;
@@ -118,7 +117,6 @@ static void mednafen_init()
 {
     if((self = [super init]))
     {
-        memset(pad, 0, sizeof(int16_t) * 10);
         current = self;
     }
     
@@ -134,8 +132,6 @@ static void mednafen_init()
 
 static void emulation_run()
 {
-    update_input();
-
     static int16_t sound_buf[0x10000];
     MDFN_Rect rects[game->fb_height];
     rects[0].w = ~0;
@@ -474,296 +470,72 @@ bool mednafen_unserialize(const void *data, size_t size)
 
 # pragma mark - Input
 
-static int16_t input_state_callback(unsigned port, unsigned device, unsigned index, unsigned id)
-{
-    //NSLog(@"polled input: port: %d device: %d id: %d", port, device, id);
-    if (port == 0 & device == 1) {
-        return current->pad[0][id];
-    }
-    else if(port == 1 & device == 1) {
-        return current->pad[1][id];
-    }
-
-    return 0;
-}
-
-static void update_input()
-{
-    if(current->systemType == lynx)
-    {
-        current->input_buf[0] = current->input_buf[1] = 0;
-        static unsigned map[] = {
-            OELynxButtonA,
-            OELynxButtonB,
-            OELynxButtonOption2,
-            OELynxButtonOption1,
-            OELynxButtonLeft,
-            OELynxButtonRight,
-            OELynxButtonUp,
-            OELynxButtonDown,
-            9, // Pause
-        };
-
-        for (unsigned j = 0; j < 1; j++)
-        {
-            for (unsigned i = 0; i < 9; i++)
-                current->input_buf[j] |= map[i] != -1u &&
-                input_state_callback(j, 1, 0, map[i]) ? (1 << i) : 0;
-        }
-    }
-    else if(current->systemType == pce)
-    {
-        current->input_buf[0] = current->input_buf[1] = 0;
-        static unsigned map[] = {
-            OEPCEButton1,
-            OEPCEButton2,
-            OEPCEButtonSelect,
-            OEPCEButtonRun,
-            OEPCEButtonUp,
-            OEPCEButtonRight,
-            OEPCEButtonDown,
-            OEPCEButtonLeft,
-            OEPCEButton3,  // Button III
-            OEPCEButton4, // Button IV
-            OEPCEButton5, // Button V
-            OEPCEButton6, // Button VI
-            OEPCEButtonMode, // 2/6 Mode Select
-        };
-
-        for (unsigned j = 0; j < 2; j++)
-        {
-            for (unsigned i = 0; i < 13; i++)
-                current->input_buf[j] |= map[i] != -1u &&
-                input_state_callback(j, 1, 0, map[i]) ? (1 << i) : 0;
-        }
-    }
-    else if(current->systemType == pcfx)
-    {
-        current->input_buf[0] = current->input_buf[1] = 0;
-        static unsigned map[] = {
-            OEPCFXButton1,
-            OEPCFXButton2,
-            OEPCFXButton3,
-            OEPCFXButton4,
-            OEPCFXButton5,
-            OEPCFXButton6,
-            OEPCFXButtonSelect,
-            OEPCFXButtonRun,
-            OEPCFXButtonUp,
-            OEPCFXButtonRight,
-            OEPCFXButtonDown,
-            OEPCFXButtonLeft,
-        };
-
-        for (unsigned j = 0; j < 2; j++)
-        {
-            for (unsigned i = 0; i < 12; i++)
-                current->input_buf[j] |= map[i] != -1u &&
-                input_state_callback(j, 1, 0, map[i]) ? (1 << i) : 0;
-        }
-    }
-    else if(current->systemType == psx)
-    {
-        union
-        {
-            uint32_t u32[2][1 + 8];
-            uint8_t u8[2][2 * sizeof(uint16_t) + 8 * sizeof(uint32_t)];
-        } static buf;
-
-        uint16_t input_buf[2] = {0};
-        static unsigned map[] = {
-            OEPSXButtonSelect,
-            OEPSXButtonL3,
-            OEPSXButtonR3,
-            OEPSXButtonStart,
-            OEPSXButtonUp,
-            OEPSXButtonRight,
-            OEPSXButtonDown,
-            OEPSXButtonLeft,
-            OEPSXButtonL2,
-            OEPSXButtonR2,
-            OEPSXButtonL1,
-            OEPSXButtonR1,
-            OEPSXButtonTriangle,
-            OEPSXButtonCircle,
-            OEPSXButtonCross,
-            OEPSXButtonSquare,
-        };
-
-        for (unsigned j = 0; j < 2; j++)
-        {
-            for (unsigned i = 0; i < 16; i++)
-                input_buf[j] |= input_state_callback(j, 1, 0, map[i]) ? (1 << i) : 0;
-        }
-
-        // Buttons.
-        buf.u8[0][0] = (input_buf[0] >> 0) & 0xff;
-        buf.u8[0][1] = (input_buf[0] >> 8) & 0xff;
-        buf.u8[1][0] = (input_buf[1] >> 0) & 0xff;
-        buf.u8[1][1] = (input_buf[1] >> 8) & 0xff;
-
-        // Analogs
-        for (unsigned j = 0; j < 2; j++)
-        {
-            int analog_left_x = input_state_callback(j, 5, 0,
-                                                     0);
-
-            int analog_left_y = input_state_callback(j, 5, 0,
-                                                     1);
-
-            int analog_right_x = input_state_callback(j, 5, 1,
-                                                      0);
-
-            int analog_right_y = input_state_callback(j, 5, 1,
-                                                      1);
-
-            uint32_t r_right = analog_right_x > 0 ?  analog_right_x : 0;
-            uint32_t r_left  = analog_right_x < 0 ? -analog_right_x : 0;
-            uint32_t r_down  = analog_right_y > 0 ?  analog_right_y : 0;
-            uint32_t r_up    = analog_right_y < 0 ? -analog_right_y : 0;
-
-            uint32_t l_right = analog_left_x > 0 ?  analog_left_x : 0;
-            uint32_t l_left  = analog_left_x < 0 ? -analog_left_x : 0;
-            uint32_t l_down  = analog_left_y > 0 ?  analog_left_y : 0;
-            uint32_t l_up    = analog_left_y < 0 ? -analog_left_y : 0;
-
-            buf.u32[j][1] = r_right;
-            buf.u32[j][2] = r_left;
-            buf.u32[j][3] = r_down;
-            buf.u32[j][4] = r_up;
-
-            buf.u32[j][5] = l_right;
-            buf.u32[j][6] = l_left;
-            buf.u32[j][7] = l_down;
-            buf.u32[j][8] = l_up;
-        }
-
-        game->SetInput(0, "gamepad", &buf.u8[0]);
-        game->SetInput(1, "gamepad", &buf.u8[1]);
-    }
-    else if(current->systemType == vb)
-    {
-        current->input_buf[0] = current->input_buf[1] = 0;
-        static unsigned map[] = {
-            OEVBButtonA,
-            OEVBButtonB,
-            OEVBButtonR,
-            OEVBButtonL,
-            OEVBButtonRightUp,
-            OEVBButtonRightRight,
-            OEVBButtonLeftRight,
-            OEVBButtonLeftLeft,
-            OEVBButtonLeftDown,
-            OEVBButtonLeftUp,
-            OEVBButtonStart,
-            OEVBButtonSelect,
-            OEVBButtonRightLeft,
-            OEVBButtonRightDown,
-        };
-
-        for (unsigned j = 0; j < 1; j++)
-        {
-            for (unsigned i = 0; i < 14; i++)
-                current->input_buf[j] |= map[i] != -1u &&
-                input_state_callback(j, 1, 0, map[i]) ? (1 << i) : 0;
-        }
-    }
-    else if(current->systemType == wswan)
-    {
-        current->input_buf[0] = current->input_buf[1] = 0;
-        static unsigned map[] = {
-            OEWSButtonX1, //X Cursor horizontal-layout games
-            OEWSButtonX2, //X Cursor horizontal-layout games
-            OEWSButtonX3, //X Cursor horizontal-layout games
-            OEWSButtonX4, //X Cursor horizontal-layout games
-            OEWSButtonY1, //Y Cursor UP vertical-layout games
-            OEWSButtonY2, //Y Cursor RIGHT vertical-layout games
-            OEWSButtonY3, //Y Cursor DOWN vertical-layout games
-            OEWSButtonY4, //Y Cursor LEFT vertical-layout games
-            OEWSButtonStart,
-            OEWSButtonA,
-            OEWSButtonB,
-        };
-
-        for (unsigned j = 0; j < 1; j++)
-        {
-            for (unsigned i = 0; i < 11; i++)
-                current->input_buf[j] |= map[i] != -1u &&
-                input_state_callback(j, 1, 0, map[i]) ? (1 << i) : 0;
-        }
-    }
-}
-
-NSUInteger LynxEmulatorValues[] = { OELynxButtonUp, OELynxButtonDown, OELynxButtonLeft, OELynxButtonRight, OELynxButtonA, OELynxButtonB, OELynxButtonOption1, OELynxButtonOption2 };
-
-NSUInteger PCEEmulatorValues[] = { OEPCEButtonUp, OEPCEButtonDown, OEPCEButtonLeft, OEPCEButtonRight, OEPCEButton1, OEPCEButton2, OEPCEButton3, OEPCEButton4, OEPCEButton5, OEPCEButton6, OEPCEButtonRun, OEPCEButtonSelect, OEPCEButtonMode };
-
-NSUInteger PCFXEmulatorValues[] = { OEPCFXButtonUp, OEPCFXButtonDown, OEPCFXButtonLeft, OEPCFXButtonRight, OEPCFXButton1, OEPCFXButton2, OEPCFXButton3, OEPCFXButton4, OEPCFXButton5, OEPCFXButton6, OEPCFXButtonRun, OEPCFXButtonSelect };
-
-NSUInteger PSXEmulatorValues[] = { OEPSXButtonUp, OEPSXButtonDown, OEPSXButtonLeft, OEPSXButtonRight, OEPSXButtonTriangle, OEPSXButtonCircle, OEPSXButtonCross, OEPSXButtonSquare, OEPSXButtonL1, OEPSXButtonL2, OEPSXButtonL3, OEPSXButtonR1, OEPSXButtonR2, OEPSXButtonR3, OEPSXButtonStart, OEPSXButtonSelect };
-
-NSUInteger VBEmulatorValues[] = { OEVBButtonLeftUp, OEVBButtonLeftDown, OEVBButtonLeftLeft, OEVBButtonLeftRight, OEVBButtonRightUp, OEVBButtonRightDown, OEVBButtonRightLeft, OEVBButtonRightRight,OEVBButtonL, OEVBButtonR, OEVBButtonA, OEVBButtonB, OEVBButtonStart, OEVBButtonSelect };
-
-NSUInteger WSEmulatorValues[] = { OEWSButtonX1, OEWSButtonX3, OEWSButtonX4, OEWSButtonX2, OEWSButtonY1, OEWSButtonY3, OEWSButtonY4, OEWSButtonY2, OEWSButtonA, OEWSButtonB, OEWSButtonStart, OEWSButtonSound };
+// Map OE button order to Mednafen button order
+const int LynxMap[] = { 6, 7, 4, 5, 0, 1, 3, 2 };
+const int PCEMap[]  = { 4, 6, 7, 5, 0, 1, 8, 9, 10, 11, 3, 2, 12 };
+const int PCFXMap[] = { 8, 10, 11, 9, 0, 1, 2, 3, 4, 5, 7, 6 };
+const int PSXMap[]  = { 4, 6, 7, 5, 12, 13, 14, 15, 10, 8, 1, 11, 9, 2, 3, 0 };
+const int VBMap[]   = { 9, 8, 7, 6, 4, 13, 12, 5, 3, 2, 0, 1, 10, 11 };
+const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)didPushLynxButton:(OELynxButton)button forPlayer:(NSUInteger)player;
 {
-    pad[player-1][LynxEmulatorValues[button]] = 1;
+    input_buf[player-1] |= 1 << LynxMap[button];
 }
 
 - (oneway void)didReleaseLynxButton:(OELynxButton)button forPlayer:(NSUInteger)player;
 {
-    pad[player-1][LynxEmulatorValues[button]] = 0;
+    input_buf[player-1] &= ~(1 << LynxMap[button]);
 }
 
 - (oneway void)didPushPCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player;
 {
-    pad[player-1][PCEEmulatorValues[button]] = 1;
+    input_buf[player-1] |= 1 << PCEMap[button];
 }
 
 - (oneway void)didReleasePCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player;
 {
-    pad[player-1][PCEEmulatorValues[button]] = 0;
+    input_buf[player-1] &= ~(1 << PCEMap[button]);
 }
 
 - (oneway void)didPushPCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player;
 {
-    pad[player-1][PCFXEmulatorValues[button]] = 1;
+    input_buf[player-1] |= 1 << PCFXMap[button];
 }
 
 - (oneway void)didReleasePCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player;
 {
-    pad[player-1][PCFXEmulatorValues[button]] = 0;
+    input_buf[player-1] &= ~(1 << PCFXMap[button]);
 }
 
 - (oneway void)didPushPSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
 {
-    pad[player-1][PSXEmulatorValues[button]] = 1;
+    input_buf[player-1] |= 1 << PSXMap[button];
 }
 
 - (oneway void)didReleasePSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
 {
-    pad[player-1][PSXEmulatorValues[button]] = 0;
+    input_buf[player-1] &= ~(1 << PSXMap[button]);
 }
 
 - (oneway void)didPushVBButton:(OEVBButton)button forPlayer:(NSUInteger)player;
 {
-    pad[player-1][VBEmulatorValues[button]] = 1;
+    input_buf[player-1] |= 1 << VBMap[button];
 }
 
 - (oneway void)didReleaseVBButton:(OEVBButton)button forPlayer:(NSUInteger)player;
 {
-    pad[player-1][VBEmulatorValues[button]] = 0;
+    input_buf[player-1] &= ~(1 << VBMap[button]);
 }
 
 - (oneway void)didPushWSButton:(OEWSButton)button forPlayer:(NSUInteger)player;
 {
-    pad[player-1][WSEmulatorValues[button]] = 1;
+    input_buf[player-1] |= 1 << WSMap[button];
 }
 
 - (oneway void)didReleaseWSButton:(OEWSButton)button forPlayer:(NSUInteger)player;
 {
-    pad[player-1][WSEmulatorValues[button]] = 0;
+    input_buf[player-1] &= ~(1 << WSMap[button]);
 }
 
 @end
