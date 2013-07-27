@@ -29,6 +29,7 @@
 #import <OpenEmuBase/OERingBuffer.h>
 #import "OELynxSystemResponderClient.h"
 #import "OEPCESystemResponderClient.h"
+#import "OEPCECDSystemResponderClient.h"
 #import "OEPCFXSystemResponderClient.h"
 #import "OEPSXSystemResponderClient.h"
 #import "OEVBSystemResponderClient.h"
@@ -44,7 +45,7 @@ static MDFN_Surface *surf;
 
 enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
 
-@interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
+@interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
 {
     int systemType;
     int videoWidth, videoHeight;
@@ -72,9 +73,7 @@ static void mednafen_init()
     std::vector<MDFNSetting> settings;
     
     NSString *batterySavesDirectory = current.batterySavesDirectoryPath;
-    NSString *biosPath = [NSString pathWithComponents:@[
-                          [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject],
-                          @"OpenEmu", @"BIOS"]];
+    NSString *biosPath = current.biosDirectoryPath;
     
     MDFNSetting pce_setting = { "pce.cdbios", MDFNSF_EMU_STATE, "PCE CD BIOS", NULL, MDFNST_STRING, [[[biosPath stringByAppendingPathComponent:@"syscard3"] stringByAppendingPathExtension:@"pce"] UTF8String] };
     
@@ -216,7 +215,7 @@ static void emulation_run()
         sampleRate         = 48000;
     }
 
-    if([[self systemIdentifier] isEqualToString:@"openemu.system.pce"])
+    if([[self systemIdentifier] isEqualToString:@"openemu.system.pce"] || [[self systemIdentifier] isEqualToString:@"openemu.system.pcecd"])
     {
         systemType = pce;
 
@@ -494,6 +493,16 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 }
 
 - (oneway void)didReleasePCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player;
+{
+    input_buf[player-1] &= ~(1 << PCEMap[button]);
+}
+
+- (oneway void)didPushPCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player;
+{
+    input_buf[player-1] |= 1 << PCEMap[button];
+}
+
+- (oneway void)didReleasePCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player;
 {
     input_buf[player-1] &= ~(1 << PCEMap[button]);
 }

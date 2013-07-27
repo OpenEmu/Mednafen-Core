@@ -32,6 +32,7 @@
 	<array>
 		<string>openemu.system.lynx</string>
 		<string>openemu.system.pce</string>
+		<string>openemu.system.pcecd</string>
 		<string>openemu.system.pcfx</string>
 		<string>openemu.system.psx</string>
 		<string>openemu.system.vb</string>

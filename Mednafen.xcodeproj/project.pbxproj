@@ -214,6 +214,7 @@
 		82CFBC510FFEF432002B6C7C /* Mednafen.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Mednafen.icns; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* Mednafen.oecoreplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Mednafen.oecoreplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		940553AC17A3533E009B505D /* OEPCECDSystemResponderClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEPCECDSystemResponderClient.h; path = "../OpenEmu/PC Engine CD/OEPCECDSystemResponderClient.h"; sourceTree = "<group>"; };
 		944543EE17852820006C057B /* OEPSXSystemResponderClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEPSXSystemResponderClient.h; path = ../OpenEmu/PlayStation/OEPSXSystemResponderClient.h; sourceTree = "<group>"; };
 		944543EF1785282E006C057B /* OEPCESystemResponderClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEPCESystemResponderClient.h; path = "../OpenEmu/PC Engine/OEPCESystemResponderClient.h"; sourceTree = "<group>"; };
 		944543F01785283A006C057B /* OEPCFXSystemResponderClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEPCFXSystemResponderClient.h; path = "../OpenEmu/PC-FX/OEPCFXSystemResponderClient.h"; sourceTree = "<group>"; };
@@ -1823,6 +1824,7 @@
 				82407F340FFD99D700F0FE7D /* core */,
 				944543F117852870006C057B /* OELynxSystemResponderClient.h */,
 				944543EF1785282E006C057B /* OEPCESystemResponderClient.h */,
+				940553AC17A3533E009B505D /* OEPCECDSystemResponderClient.h */,
 				944543F01785283A006C057B /* OEPCFXSystemResponderClient.h */,
 				944543EE17852820006C057B /* OEPSXSystemResponderClient.h */,
 				944543F21785288D006C057B /* OEVBSystemResponderClient.h */,
