@@ -206,6 +206,8 @@ static void emulation_run()
 
 - (BOOL)loadFileAtPath:(NSString *)path
 {
+    [[NSFileManager defaultManager] createDirectoryAtPath:[self batterySavesDirectoryPath] withIntermediateDirectories:YES attributes:nil error:NULL];
+    
     if([[self systemIdentifier] isEqualToString:@"openemu.system.lynx"])
     {
         systemType = lynx;
