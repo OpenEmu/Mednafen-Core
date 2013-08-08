@@ -27,6 +27,7 @@
 
 #import "MednafenGameCore.h"
 #import <OpenEmuBase/OERingBuffer.h>
+#import <OpenGL/gl.h>
 #import "OELynxSystemResponderClient.h"
 #import "OEPCESystemResponderClient.h"
 #import "OEPCECDSystemResponderClient.h"
