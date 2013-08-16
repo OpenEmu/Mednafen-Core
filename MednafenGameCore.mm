@@ -44,6 +44,13 @@
 static MDFNGI *game;
 static MDFN_Surface *surf;
 
+namespace MDFN_IEN_VB
+{
+    extern void VIP_SetParallaxDisable(bool disabled);
+    extern void VIP_SetAnaglyphColors(uint32 lcolor, uint32 rcolor);
+    int mednafenCurrentDisplayMode = 1;
+}
+
 enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
 
 @interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
@@ -548,6 +555,73 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 - (oneway void)didReleaseWSButton:(OEWSButton)button forPlayer:(NSUInteger)player;
 {
     input_buf[player-1] &= ~(1 << WSMap[button]);
+}
+
+- (void)changeDisplayMode
+{
+    if (systemType == vb)
+    {
+        switch (MDFN_IEN_VB::mednafenCurrentDisplayMode)
+        {
+            case 0: // (2D) red/black
+                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x000000);
+                MDFN_IEN_VB::VIP_SetParallaxDisable(true);
+                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
+                break;
+                
+            case 1: // (2D) white/black
+                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFFFFFF, 0x000000);
+                MDFN_IEN_VB::VIP_SetParallaxDisable(true);
+                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
+                break;
+                
+            case 2: // (2D) purple/black
+                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF00FF, 0x000000);
+                MDFN_IEN_VB::VIP_SetParallaxDisable(true);
+                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
+                break;
+                
+            case 3: // (3D) red/blue
+                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x0000FF);
+                MDFN_IEN_VB::VIP_SetParallaxDisable(false);
+                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
+                break;
+                
+            case 4: // (3D) red/cyan
+                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x00B7EB);
+                MDFN_IEN_VB::VIP_SetParallaxDisable(false);
+                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
+                break;
+                
+            case 5: // (3D) red/electric cyan
+                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x00FFFF);
+                MDFN_IEN_VB::VIP_SetParallaxDisable(false);
+                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
+                break;
+                
+            case 6: // (3D) red/green
+                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x00FF00);
+                MDFN_IEN_VB::VIP_SetParallaxDisable(false);
+                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
+                break;
+                
+            case 7: // (3D) green/red
+                MDFN_IEN_VB::VIP_SetAnaglyphColors(0x00FF00, 0xFF0000);
+                MDFN_IEN_VB::VIP_SetParallaxDisable(false);
+                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
+                break;
+                
+            case 8: // (3D) yellow/blue
+                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFFFF00, 0x0000FF);
+                MDFN_IEN_VB::VIP_SetParallaxDisable(false);
+                MDFN_IEN_VB::mednafenCurrentDisplayMode = 0;
+                break;
+                
+            default:
+                return;
+                break;
+        }
+    }
 }
 
 @end
