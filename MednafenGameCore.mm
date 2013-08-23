@@ -376,105 +376,14 @@ static size_t update_audio_batch(const int16_t *data, size_t frames){
 
 # pragma mark - Save States
 
-size_t mednafen_serialize_size(void)
-{
-    static size_t serialize_size;
-
-    if (!game->StateAction)
-    {
-        //NSLog(@"Module doesn't support save states.");
-        return 0;
-    }
-
-    StateMem st;
-    memset(&st, 0, sizeof(st));
-
-    if (!MDFNSS_SaveSM(&st, 0, 1))
-    {
-        //NSLog(@"Module doesn't support save states.");
-        return 0;
-    }
-
-    free(st.data);
-    return serialize_size = st.len;
-}
-
-bool mednafen_serialize(void *data, size_t size)
-{
-    StateMem st;
-    memset(&st, 0, sizeof(st));
-    st.data = (uint8_t*)data;
-    st.malloced = size;
-
-    return MDFNSS_SaveSM(&st, 0, 1);
-}
-
-bool mednafen_unserialize(const void *data, size_t size)
-{
-    StateMem st;
-    memset(&st, 0, sizeof(st));
-    st.data = (uint8_t*)data;
-    st.len = size;
-
-    return MDFNSS_LoadSM(&st, 0, 1);
-}
-
 - (BOOL)saveStateToFileAtPath:(NSString *)fileName
 {
-    if(current->systemType == psx)
-        return NO;
-    
-    int serial_size = mednafen_serialize_size();
-    uint8_t *serial_data = (uint8_t *) malloc(serial_size);
-    
-    mednafen_serialize(serial_data, serial_size);
-    
-    FILE *state_file = fopen([fileName UTF8String], "wb");
-    long bytes_written = fwrite(serial_data, sizeof(uint8_t), serial_size, state_file);
-    
-    free(serial_data);
-    
-    if( bytes_written != serial_size )
-    {
-        NSLog(@"Couldn't write state");
-        return NO;
-    }
-    fclose( state_file );
-    
-    return YES;
+    return MDFNSS_Save([fileName UTF8String], "");
 }
 
 - (BOOL)loadStateFromFileAtPath:(NSString *)fileName
 {
-    if(current->systemType == psx)
-        return NO;
-    
-    FILE *state_file = fopen([fileName UTF8String], "rb");
-    if( !state_file )
-    {
-        NSLog(@"Could not open state file");
-        return NO;
-    }
-    
-    int serial_size = mednafen_serialize_size();
-    uint8_t *serial_data = (uint8_t *) malloc(serial_size);
-    
-    if(!fread(serial_data, sizeof(uint8_t), serial_size, state_file))
-    {
-        NSLog(@"Couldn't read file");
-        return NO;
-    }
-    fclose(state_file);
-    
-    if(!mednafen_unserialize(serial_data, serial_size))
-    {
-        NSLog(@"Couldn't unpack state");
-        return NO;
-    }
-    
-    free(serial_data);
-    
-    return YES;
+    return MDFNSS_Load([fileName UTF8String], "");
 }
 
 # pragma mark - Input
