@@ -70,11 +70,14 @@ enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
 
 @end
 
-MednafenGameCore *current;
+static __weak MednafenGameCore *_current;
+
 @implementation MednafenGameCore
 
 static void mednafen_init()
 {
+    GET_CURRENT_AND_RETURN();
+
     std::vector<MDFNGI*> ext;
     MDFNI_InitializeModules(ext);
     
@@ -124,7 +127,7 @@ static void mednafen_init()
 {
     if((self = [super init]))
     {
-        current = self;
+        _current = self;
     }
     
     return self;
@@ -139,6 +142,8 @@ static void mednafen_init()
 
 static void emulation_run()
 {
+    GET_CURRENT_AND_RETURN();
+
     static int16_t sound_buf[0x10000];
     MDFN_Rect rects[game->fb_height];
     rects[0].w = ~0;
@@ -359,7 +364,10 @@ static void emulation_run()
 
 # pragma mark - Audio
 
-static size_t update_audio_batch(const int16_t *data, size_t frames){
+static size_t update_audio_batch(const int16_t *data, size_t frames)
+{
+    GET_CURRENT_AND_RETURN(frames);
+
     [[current ringBufferAtIndex:0] write:data maxLength:frames * [current channelCount] * 2];
     return frames;
 }
