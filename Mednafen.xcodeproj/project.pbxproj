@@ -1935,7 +1935,6 @@
 		8CB3E09E17F1DFFF0090372A /* triop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = triop.h; sourceTree = "<group>"; };
 		8CB3E09F17F1DFFF0090372A /* triostr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = triostr.h; sourceTree = "<group>"; };
 		8CB3E0A517F1E1B80090372A /* OELynxSystemResponderClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OELynxSystemResponderClient.h; path = ../OpenEmu/Lynx/OELynxSystemResponderClient.h; sourceTree = "<group>"; };
-		8CB3E0AA17F1F3460090372A /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* Mednafen.oecoreplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Mednafen.oecoreplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		940553AC17A3533E009B505D /* OEPCECDSystemResponderClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEPCECDSystemResponderClient.h; path = "../OpenEmu/PC Engine CD/OEPCECDSystemResponderClient.h"; sourceTree = "<group>"; };
@@ -5562,7 +5561,6 @@
 				8CB3E08E17F1DFFF0090372A /* blip */,
 				8CB3E09117F1DFFF0090372A /* boost */,
 				8CB3E09217F1DFFF0090372A /* config.h.in */,
-				8CB3E0AA17F1F3460090372A /* config.h */,
 				8CB3E09817F1DFFF0090372A /* Fir_Resampler.h */,
 				8CB3E09917F1DFFF0090372A /* trio */,
 			);
