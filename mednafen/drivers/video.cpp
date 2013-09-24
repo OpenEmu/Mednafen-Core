@@ -30,8 +30,6 @@
 #include "netplay.h"
 #include "cheat.h"
 
-#include "scalebit.h"
-#include "hqxx-common.h"
 #include "nnx.h"
 #include "debugger.h"
 #include "fps.h"
@@ -39,7 +37,11 @@
 #include "video-state.h"
 #include "../video/selblur.h"
 
+#ifdef WANT_FANCY_SCALERS
+#include "scalebit.h"
+#include "hqxx-common.h"
 #include "2xSaI.h"
+#endif
 
 typedef struct
 {
@@ -70,7 +72,6 @@ typedef struct
 
 static ScalerDefinition Scalers[] = 
 {
-
 	{"hq2x", NTVB_HQ2X, 2, 2 },
 	{"hq3x", NTVB_HQ3X, 3, 3 },
 	{"hq4x", NTVB_HQ4X, 4, 4 },
@@ -104,6 +105,7 @@ static int cur_xres, cur_yres, cur_flags;
 static ScalerDefinition *CurrentScaler = NULL;
 
 static SDL_Surface *screen = NULL;
+static OpenGL_Blitter *ogl_blitter = NULL;
 static SDL_Surface *IconSurface=NULL;
 
 static MDFN_Rect screen_dest_rect;
@@ -130,18 +132,42 @@ static double exs,eys;
 static int evideoip;
 
 static int NeedClear = 0;
+static uint32 LastBBClearTime = 0;
 
 static MDFN_PixelFormat pf_overlay, pf_normal;
 
-void ClearBackBuffer(void)
+static void MarkNeedBBClear(void)
 {
- if(cur_flags & SDL_OPENGL)
+ NeedClear = 15;
+}
+
+static void ClearBackBuffer(void)
+{
+ //printf("WOO: %u\n", MDFND_GetTime());
+ if(ogl_blitter)
  {
-  ClearBackBufferOpenGL();
+  ogl_blitter->ClearBackBuffer();
  }
  else
  {
-  SDL_FillRect(screen, NULL, 0);
+  // Don't use SDL_FillRect() on hardware surfaces, it's borked(causes a long wait) with DirectX.
+  // ...on second thought, memset() is likely borked on PPC with hardware surface memory due to use of "dcbz" on uncachable memory. :(
+  //
+  // We'll do an icky #ifdef kludge instead for now.
+#ifdef WIN32
+  if(screen->flags & SDL_HWSURFACE)
+  {
+   if(SDL_MUSTLOCK(screen))
+    SDL_LockSurface(screen);
+   memset(screen->pixels, 0, screen->pitch * screen->h);
+   if(SDL_MUSTLOCK(screen))
+    SDL_UnlockSurface(screen);
+  }
+  else
+#endif
+  {
+   SDL_FillRect(screen, NULL, 0);
+  }
  }
 }
 
@@ -184,13 +210,19 @@ void KillVideo(void)
   NetSurface = NULL;
  }
 
- if(cur_flags & SDL_OPENGL)
-  KillOpenGL();
+ if(ogl_blitter)
+ {
+  delete ogl_blitter;
+  ogl_blitter = NULL;
+ }
 
  if(vdriver == VDRIVER_OVERLAY)
   OV_Kill();
 
+ screen = NULL;
  VideoGI = NULL;
+ cur_xres = 0;
+ cur_yres = 0;
  cur_flags = 0;
 }
 
@@ -403,11 +435,7 @@ int InitVideo(MDFNGI *gi)
 
  _video.special = GetSpecialScalerID(special_string);
 
- #ifdef MDFN_WANT_OPENGL_SHADERS
  _video.pixshader = (ShaderType)MDFN_GetSettingI(std::string(sn + "." + std::string("pixshader")).c_str());
- #else
- _video.pixshader = SHADER_NONE;
- #endif
 
  CurrentScaler = _video.special ? &Scalers[_video.special - 1] : NULL;
 
@@ -427,10 +455,10 @@ int InitVideo(MDFNGI *gi)
 
 
  if(vinf->hw_available)
-  flags|=SDL_HWSURFACE;
+  flags |= SDL_HWSURFACE | SDL_DOUBLEBUF;
 
  if(_fullscreen)
-  flags|=SDL_FULLSCREEN;
+  flags |= SDL_FULLSCREEN;
 
  vdriver = MDFN_GetSettingI("video.driver");
 
@@ -445,13 +473,16 @@ int InitVideo(MDFNGI *gi)
     sdlhaveogl = 0;
   }
 
-  if(sdlhaveogl)
-   flags |= SDL_OPENGL;
-  else
+  if(!sdlhaveogl)
   {
    MDFN_PrintError(_("Could not load OpenGL library, disabling OpenGL usage!"));
-   vdriver = 0;
+   vdriver = VDRIVER_SOFTSDL;
   }
+ }
+
+ if(vdriver == VDRIVER_OPENGL)
+ {
+  flags |= SDL_OPENGL;
 
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1 );
 
@@ -460,10 +491,12 @@ int InitVideo(MDFNGI *gi)
   #endif
  }
  else if(vdriver == VDRIVER_SOFTSDL)
-  flags |= SDL_DOUBLEBUF;
+ {
+
+ }
  else if(vdriver == VDRIVER_OVERLAY)
  {
-  //flags |= SDL_
+
  }
 
  exs = _fullscreen ? _video.xscalefs : _video.xscale;
@@ -479,7 +512,7 @@ int InitVideo(MDFNGI *gi)
    MDFND_PrintError(_("Eep!  Effective X scale setting is way too high.  Correcting."));
    exs = 50;
   }
- 
+
   if(eys > 50)
   {
    MDFND_PrintError(_("Eep!  Effective Y scale setting is way too high.  Correcting."));
@@ -518,6 +551,10 @@ int InitVideo(MDFNGI *gi)
  cur_yres = screen->h;
  cur_flags = flags;
  curbpp = screen->format->BitsPerPixel;
+
+ // Kludgey, we need to clean this up(vdriver vs cur_flags and whatnot).
+ if(vdriver != VDRIVER_OVERLAY)
+  vdriver = (cur_flags & SDL_OPENGL) ? VDRIVER_OPENGL : VDRIVER_SOFTSDL;
 
  GenerateDestRect();
 
@@ -580,8 +617,13 @@ int InitVideo(MDFNGI *gi)
 
  if(cur_flags & SDL_OPENGL)
  {
-  if(!InitOpenGL(evideoip, _video.scanlines, _video.pixshader, screen, &rs, &gs, &bs, &as))
+  try
   {
+   ogl_blitter = new OpenGL_Blitter(_video.scanlines, _video.pixshader, screen->w, screen->h, &rs, &gs, &bs, &as);
+  }
+  catch(std::exception &e)
+  {
+   MDFND_PrintError(e.what());
    KillVideo();
    MDFN_indent(-1);
    return(0);
@@ -613,6 +655,7 @@ int InitVideo(MDFNGI *gi)
     We do conversion to the real screen format in the blitting function. 
  */
  if(CurrentScaler) {
+#ifdef WANT_FANCY_SCALERS
   if(CurrentScaler->id == NTVB_HQ2X || CurrentScaler->id == NTVB_HQ3X || CurrentScaler->id == NTVB_HQ4X)
   {
    rs = 16;
@@ -624,6 +667,7 @@ int InitVideo(MDFNGI *gi)
   {
    Init_2xSaI(screen->format->BitsPerPixel, 555); // systemColorDepth, BitFormat
   }
+#endif
  }
 
  NetSurface = new MDFN_Surface(NULL, screen->w, 18 * 5, screen->w, MDFN_PixelFormat(MDFN_COLORSPACE_RGB, real_rs, real_gs, real_bs, real_as));
@@ -690,10 +734,15 @@ int InitVideo(MDFNGI *gi)
   ClearBackBuffer();
 
   if(cur_flags & SDL_OPENGL)
-   FlipOpenGL();
+  {
+   SDL_GL_SwapBuffers();
+   //ogl_blitter->HardSync();
+  }
   else
    SDL_Flip(screen);
  }
+
+ MarkNeedBBClear();
 
  return 1;
 }
@@ -719,8 +768,8 @@ void VideoShowMessage(UTF8 *text)
 
 void BlitRaw(MDFN_Surface *src, const MDFN_Rect *src_rect, const MDFN_Rect *dest_rect, int source_alpha)
 {
- if(cur_flags & SDL_OPENGL)
-  BlitOpenGLRaw(src, src_rect, dest_rect, (source_alpha != 0) && osd_alpha_blend);
+ if(ogl_blitter)
+  ogl_blitter->BlitRaw(src, src_rect, dest_rect, (source_alpha != 0) && osd_alpha_blend);
  else
  {
   SDL_to_MDFN_Surface_Wrapper m_surface(screen);
@@ -729,12 +778,16 @@ void BlitRaw(MDFN_Surface *src, const MDFN_Rect *src_rect, const MDFN_Rect *dest
   MDFN_StretchBlitSurface(src, src_rect, &m_surface, dest_rect, (source_alpha > 0) && osd_alpha_blend);
  }
 
- //if((dest_rect->x < screen_dest_rect.x) || (dest_rect->y < screen_dest_rect.y) ||
- //	((dest_rect->x + dest_rect->w) > (screen_dest_rect.x + screen_dest_rect.w)) || ((dest_rect->y + dest_rect->h) > (screen_dest_rect.y + screen_dest_rect.h)) )
- {
-  //puts("Need clear");
-  NeedClear = 2;
- }
+ bool cond1 = (dest_rect->x < screen_dest_rect.x || (dest_rect->x + dest_rect->w) > (screen_dest_rect.x + screen_dest_rect.w));
+ bool cond2 = (dest_rect->y < screen_dest_rect.y || (dest_rect->y + dest_rect->h) > (screen_dest_rect.y + screen_dest_rect.h));
+
+ if(cond1 || cond2)
+  MarkNeedBBClear();
+}
+
+void VideoAppActive(bool gain)
+{
+ //printf("AppActive: %u\n", gain);
 }
 
 static bool IsInternalMessageActive(void)
@@ -846,13 +899,14 @@ static void SubBlit(MDFN_Surface *source_surface, const MDFN_Rect &src_rect, con
     boohoo_rect.w *= CurrentScaler->xscale;
     boohoo_rect.h *= CurrentScaler->yscale;
 
-    bah_surface = new MDFN_Surface(NULL, boohoo_rect.w, boohoo_rect.h, boohoo_rect.w, eff_source_surface->format);
+    bah_surface = new MDFN_Surface(NULL, boohoo_rect.w, boohoo_rect.h, boohoo_rect.w, eff_source_surface->format, false);
 
     screen_pixies = (uint8 *)bah_surface->pixels;
     screen_pitch = bah_surface->pitch32 << 2;
 
     if(CurrentScaler->id == NTVB_SCALE4X || CurrentScaler->id == NTVB_SCALE3X || CurrentScaler->id == NTVB_SCALE2X)
     {
+#ifdef WANT_FANCY_SCALERS
      // scale2x and scale3x apparently can't handle source heights less than 2.
      // scale4x, it's less than 4
      if(eff_src_rect.h < 2 || (CurrentScaler->id == NTVB_SCALE4X && eff_src_rect.h < 4))
@@ -864,6 +918,7 @@ static void SubBlit(MDFN_Surface *source_surface, const MDFN_Rect &src_rect, con
       uint8 *source_pixies = (uint8 *)eff_source_surface->pixels + eff_src_rect.x * sizeof(uint32) + eff_src_rect.y * eff_source_surface->pitchinpix * sizeof(uint32);
       scale((CurrentScaler->id ==  NTVB_SCALE2X)?2:(CurrentScaler->id == NTVB_SCALE4X)?4:3, screen_pixies, screen_pitch, source_pixies, eff_source_surface->pitchinpix * sizeof(uint32), sizeof(uint32), eff_src_rect.w, eff_src_rect.h);
      }
+#endif
     }
     else if(CurrentScaler->id == NTVB_NN2X || CurrentScaler->id == NTVB_NN3X || CurrentScaler->id == NTVB_NN4X)
     {
@@ -895,6 +950,7 @@ static void SubBlit(MDFN_Surface *source_surface, const MDFN_Rect &src_rect, con
      }
     }
 #endif
+#ifdef WANT_FANCY_SCALERS
     else
     {
      uint8 *source_pixies = (uint8 *)(eff_source_surface->pixels + eff_src_rect.x + eff_src_rect.y * eff_source_surface->pitchinpix);
@@ -961,9 +1017,10 @@ static void SubBlit(MDFN_Surface *source_surface, const MDFN_Rect &src_rect, con
       }
      }
     }
+#endif
 
-    if(cur_flags & SDL_OPENGL)
-     BlitOpenGL(bah_surface, &boohoo_rect, &dest_rect, &eff_src_rect);
+    if(ogl_blitter)
+     ogl_blitter->Blit(bah_surface, &boohoo_rect, &dest_rect, &eff_src_rect, evideoip, CurGame->rotated);
     else
     {
      if(OverlayOK)
@@ -988,8 +1045,8 @@ static void SubBlit(MDFN_Surface *source_surface, const MDFN_Rect &src_rect, con
    }
    else // No special scaler:
    {
-    if(cur_flags & SDL_OPENGL)
-     BlitOpenGL(eff_source_surface, &eff_src_rect, &dest_rect, &eff_src_rect);
+    if(ogl_blitter)
+     ogl_blitter->Blit(eff_source_surface, &eff_src_rect, &dest_rect, &eff_src_rect, evideoip, CurGame->rotated);
     else
     {
      if(OverlayOK)
@@ -1028,10 +1085,18 @@ void BlitScreen(MDFN_Surface *msurface, const MDFN_Rect *DisplayRect, const MDFN
 
  if(NeedClear)
  {
-  NeedClear--;
+  uint32 ct = MDFND_GetTime();
+
+  if((ct - LastBBClearTime) >= 30)
+  {
+   LastBBClearTime = ct;
+   NeedClear--;
+  }
+
   ClearBackBuffer();
  }
 
+ OverlayOK = false;
  if(vdriver == VDRIVER_OVERLAY)
  {
   bool osd_active = Help_IsActive() || SaveStatesActive() || IsConsoleCheatConfigActive() || Netplay_GetTextView() ||
@@ -1057,7 +1122,7 @@ void BlitScreen(MDFN_Surface *msurface, const MDFN_Rect *DisplayRect, const MDFN
 
   if(OverlayOK)
    pf_needed = &pf_overlay;
- }
+ } // end if(vdriver == VDRIVER_OVERLAY)
 
  msurface->SetFormat(*pf_needed, TRUE);
 
@@ -1066,6 +1131,8 @@ void BlitScreen(MDFN_Surface *msurface, const MDFN_Rect *DisplayRect, const MDFN
  src_rect.y = DisplayRect->y;
  src_rect.h = DisplayRect->h;
 
+ // This drawing to the game's video surface can cause visual glitches, but better than killing performance which kind of
+ // defeats the purpose of the FPS display.
  if(OverlayOK)
  {
   int fps_w, fps_h;
@@ -1094,7 +1161,6 @@ void BlitScreen(MDFN_Surface *msurface, const MDFN_Rect *DisplayRect, const MDFN
 
   }
  }
-
 
  if(LineWidths[0].w == ~0) // Skip multi line widths code?
  {
@@ -1161,8 +1227,8 @@ void BlitScreen(MDFN_Surface *msurface, const MDFN_Rect *DisplayRect, const MDFN
 
    ib = new MDFN_Surface(NULL, sr.w, sr.h, sr.w, MDFN_PixelFormat(MDFN_COLORSPACE_RGB, real_rs, real_gs, real_bs, real_as));
 
-   if(cur_flags & SDL_OPENGL)
-    ReadPixelsGL(ib, &sr);
+   if(ogl_blitter)
+    ogl_blitter->ReadPixels(ib, &sr);
    else
    {
     if(SDL_MUSTLOCK(screen))
@@ -1332,7 +1398,21 @@ void BlitScreen(MDFN_Surface *msurface, const MDFN_Rect *DisplayRect, const MDFN
  BlitInternalMessage();
 
  if(!OverlayOK)
-  FPS_DrawToScreen(screen, real_rs, real_gs, real_bs, real_as);
+ {
+  unsigned fps_offsx = 0, fps_offsy = 0;
+
+  // When using soft-SDL, position the FPS display so we won't incur a potentially large(on older/slower hardware) penalty due
+  // to a requisite backbuffer clear(we could avoid this with some sort of dirty-rects system so only parts of the backbuffer are cleared,
+  // but that gets awfully complicated and prone to bugs when dealing with double/triple-buffered video...).
+  //
+  // std::max so we don't position it offscreen if the user has selected xscalefs or yscalefs values that are too large.
+  if(!(cur_flags & SDL_OPENGL))
+  {
+   fps_offsx = std::max<int32>(screen_dest_rect.x, 0);
+   fps_offsy = std::max<int32>(screen_dest_rect.y, 0);
+  }
+  FPS_DrawToScreen(screen, real_rs, real_gs, real_bs, real_as, fps_offsx, fps_offsy);
+ }
 
  if(!(cur_flags & SDL_OPENGL))
  {
@@ -1340,7 +1420,11 @@ void BlitScreen(MDFN_Surface *msurface, const MDFN_Rect *DisplayRect, const MDFN
    SDL_Flip(screen);
  }
  else
-  FlipOpenGL();
+ {
+  PumpWrap();
+  SDL_GL_SwapBuffers();
+  //ogl_blitter->HardSync();
+ }
 }
 
 void PtoV(const int in_x, const int in_y, int32 *out_x, int32 *out_y)

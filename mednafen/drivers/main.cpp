@@ -111,6 +111,8 @@ static MDFNSetting_EnumList SDriver_List[] =
  { "alsa", -1, "ALSA", gettext_noop("A recommended driver, and the default for Linux(if available).") },
  { "oss", -1, "Open Sound System", gettext_noop("A recommended driver, and the default for non-Linux UN*X/POSIX/BSD systems, or anywhere ALSA is unavailable. If the ALSA driver gives you problems, you can try using this one instead.\n\nIf you are using OSSv4 or newer, you should edit \"/usr/lib/oss/conf/osscore.conf\", uncomment the max_intrate= line, and change the value from 100(default) to 1000(or higher if you know what you're doing), and restart OSS. Otherwise, performance will be poor, and the sound buffer size in Mednafen will be orders of magnitude larger than specified.\n\nIf the sound buffer size is still excessively larger than what is specified via the \"sound.buffer_time\" setting, you can try setting \"sound.period_time\" to 2666, and as a last resort, 5333, to work around a design flaw/limitation/choice in the OSS API and OSS implementation.") },
  { "dsound", -1, "DirectSound", gettext_noop("A recommended driver, and the default for Microsoft Windows.") },
+ { "wasapi", -1, "WASAPI", gettext_noop("Experimental exclusive-mode WASAPI driver, usable on Windows Vista and newer.  Use it for lower-latency sound(though you'll of course need to lower the sound.buffer_time setting to take full advantage of it).  May not work properly on all sound cards.") },
+
  { "sdl", -1, "Simple Directmedia Layer", gettext_noop("This driver is not recommended, but it serves as a backup driver if the others aren't available. Its performance is generally sub-par, requiring higher latency or faster CPUs/SMP for glitch-free playback, except where the OS provides a sound callback API itself, such as with Mac OS X and BeOS.") },
  { "jack", -1, "JACK", gettext_noop("Somewhat experimental driver, unusably buggy until Mednafen 0.8.C. The \"sound.buffer_time\" setting controls the size of the local sound buffer, not the server's sound buffer, and the latency reported during startup is for the local sound buffer only. Please note that video card drivers(in the kernel or X), and hardware-accelerated OpenGL, may interfere with jackd's ability to effectively run with realtime response.") },
 
@@ -121,6 +123,8 @@ static MDFNSetting_EnumList Special_List[] =
 {
     { "0", 	-1 },
     { "none", 	-1, "None/Disabled" },
+
+#ifdef WANT_FANCY_SCALERS
     { "hq2x", 	-1, "hq2x" },
     { "hq3x", 	-1, "hq3x" },
     { "hq4x", 	-1, "hq4x" },
@@ -131,6 +135,8 @@ static MDFNSetting_EnumList Special_List[] =
     { "2xsai", 	-1, "2xSaI" },
     { "super2xsai", -1, "Super 2xSaI" },
     { "supereagle", -1, "Super Eagle" },
+#endif
+
     { "nn2x",	-1, "Nearest-neighbor 2x" },
     { "nn3x",	-1, "Nearest-neighbor 3x" },
     { "nn4x",	-1, "Nearest-neighbor 4x" },
@@ -196,7 +202,7 @@ static MDFNSetting DriverSettings[] =
   { "sound.device", MDFNSF_NOFLAGS, gettext_noop("Select sound output device."), gettext_noop("When using ALSA sound output under Linux, the \"sound.device\" setting \"default\" is Mednafen's default, IE \"hw:0\", not ALSA's \"default\". If you want to use ALSA's \"default\", use \"sexyal-literal-default\"."), MDFNST_STRING, "default", NULL, NULL },
   { "sound.volume", MDFNSF_NOFLAGS, gettext_noop("Sound volume level, in percent."), NULL, MDFNST_UINT, "100", "0", "150" },
   { "sound", MDFNSF_NOFLAGS, gettext_noop("Enable sound output."), NULL, MDFNST_BOOL, "1" },
-  { "sound.period_time", MDFNSF_NOFLAGS, gettext_noop("Desired period size in microseconds."), gettext_noop("Currently only affects OSS, ALSA, and SDL output.  A value of 0 defers to the default in the driver code in SexyAL.\n\nNote: This is not the \"sound buffer size\" setting, that would be \"sound.buffer_time\"."), MDFNST_UINT,  "0", "0", "100000" },
+  { "sound.period_time", MDFNSF_NOFLAGS, gettext_noop("Desired period size in microseconds."), gettext_noop("Currently only affects OSS, ALSA, WASAPI, and SDL output.  A value of 0 defers to the default in the driver code in SexyAL.\n\nNote: This is not the \"sound buffer size\" setting, that would be \"sound.buffer_time\"."), MDFNST_UINT,  "0", "0", "100000" },
   { "sound.buffer_time", MDFNSF_NOFLAGS, gettext_noop("Desired total buffer size in milliseconds."), NULL, MDFNST_UINT, 
    #ifdef WIN32
    "52"
@@ -653,22 +659,27 @@ static void MakeMednafenArgsStruct(void)
 }
 
 static int netconnect = 0;
-static char * loadcd = NULL;
+static char* loadcd = NULL;	// Deprecated
+static int physcd = 0;
+
 static char * force_module_arg = NULL;
 static int DoArgs(int argc, char *argv[], char **filename)
 {
 	int ShowCLHelp = 0;
-	int DoSetRemote = 0;
 
 	char *dsfn = NULL;
 	char *dmfn = NULL;
+	char *dummy_remote = NULL;
 
         ARGPSTRUCT MDFNArgs[] = 
 	{
 	 { "help", _("Show help!"), &ShowCLHelp, 0, 0 },
-	 { "remote", _("Enable remote mode(EXPERIMENTAL AND INCOMPLETE)."), &DoSetRemote, 0, 0 },
+	 { "remote", _("Enable remote mode with the specified stdout key(EXPERIMENTAL AND INCOMPLETE)."), 0, &dummy_remote, SUBSTYPE_STRING_ALLOC },
 
-	 { "loadcd", _("Load and boot a CD for the specified system."), 0, &loadcd, SUBSTYPE_STRING_ALLOC },
+	 // -loadcd is deprecated and only still supported because it's been around for yeaaaars.
+	 { "loadcd", NULL/*_("Load and boot a CD for the specified system.")*/, 0, &loadcd, SUBSTYPE_STRING_ALLOC },
+
+	 { "physcd", _("Load and boot from a physical CD, treating [FILE] as the optional device name."), &physcd, 0, 0 },
 
 	 { "force_module", _("Force usage of specified emulation module."), 0, &force_module_arg, SUBSTYPE_STRING_ALLOC },
 
@@ -698,13 +709,19 @@ static int DoArgs(int argc, char *argv[], char **filename)
 	 if(!ParseArguments(argc - 1, &argv[1], MDFNArgs, filename))
 	  return(0);
 
+	 if(dummy_remote)
+	 {
+	  free(dummy_remote);
+	  dummy_remote = NULL;
+	 }
+
 	 if(ShowCLHelp)
 	 {
           printf(usage_string, argv[0]);
           ShowArgumentsHelp(MDFNArgs, false);
 	  printf("\n");
 	  printf(_("Each setting(listed in the documentation) can also be passed as an argument by prefixing the name with a hyphen,\nand specifying the value to change the setting to as the next argument.\n\n"));
-	  printf(_("For example:\n\t%s -pce.xres 1680 -pce.yres 1050 -pce.stretch aspect -pce.pixshader autoipsharper \"Hyper Bonk Soldier.pce\"\n\n"), argv[0]);
+	  printf(_("For example:\n\t%s -pce.stretch aspect -pce.pixshader autoipsharper \"Hyper Bonk Soldier.pce\"\n\n"), argv[0]);
 	  printf(_("Settings specified in this manner are automatically saved to the configuration file, hence they\ndo not need to be passed to future invocations of the Mednafen executable.\n"));
 	  printf("\n");
 	  return(0);
@@ -719,9 +736,9 @@ static int DoArgs(int argc, char *argv[], char **filename)
 	 if(dsfn || dmfn)
 	  return(0);
 
-	 if(*filename == NULL && loadcd == NULL)
+	 if(*filename == NULL && loadcd == NULL && physcd == 0)
 	 {
-	  puts(_("No game filename specified!"));
+	  MDFN_PrintError(_("No game filename specified!"));
 	  return(0);
 	 }
 	}
@@ -731,7 +748,7 @@ static int DoArgs(int argc, char *argv[], char **filename)
 static int volatile NeedVideoChange = 0;
 int GameLoop(void *arg);
 int volatile GameThreadRun = 0;
-void MDFND_Update(MDFN_Surface *surface, int16 *Buffer, int Count);
+bool MDFND_Update(MDFN_Surface *surface, MDFN_Rect *rect, MDFN_Rect *lw, int16 *Buffer, int Count);
 
 bool sound_active;	// true if sound is enabled and initialized
 
@@ -749,14 +766,36 @@ static int LoadGame(const char *force_module, const char *path)
 	pending_snapshot = 0;
 	pending_ssnapshot = 0;
 
-	if(loadcd)
+	if(physcd)
+	{
+	 if(!(tmp = MDFNI_LoadCD(force_module, path, true)))
+		return(0);
+	}
+	else if(loadcd)	// Deprecated
 	{
 	 const char *system = loadcd;
+         bool is_physical = false;
 
 	 if(!system)
 	  system = force_module;
 
-	 if(!(tmp = MDFNI_LoadCD(system, path)))
+	 if(path == NULL)
+	  is_physical = true;
+	 else
+	 {
+	  int sr;
+	  //int se;
+	  struct stat sb;
+
+	  sr = stat(path, &sb);
+	  //se = errno;	  
+
+	  if(!sr && !S_ISREG(sb.st_mode))
+	  //if(sr || !S_ISREG(sb.st_mode))
+	   is_physical = true;
+	 }
+
+	 if(!(tmp = MDFNI_LoadCD(system, path, is_physical)))
 		return(0);
 	}
 	else
@@ -895,16 +934,32 @@ void DebuggerFudge(void)
 {
           LockGameMutex(0);
 
-	  int MeowCowHowFlown = VTBackBuffer;
+#if 0
+	  bool VBValid = true;
 
-	  // FIXME.
-	  if(!VTDisplayRects[VTBackBuffer].h)
-	   VTDisplayRects[VTBackBuffer].h = 10;
-          if(!VTDisplayRects[VTBackBuffer].w)
-           VTDisplayRects[VTBackBuffer].w = 10;
+	  if(VTDisplayRects[VTBackBuffer].h == 0 || ((int64)VTDisplayRects[VTBackBuffer].y + VTDisplayRects[VTBackBuffer].h) > VTBuffer[VTBackBuffer]->h)
+	   VBValid = false;
+	  else if(VTLineWidths[VTBackBuffer][0].w != ~0)
+	  {
+	   for(int32 y = VTDisplayRects[VTBackBuffer].y; y < (VTDisplayRects[VTBackBuffer].y + VTDisplayRects[VTBackBuffer].h); y++)
+	   {
+	    if(VTLineWidths[VTBackBuffer][y].w == 0 || ((int64)VTLineWidths[VTBackBuffer][y].x + VTLineWidths[VTBackBuffer][y].w) > VTBuffer[VTBackBuffer]->w)
+	    {
+	     VBValid = false;
+	     break;
+	    }
+	   }
+	  }
+	  else if(VTDisplayRects[VTBackBuffer].w == 0 || ((int64)VTDisplayRects[VTBackBuffer].x + VTDisplayRects[VTBackBuffer].w) > VTBuffer[VTBackBuffer]->w)
+	   VBValid = false;
 
-          MDFND_Update((MDFN_Surface *)VTBuffer[VTBackBuffer], NULL, 0);
-	  VTBackBuffer = MeowCowHowFlown;
+	  if(VBValid)
+           MDFND_Update((MDFN_Surface *)VTBuffer[VTBackBuffer], (MDFN_Rect*)&VTDisplayRects[VTBackBuffer], (MDFN_Rect*)VTLineWidths[VTBackBuffer], NULL, 0);
+	  else
+#endif
+	  {
+	   MDFND_Update((MDFN_Surface *)VTBuffer[VTBackBuffer ^ 1], (MDFN_Rect*)&VTDisplayRects[VTBackBuffer ^ 1], (MDFN_Rect*)VTLineWidths[VTBackBuffer ^ 1], NULL, 0);
+	  }
 
 	  if(sound_active)
 	   WriteSoundSilence(10);
@@ -924,7 +979,7 @@ int64 Time64(void)
  if(clock_gettime(CLOCK_MONOTONIC, &tp) == -1)
  {
   if(!cgt_fail_warning)
-   printf("clock_gettime() failed: %s\n", strerror(errno));
+   fprintf(stderr, "clock_gettime() failed: %s\n", strerror(errno));
   cgt_fail_warning = 1;
  }
  else
@@ -941,7 +996,7 @@ int64 Time64(void)
 
  if(gettimeofday(&tv, NULL) == -1)
  {
-  puts("gettimeofday() error");
+  fprintf(stderr, "gettimeofday() error");
   return(0);
  }
 
@@ -981,7 +1036,7 @@ int GameLoop(void *arg)
 	  ers.SetETtoRT();
 
 	 fskip = ers.NeedFrameSkip();
-
+	
 	 if(!MDFN_GetSettingB("video.frameskip"))
 	  fskip = 0;
 
@@ -1038,10 +1093,30 @@ int GameLoop(void *arg)
 	 if(!fskip)
 	  FPS_IncDrawn();
 
+
 	 do
 	 {
 	  VTBackBuffer = ThisBackBuffer;
-          MDFND_Update(fskip ? NULL : (MDFN_Surface *)VTBuffer[ThisBackBuffer], sound, ssize);
+
+ 	  if(fskip && GameLoopPaused)
+	  {
+	   // If this frame was skipped, and the game loop is paused(IE cheat interface is active), just blit the previous "successful" frame so the cheat
+	   // interface actually gets drawn.
+	   //
+	   // Needless to say, do not do "VTBackBuffer ^= 1;" here.
+	   //
+	   // Possible problems with this kludgery:
+	   //	Will fail spectacularly if there is no previous successful frame.  BOOOOOOM.  (But there always should be, especially since we initialize some
+  	   //   of the video buffer and rect structures during startup)
+	   //
+           MDFND_Update((MDFN_Surface *)VTBuffer[VTBackBuffer ^ 1], (MDFN_Rect*)&VTDisplayRects[VTBackBuffer ^ 1], (MDFN_Rect*)VTLineWidths[VTBackBuffer ^ 1], sound, ssize);
+	  }
+	  else
+	  {
+           if(MDFND_Update(fskip ? NULL : (MDFN_Surface *)VTBuffer[VTBackBuffer], (MDFN_Rect*)&VTDisplayRects[VTBackBuffer], (MDFN_Rect*)VTLineWidths[VTBackBuffer], sound, ssize))
+	    VTBackBuffer ^= 1;
+	  }
+
           if((InFrameAdvance && !NeedFrameAdvance) || GameLoopPaused)
 	  {
            if(ssize)
@@ -1271,6 +1346,11 @@ void PumpWrap(void)
    			if(event.active.state & SDL_APPINPUTFOCUS)
 			{
 			 SendCEvent_to_GT(CEVT_SET_INPUT_FOCUS, (char*)0 + (bool)event.active.gain, NULL);
+			}
+
+			if(event.active.state & SDL_APPACTIVE)
+			{
+			 VideoAppActive((bool)(event.active.gain));
 			}
 			break;
 
@@ -1517,23 +1597,31 @@ int main(int argc, char *argv[])
 	 return(0);
 	}
 #endif
-	//struct sched_param sp;
-
-	//sp.sched_priority = 25;
-
-	//if(sched_setscheduler(getpid(), SCHED_RR, &sp))
-	//{
-	// printf("%m\n");
-	// return(-1);
-	//}
-
 	std::vector<MDFNGI *> ExternalSystems;
-	int ret;
 	char *needie = NULL;
 
 	MDFNDHaveFocus = false;
 
 	DrBaseDirectory=GetBaseDirectory();
+
+	#ifdef ENABLE_NLS
+	setlocale(LC_ALL, "");
+
+	#ifdef WIN32
+        bindtextdomain(PACKAGE, DrBaseDirectory);
+	#else
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	#endif
+
+	bind_textdomain_codeset(PACKAGE, "UTF-8");
+	textdomain(PACKAGE);
+	#endif
+
+	if(argc >= 3 && (!strcasecmp(argv[1], "-remote") || !strcasecmp(argv[1], "--remote")))
+	{
+         RemoteOn = TRUE;
+ 	 InitSTDIOInterface(argv[2]);
+	}
 
 	MDFNI_printf(_("Starting Mednafen %s\n"), MEDNAFEN_VERSION);
 	MDFN_indent(1);
@@ -1548,19 +1636,6 @@ int main(int argc, char *argv[])
         MDFN_indent(-2);
 
         MDFN_printf(_("Base directory: %s\n"), DrBaseDirectory);
-
-	#ifdef ENABLE_NLS
-	setlocale(LC_ALL, "");
-
-	#ifdef WIN32
-        bindtextdomain(PACKAGE, DrBaseDirectory);
-	#else
-	bindtextdomain(PACKAGE, LOCALEDIR);
-	#endif
-
-	bind_textdomain_codeset(PACKAGE, "UTF-8");
-	textdomain(PACKAGE);
-	#endif
 
 	if(SDL_Init(SDL_INIT_VIDEO)) /* SDL_INIT_VIDEO Needed for (joystick config) event processing? */
 	{
@@ -1584,12 +1659,6 @@ int main(int argc, char *argv[])
 	if(!MDFNI_InitializeModules(ExternalSystems))
 	 return(-1);
 
-	if(argc >= 2 && (!strcasecmp(argv[1], "-remote") || !strcasecmp(argv[1], "--remote")))
-         RemoteOn = TRUE;
-
-	if(RemoteOn)
- 	 InitSTDIOInterface();
-
 	for(unsigned int x = 0; x < sizeof(DriverSettings) / sizeof(MDFNSetting); x++)
 	 NeoDriverSettings.push_back(DriverSettings[x]);
 
@@ -1597,7 +1666,7 @@ int main(int argc, char *argv[])
 	MakeVideoSettings(NeoDriverSettings);
 	MakeInputSettings(NeoDriverSettings);
 
-        if(!(ret=MDFNI_Initialize(DrBaseDirectory, NeoDriverSettings)))
+        if(!MDFNI_Initialize(DrBaseDirectory, NeoDriverSettings))
          return(-1);
 
         SDL_EnableUNICODE(1);
@@ -1655,6 +1724,7 @@ int main(int argc, char *argv[])
 	   secondary thread to run the game in(and do sound output, since we use
 	   separate sound code which should be thread safe(?)).
 	*/
+	int ret = 0;
 
 	//InitVideo(NULL);
 
@@ -1698,13 +1768,25 @@ int main(int argc, char *argv[])
          VTLineWidths[1] = (MDFN_Rect *)calloc(CurGame->fb_height, sizeof(MDFN_Rect));
 
          for(int i = 0; i < 2; i++)
+	 {
           ((MDFN_Surface *)VTBuffer[i])->Fill(0, 0, 0, 0);
+
+	  //
+	  // Debugger step mode, and cheat interface, rely on the previous backbuffer being valid in certain situations.  Initialize some stuff here so that
+	  // reliance will still work even immediately after startup.
+	  VTDisplayRects[i].w = std::min<int32>(16, VTBuffer[i]->w);
+	  VTDisplayRects[i].h = std::min<int32>(16, VTBuffer[i]->h);
+	  VTLineWidths[i][0].w = ~0;
+	 }
 
          NeedVideoChange = -1;
          FPS_Init();
         }
 	else
+	{
+	 ret = -1;
 	 NeedExitNow = 1;
+	}
 
 	while(!NeedExitNow)
 	{
@@ -1723,6 +1805,7 @@ int main(int argc, char *argv[])
           {
            if(!InitVideo(CurGame))
            {
+	    ret = -1;
             NeedExitNow = 1;
             break;
            }
@@ -1802,7 +1885,7 @@ int main(int argc, char *argv[])
 	DeleteInternalArgs();
 	KillInputSettings();
 
-        return(0);
+        return(ret);
 }
 
 
@@ -1867,8 +1950,10 @@ void MDFND_MidSync(const EmulateSpecStruct *espec)
  MDFND_UpdateInput(true, false);
 }
 
-static void PassBlit(MDFN_Surface *surface)
+static bool PassBlit(MDFN_Surface *surface, MDFN_Rect *rect, MDFN_Rect *lw)
 {
+ bool ret = false;
+
   /* If it's been >= 100ms since the last blit, assume that the blit
      thread is being time-slice starved, and let it run.  This is especially necessary
      for fast-forwarding to respond well(since keyboard updates are
@@ -1885,32 +1970,29 @@ static void PassBlit(MDFN_Surface *surface)
   if(!VTReady)
   {
    VTSSnapshot = pending_ssnapshot;
-   VTLWReady = VTLineWidths[VTBackBuffer];
-   VTDRReady = &VTDisplayRects[VTBackBuffer];
-   VTReady = VTBuffer[VTBackBuffer];
+   VTLWReady = lw;
+   VTDRReady = rect;
+   VTReady = surface;
+   ret = true;
 
-   VTBackBuffer ^= 1;
    pending_ssnapshot = 0;
    last_btime = SDL_GetTicks();
    FPS_IncBlitted();
   }
  }
- else if(IsConsoleCheatConfigActive() && !VTReady)
- {
-  VTBackBuffer ^= 1;
-  VTLWReady = VTLineWidths[VTBackBuffer];
-  VTReady = VTBuffer[VTBackBuffer];
-  VTBackBuffer ^= 1;
- }
+
+ return(ret);
 }
 
 
-void MDFND_Update(MDFN_Surface *surface, int16 *Buffer, int Count)
+bool MDFND_Update(MDFN_Surface *surface, MDFN_Rect *rect, MDFN_Rect *lw, int16 *Buffer, int Count)
 {
+ bool ret = false;
+
  if(false == sc_blit_timesync)
  {
   //puts("ABBYNORMAL");
-  PassBlit(surface);
+  ret |= PassBlit(surface, rect, lw);
  }
 
  UpdateSoundSync(Buffer, Count);
@@ -1921,15 +2003,15 @@ void MDFND_Update(MDFN_Surface *surface, int16 *Buffer, int Count)
  if(surface)
  {
   if(pending_snapshot)
-   MDFNI_SaveSnapshot(surface, (MDFN_Rect *)&VTDisplayRects[VTBackBuffer], (MDFN_Rect *)VTLineWidths[VTBackBuffer]);
+   MDFNI_SaveSnapshot(surface, rect, lw);
 
   if(pending_save_state || pending_save_movie)
    LockGameMutex(1);
 
   if(pending_save_state)
-   MDFNI_SaveState(NULL, NULL, surface, (MDFN_Rect *)&VTDisplayRects[VTBackBuffer], (MDFN_Rect *)VTLineWidths[VTBackBuffer]);
+   MDFNI_SaveState(NULL, NULL, surface, rect, lw);
   if(pending_save_movie)
-   MDFNI_SaveMovie(NULL, surface, (MDFN_Rect *)&VTDisplayRects[VTBackBuffer], (MDFN_Rect *)VTLineWidths[VTBackBuffer]);
+   MDFNI_SaveMovie(NULL, surface, rect, lw);
 
   if(pending_save_state || pending_save_movie)
    LockGameMutex(0);
@@ -1940,8 +2022,10 @@ void MDFND_Update(MDFN_Surface *surface, int16 *Buffer, int Count)
  if(true == sc_blit_timesync)
  {
   //puts("NORMAL");
-  PassBlit(surface);
+  ret |= PassBlit(surface, rect, lw);
  }
+
+ return(ret);
 }
 
 void MDFND_DispMessage(UTF8 *text)
@@ -1999,13 +2083,6 @@ void MDFND_WaitThread(MDFN_Thread *thread, int *status)
 {
  SDL_WaitThread(thread->sdl_thread, status);
  thread->sdl_thread = NULL;	// To make accidental use-after-free() more apparent.
- free(thread);
-}
-
-void MDFND_KillThread(MDFN_Thread *thread)
-{
- SDL_KillThread(thread->sdl_thread);
- thread->sdl_thread = NULL;
  free(thread);
 }
 

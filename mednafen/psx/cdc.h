@@ -116,7 +116,12 @@ class PS_CDC
 
  uint8 RegSelector;
  uint8 ArgsBuf[16];
- uint32 ArgsIn;		// 5-bit(0 ... 31)
+ uint8 ArgsWP;		// 5-bit(0 ... 31)
+ uint8 ArgsRP;		// 5-bit(0 ... 31)
+
+ uint8 ArgsReceiveLatch;
+ uint8 ArgsReceiveBuf[32];
+ uint8 ArgsReceiveIn;
 
  uint8 ResultsBuffer[16];
  uint8 ResultsIn;	// 5-bit(0 ... 31)
@@ -173,7 +178,7 @@ class PS_CDC
 
 
  uint8 PendingCommand;
- bool PendingCommandPhase;
+ int PendingCommandPhase;
  int32 PendingCommandCounter;
 
  int32 SPUCounter;
@@ -239,6 +244,7 @@ class PS_CDC
  bool DecodeSubQ(uint8 *subpw);
  bool CommandCheckDiscPresent(void);
 
+ void EnbufferizeCDDASector(const uint8 *buf);
  bool XA_Test(const uint8 *sdata);
  void XA_ProcessSector(const uint8 *sdata, CD_Audio_Buffer *ab);
  int16 xa_previous[2][2];

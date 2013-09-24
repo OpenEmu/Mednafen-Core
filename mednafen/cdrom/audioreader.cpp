@@ -43,7 +43,7 @@
 #include <time.h>
 
 #include "../general.h"
-#include "../mednafen-endian.h"
+#include "../endian.h"
 
 AudioReader::AudioReader() : LastReadPos(0)
 {

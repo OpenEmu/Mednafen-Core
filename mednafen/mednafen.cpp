@@ -156,6 +156,10 @@ static MDFNSetting RenamedSettings[] =
  { "analogthreshold", MDFNSF_NOFLAGS, NULL, NULL, MDFNST_ALIAS , "input.joystick.axis_threshold" },
  { "ckdelay", MDFNSF_NOFLAGS, NULL, NULL, MDFNST_ALIAS         , "input.ckdelay" },
 
+
+ { "psx.input.port1.multitap", MDFNSF_NOFLAGS, NULL, NULL, MDFNST_ALIAS         , "psx.input.pport1.multitap" },
+ { "psx.input.port2.multitap", MDFNSF_NOFLAGS, NULL, NULL, MDFNST_ALIAS         , "psx.input.pport2.multitap" },
+
  { NULL }
 };
 
@@ -229,7 +233,7 @@ bool MDFNI_StartAVRecord(const char *path, double SoundRate)
 
   if(spec.SoundRate && spec.SoundChan)
   {
-   MDFN_printf(_("Sound rate: %u\n"), spec.SoundRate);
+   MDFN_printf(_("Sound rate: %u\n"), std::min<uint32>(spec.SoundRate, 64000));
    MDFN_printf(_("Sound channels: %u\n"), spec.SoundChan);
   }
   else
@@ -325,6 +329,10 @@ extern MDFNGI EmulatedNES;
 
 #ifdef WANT_SNES_EMU
 extern MDFNGI EmulatedSNES;
+#endif
+
+#ifdef WANT_SNES_PERF_EMU
+extern MDFNGI EmulatedSNES_Perf;
 #endif
 
 #ifdef WANT_GBA_EMU
@@ -452,7 +460,7 @@ static void ReadM3U(std::vector<std::string> &file_list, std::string path, unsig
 
 // TODO: LoadCommon()
 
-MDFNGI *MDFNI_LoadCD(const char *force_module, const char *devicename)
+MDFNGI *MDFNI_LoadCD(const char *force_module, const char *devicename, const bool is_device)
 {
  uint8 LayoutMD5[16];
 
@@ -460,39 +468,51 @@ MDFNGI *MDFNI_LoadCD(const char *force_module, const char *devicename)
 
  LastSoundMultiplier = 1;
 
- MDFN_printf(_("Loading %s...\n\n"), devicename ? devicename : _("PHYSICAL CD"));
+ if(is_device)
+ {
+  if(devicename)
+   MDFN_printf(_("Loading from CD drive device %s...\n\n"), devicename);
+  else
+   MDFN_printf(_("Load from default CD drive device...\n\n"));
+ }
+ else
+ {
+  assert(devicename != NULL);
+  MDFN_printf(_("Loading %s...\n\n"), devicename);
+ }
 
  try
  {
-  if(devicename && strlen(devicename) > 4 && !strcasecmp(devicename + strlen(devicename) - 4, ".m3u"))
+  const bool image_memcache = MDFN_GetSettingB("cd.image_memcache");
+
+  if(is_device)
   {
-   std::vector<std::string> file_list;
-
-   ReadM3U(file_list, devicename);
-
-   for(unsigned i = 0; i < file_list.size(); i++)
-   {
-    CDInterfaces.push_back(CDIF_Open(file_list[i].c_str(), MDFN_GetSettingB("cd.image_memcache")));
-   }
-
-   GetFileBase(devicename);
+   CDInterfaces.push_back(CDIF_Open(devicename, true, image_memcache));
+   GetFileBase("cdrom");
   }
   else
   {
-   CDInterfaces.push_back(CDIF_Open(devicename, MDFN_GetSettingB("cd.image_memcache")));
-
-   if(CDInterfaces[0]->IsPhysical())
+   if(devicename && strlen(devicename) > 4 && !strcasecmp(devicename + strlen(devicename) - 4, ".m3u"))
    {
-    GetFileBase("cdrom");
+    std::vector<std::string> file_list;
+
+    ReadM3U(file_list, devicename);
+
+    for(unsigned i = 0; i < file_list.size(); i++)
+    {
+     CDInterfaces.push_back(CDIF_Open(file_list[i].c_str(), false, image_memcache));
+    }
    }
    else
-    GetFileBase(devicename);
+   {
+    CDInterfaces.push_back(CDIF_Open(devicename, false, image_memcache));
+   }
+   GetFileBase(devicename);
   }
  }
  catch(std::exception &e)
  {
-  MDFND_PrintError(e.what());
-  MDFN_PrintError(_("Error opening CD."));
+  MDFN_PrintError(_("Error opening CD: %s"), e.what());
   return(0);
  }
 
@@ -686,17 +706,11 @@ static bool LoadIPS(MDFNFILE &GameFile, const char *path)
 MDFNGI *MDFNI_LoadGame(const char *force_module, const char *name)
 {
         MDFNFILE GameFile;
-	struct stat stat_buf;
 	std::vector<FileExtensionSpecStruct> valid_iae;
 
-	if(strlen(name) > 4 && (!strcasecmp(name + strlen(name) - 4, ".cue") || !strcasecmp(name + strlen(name) - 4, ".toc") || !strcasecmp(name + strlen(name) - 4, ".m3u")))
+	if(strlen(name) > 4 && (!strcasecmp(name + strlen(name) - 4, ".cue") || !strcasecmp(name + strlen(name) - 4, ".toc") || !strcasecmp(name + strlen(name) - 4, ".ccd") || !strcasecmp(name + strlen(name) - 4, ".m3u")))
 	{
-	 return(MDFNI_LoadCD(force_module, name));
-	}
-	
-	if(!stat(name, &stat_buf) && !S_ISREG(stat_buf.st_mode))
-	{
-	 return(MDFNI_LoadCD(force_module, name));
+	 return(MDFNI_LoadCD(force_module, name, false));
 	}
 
 	MDFNI_CloseGame();
@@ -705,7 +719,7 @@ MDFNGI *MDFNI_LoadGame(const char *force_module, const char *name)
 
 	MDFNGameInfo = NULL;
 
-	MDFN_printf(_("Loading %s...\n"),name);
+	MDFN_printf(_("Loading %s...\n"), name);
 
 	MDFN_indent(1);
 
@@ -992,6 +1006,10 @@ bool MDFNI_InitializeModules(const std::vector<MDFNGI *> &ExternalSystems)
   &EmulatedSNES,
   #endif
 
+  #ifdef WANT_SNES_PERF_EMU
+  &EmulatedSNES_Perf,
+  #endif
+
   #ifdef WANT_GB_EMU
   &EmulatedGB,
   #endif
@@ -1133,13 +1151,13 @@ int MDFNI_Initialize(const char *basedir, const std::vector<MDFNSetting> &Driver
 	 dynamic_settings.push_back(setting);
 	}
 
-    if(DriverSettings.size())
-        MDFN_MergeSettings(DriverSettings);
-    
 	// First merge all settable settings, then load the settings from the SETTINGS FILE OF DOOOOM
 	MDFN_MergeSettings(MednafenSettings);
         MDFN_MergeSettings(dynamic_settings);
 	MDFN_MergeSettings(MDFNMP_Settings);
+
+	if(DriverSettings.size())
+ 	 MDFN_MergeSettings(DriverSettings);
 
 	for(unsigned int x = 0; x < MDFNSystems.size(); x++)
 	{
@@ -1487,7 +1505,8 @@ void MDFNI_Emulate(EmulateSpecStruct *espec)
   espec->SoundBufSize = sbs_backup;
  }
 
- TBlur_Run(espec);
+ if(TBlur_IsOn())
+  TBlur_Run(espec);
 }
 
 // This function should only be called for state rewinding.

@@ -359,7 +359,7 @@ typedef struct
  int fb_width;		// Width of the framebuffer(not necessarily width of the image).  MDFN_Surface width should be >= this.
  int fb_height;		// Height of the framebuffer passed to the Emulate() function(not necessarily height of the image)
 
- int soundchan; 	// Number of output sound channels.
+ int soundchan; 	// Number of output sound channels.  Only values of 1 and 2 are currently supported.
 
 
  int rotated;
@@ -383,6 +383,5 @@ typedef struct
  std::vector<const char *>DesiredInput; // Desired input device for the input ports, NULL for don't care
 
  double mouse_sensitivity;
- bool isPalPSX;
 } MDFNGI;
 #endif

@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "mpcmath.h"
+#include "mpc/mpcmath.h"
 
 #ifdef FAST_MATH
 

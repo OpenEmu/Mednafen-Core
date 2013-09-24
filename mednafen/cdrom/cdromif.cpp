@@ -446,7 +446,7 @@ CDIF_MT::CDIF_MT(CDAccess *cda) : disc_cdaccess(cda), CDReadThread(NULL), SBMute
 
 CDIF_MT::~CDIF_MT()
 {
- bool thread_murdered_with_kitchen_knife = false;
+ bool thread_deaded_failed = false;
 
  try
  {
@@ -455,11 +455,10 @@ CDIF_MT::~CDIF_MT()
  catch(std::exception &e)
  {
   MDFND_PrintError(e.what());
-  MDFND_KillThread(CDReadThread);
-  thread_murdered_with_kitchen_knife = true;
+  thread_deaded_failed = true;
  }
 
- if(!thread_murdered_with_kitchen_knife)
+ if(!thread_deaded_failed)
   MDFND_WaitThread(CDReadThread, NULL);
 
  if(SBMutex)
@@ -482,7 +481,7 @@ bool CDIF::ValidateRawSector(uint8 *buf)
  if(mode != 0x1 && mode != 0x2)
   return(false);
 
- if(!edc_lec_check_correct(buf, mode == 2))
+ if(!edc_lec_check_and_correct(buf, mode == 2))
   return(false);
 
  return(true);
@@ -845,12 +844,17 @@ Stream *CDIF::MakeStream(uint32 lba, uint32 sector_count)
 }
 
 
-CDIF *CDIF_Open(const char *path, bool image_memcache)
+CDIF *CDIF_Open(const char *path, const bool is_device, bool image_memcache)
 {
- CDAccess *cda = cdaccess_open(path, image_memcache);
-
- if(cda->Is_Physical() || !image_memcache)
-  return new CDIF_MT(cda);
+ if(is_device)
+  return new CDIF_MT(cdaccess_open_phys(path));
  else
-  return new CDIF_ST(cda); 
+ {
+  CDAccess *cda = cdaccess_open_image(path, image_memcache);
+
+  if(!image_memcache)
+   return new CDIF_MT(cda);
+  else
+   return new CDIF_ST(cda); 
+ }
 }

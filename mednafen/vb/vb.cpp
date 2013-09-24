@@ -483,7 +483,7 @@ static void ReadHeader(MDFNFILE *fp, VB_HeaderInfo *hi)
   in_ptr = (char*)fp->data + (0xFFFFFDE0 & (fp->size - 1));
   out_ptr = hi->game_title;
 
-  iconv(sjis_ict, (char **)&in_ptr, &ibl, &out_ptr, &obl);
+  iconv(sjis_ict, (ICONV_CONST char **)&in_ptr, &ibl, &out_ptr, &obl);
   iconv_close(sjis_ict);
 
   *out_ptr = 0;

@@ -25,6 +25,8 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "mednafen.h"
+
 #import "MednafenGameCore.h"
 #import <OpenEmuBase/OERingBuffer.h>
 #import <OpenGL/gl.h>
@@ -35,11 +37,6 @@
 #import "OEPSXSystemResponderClient.h"
 #import "OEVBSystemResponderClient.h"
 #import "OEWSSystemResponderClient.h"
-
-#include "mednafen/mednafen-types.h"
-#include "mednafen/mednafen.h"
-#include "mednafen/git.h"
-#include "mednafen/general.h"
 
 static MDFNGI *game;
 static MDFN_Surface *surf;
@@ -166,8 +163,7 @@ static void emulation_run()
         current->videoWidth = rects[0].w;
 
         // Crop overscan for NTSC. Might remove as this kinda sucks
-        if (!game->isPalPSX)
-            switch (current->videoWidth)
+        if(game->VideoSystem == VIDSYS_NTSC) switch(current->videoWidth)
         {
                 // The shifts are not simply (padded_width - real_width) / 2.
             case 350:

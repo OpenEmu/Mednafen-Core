@@ -22,7 +22,7 @@
 */
 #include "mednafen.h"
 #include "PSFLoader.h"
-#include "mednafen-endian.h"
+#include "endian.h"
 #include "general.h"
 
 #include <limits.h>

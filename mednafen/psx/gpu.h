@@ -40,10 +40,10 @@ class PS_GPU
 {
  public:
 
- PS_GPU(bool pal_clock_and_tv);
- ~PS_GPU();
+ PS_GPU(bool pal_clock_and_tv) MDFN_COLD;
+ ~PS_GPU() MDFN_COLD;
 
- void Power(void);
+ void Power(void) MDFN_COLD;
 
  void ResetTS(void);
 
@@ -269,7 +269,7 @@ class PS_GPU
  uint32 LinesPerField;
  uint32 scanline;
  bool field;
- bool field_atvs;
+ bool field_ram_readout;
  bool PhaseChange;
 
  uint32 DotClockCounter;

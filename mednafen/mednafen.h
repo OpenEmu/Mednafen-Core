@@ -1,6 +1,6 @@
 #ifndef _MEDNAFEN_H
 
-#include "mednafen-types.h"
+#include "types.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -50,7 +50,7 @@ int MDFN_RawInputStateAction(StateMem *sm, int load, int data_only);
 
 #include "mednafen-driver.h"
 
-#include "mednafen-endian.h"
+#include "endian.h"
 #include "memory.h"
 
 #define _MEDNAFEN_H

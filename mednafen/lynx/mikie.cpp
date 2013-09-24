@@ -73,9 +73,6 @@ CMikie::CMikie(CSystem& parent)
 	mpDisplayCurrent=NULL;
 	mpRamPointer=NULL;
 
-	mpDisplayCallback=NULL;
-	mDisplayCallbackObject=0;
-
 	mUART_CABLE_PRESENT=FALSE;
 	mpUART_TX_CALLBACK=NULL;
 
@@ -377,9 +374,8 @@ void CMikie::ComLynxTxCallback(void (*function)(int data,uint32 objref),uint32 o
 }
 
 
-void CMikie::DisplaySetAttributes(const MDFN_PixelFormat &format, uint32 Pitch)
+void CMikie::DisplaySetAttributes(const MDFN_PixelFormat &format)
 {
-	mDisplayPitch=Pitch;
 	mpDisplayCurrent=NULL;
 
 	//
@@ -392,19 +388,40 @@ void CMikie::DisplaySetAttributes(const MDFN_PixelFormat &format, uint32 Pitch)
 		mColourMap[Spot.Index]= format.MakeColor(((Spot.Colours.Red * 15) + 30), ((Spot.Colours.Green * 15) + 30),
 							 ((Spot.Colours.Blue * 15) + 30));
 	}
-
-	// Reset screen related counters/vars
-	mTIM_0_CURRENT=0;
-	mTIM_2_CURRENT=0;
-
-	// Fix lastcount so that timer update will definately occur
-	mTIM_0_LAST_COUNT-=(1<<(4+mTIM_0_LINKING))+1;
-	mTIM_2_LAST_COUNT-=(1<<(4+mTIM_2_LINKING))+1;
-
-	// Force immediate timer update
-	gNextTimerEvent=gSystemCycleCount;
 }
 
+template<typename T>
+void CMikie::CopyLineSurface(void)
+{
+	T* bitmap_tmp = mpDisplayCurrent->pix<T>() + mpDisplayCurrentLine * mpDisplayCurrent->pitchinpix;
+
+	if(mpDisplayCurrentLine > 102)
+	{
+	 printf("Lynx Line Overflow: %d\n", mpDisplayCurrentLine);
+	 return;
+	}
+
+	for(uint32 loop = 0; loop < SCREEN_WIDTH / 2; loop++)
+	{
+		uint32 source = mpRamPointer[(uint16)mLynxAddr];
+		if(mDISPCTL_Flip)
+		{
+			mLynxAddr--;
+			*bitmap_tmp=mColourMap[mPalette[source&0x0f].Index];
+			bitmap_tmp++;
+			*bitmap_tmp=mColourMap[mPalette[source>>4].Index];
+			bitmap_tmp++;
+		}
+		else
+		{
+			mLynxAddr++;
+			*bitmap_tmp = mColourMap[mPalette[source>>4].Index];
+			bitmap_tmp++;
+			*bitmap_tmp = mColourMap[mPalette[source&0x0f].Index];
+			bitmap_tmp++;
+		}
+	}
+}
 
 uint32 CMikie::DisplayRenderLine(void)
 {
@@ -461,33 +478,15 @@ uint32 CMikie::DisplayRenderLine(void)
 		// Assign the temporary pointer;
 		if(!mpSkipFrame)
 		{
-			uint32 *bitmap_tmp = mpDisplayCurrent + mpDisplayCurrentLine * mDisplayPitch;
-
-			if(mpDisplayCurrentLine > 102)
+			switch(mpDisplayCurrent->format.bpp)
 			{
-                         printf("Lynx Line Overflow: %d\n", mpDisplayCurrentLine);
-			 bitmap_tmp = mpDisplayCurrent;
-			}
+				case 16:
+					CopyLineSurface<uint16>();
+					break;
 
-			for(uint32 loop=0;loop<SCREEN_WIDTH/2;loop++)
-			{
-				uint32 source = mpRamPointer[mLynxAddr];
-				if(mDISPCTL_Flip)
-				{
-					mLynxAddr--;
-					*bitmap_tmp=mColourMap[mPalette[source&0x0f].Index];
-					bitmap_tmp++;
-					*bitmap_tmp=mColourMap[mPalette[source>>4].Index];
-					bitmap_tmp++;
-				}
-				else
-				{
-					mLynxAddr++;
-					*bitmap_tmp = mColourMap[mPalette[source>>4].Index];
-					bitmap_tmp++;
-					*bitmap_tmp = mColourMap[mPalette[source&0x0f].Index];
-					bitmap_tmp++;
-				}
+				case 32:
+					CopyLineSurface<uint32>();
+					break;
 			}
 
 			if(mpDisplayCurrentLine < 102)
@@ -527,13 +526,6 @@ void CMikie::Poke(uint32 addr,uint8 data)
 	 switch(addr & 0x7)
 	 {
                 case (AUD0VOL&0x7):
-                        // Counter is disabled when volume is zero for optimisation
-                        // reasons, we must update the last use position to stop problems
-                        if(!mAUDIO_VOLUME[which] && data)
-                        {
-                                mAUDIO_LAST_COUNT[which]=gSystemCycleCount;
-                                gNextTimerEvent=gSystemCycleCount;
-                        }
                         mAUDIO_VOLUME[which]=(int8)data;
                         TRACE_MIKIE2("Poke(AUD0VOL,%02x) at PC=%04x",data,mSystem.mCpu->GetPC());
                         CombobulateSound(gSystemCycleCount - startTS);
@@ -556,14 +548,6 @@ void CMikie::Poke(uint32 addr,uint8 data)
                         CombobulateSound(gSystemCycleCount - startTS);
                         break;
                 case (AUD0TBACK&0x7):
-                        // Counter is disabled when backup is zero for optimisation
-                        // due to the fact that the output frequency will be above audio
-                        // range, we must update the last use position to stop problems
-                        if(!mAUDIO_BKUP[which] && data)
-                        {
-                                mAUDIO_LAST_COUNT[which]=gSystemCycleCount;
-                                gNextTimerEvent=gSystemCycleCount;
-                        }
                         mAUDIO_BKUP[which]=data;
                         TRACE_MIKIE2("Poke(AUD0TBACK,%02x) at PC=%04x",data,mSystem.mCpu->GetPC());
                         CombobulateSound(gSystemCycleCount - startTS);
@@ -2639,10 +2623,10 @@ void CMikie::Update(void)
 			  int y;
 			  for(y = 0; y < 4; y++)
 			  {
-				if(mAUDIO_ENABLE_COUNT[y] && (mAUDIO_ENABLE_RELOAD[y] || !mAUDIO_TIMER_DONE[y]) && mAUDIO_VOLUME[y] && mAUDIO_BKUP[y])
+				if(mAUDIO_ENABLE_COUNT[y] && (mAUDIO_ENABLE_RELOAD[y] || !mAUDIO_TIMER_DONE[y]))
 				{
 					decval=0;
-		
+
 					if(mAUDIO_LINKING[y]==0x07)
 					{
 						int bort;
@@ -2688,7 +2672,8 @@ void CMikie::Update(void)
 							//
 							// Update audio circuitry
 							//
-							mAUDIO_WAVESHAPER[y] = GetLfsrNext(mAUDIO_WAVESHAPER[y]);
+							if(mAUDIO_BKUP[y] || mAUDIO_LINKING[y])
+							 mAUDIO_WAVESHAPER[y] = GetLfsrNext(mAUDIO_WAVESHAPER[y]);
 
 							if(mAUDIO_INTEGRATE_ENABLE[y])
 							{
