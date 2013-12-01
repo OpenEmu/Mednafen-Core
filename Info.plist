@@ -26,6 +26,8 @@
 	<string>MednafenGameCore</string>
 	<key>OEGameCorePlayerCount</key>
 	<string>2</string>
+	<key>OEGameCoreRequiresFiles</key>
+	<true/>
 	<key>OEProjectURL</key>
 	<string>http://mednafen.sourceforge.net/</string>
 	<key>OESystemIdentifiers</key>
