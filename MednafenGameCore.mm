@@ -55,7 +55,6 @@ enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
     int systemType;
     int videoWidth, videoHeight;
     int videoOffsetX, videoOffsetY;
-    uint16_t input_buf[2];
     NSString *romName;
     double sampleRate;
     double masterClock;
@@ -68,6 +67,7 @@ enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
 @end
 
 static __weak MednafenGameCore *_current;
+uint32_t input_buf[2] = {0};
 
 @implementation MednafenGameCore
 
@@ -284,10 +284,18 @@ static void emulation_run()
 
     masterClock = game->MasterClock >> 32;
     
-    game->SetInput(0, "gamepad", &input_buf[0]);
-    // Set P2 gamepad for available systems
-    if (systemType == pce || systemType == pcfx || systemType == psx)
+    if (systemType == pce || systemType == pcfx)
+    {
+        game->SetInput(0, "gamepad", &input_buf[0]);
         game->SetInput(1, "gamepad", &input_buf[1]);
+    }
+    else if (systemType == psx)
+    {
+        game->SetInput(0, "dualshock", &input_buf[0]);
+        game->SetInput(1, "dualshock", &input_buf[1]);
+    }
+    else
+        game->SetInput(0, "gamepad", &input_buf[0]);
     
     emulation_run();
 
@@ -396,7 +404,7 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 const int LynxMap[] = { 6, 7, 4, 5, 0, 1, 3, 2 };
 const int PCEMap[]  = { 4, 6, 7, 5, 0, 1, 8, 9, 10, 11, 3, 2, 12 };
 const int PCFXMap[] = { 8, 10, 11, 9, 0, 1, 2, 3, 4, 5, 7, 6 };
-const int PSXMap[]  = { 4, 6, 7, 5, 12, 13, 14, 15, 10, 8, 1, 11, 9, 2, 3, 0 };
+const int PSXMap[]  = { 4, 6, 7, 5, 12, 13, 14, 15, 10, 8, 1, 11, 9, 2, 3, 0, 16, 24, 23, 22, 21, 20, 19, 18, 17 };
 const int VBMap[]   = { 9, 8, 7, 6, 4, 13, 12, 5, 3, 2, 0, 1, 10, 11 };
 const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
@@ -468,6 +476,11 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 - (oneway void)didReleaseWSButton:(OEWSButton)button forPlayer:(NSUInteger)player;
 {
     input_buf[player-1] &= ~(1 << WSMap[button]);
+}
+
+- (oneway void)didMovePSXJoystickDirection:(OEPSXButton)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
+{
+    //TODO
 }
 
 - (void)changeDisplayMode
