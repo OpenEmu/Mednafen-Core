@@ -52,6 +52,7 @@ enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
 
 @interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
 {
+    uint32_t *inputBuffer[2];
     int systemType;
     int videoWidth, videoHeight;
     int videoOffsetX, videoOffsetY;
@@ -67,7 +68,6 @@ enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
 @end
 
 static __weak MednafenGameCore *_current;
-uint32_t input_buf[2] = {0};
 
 @implementation MednafenGameCore
 
@@ -125,13 +125,19 @@ static void mednafen_init()
     if((self = [super init]))
     {
         _current = self;
+
+        inputBuffer[0] = (uint32_t *) calloc(9, sizeof(uint32_t));
+        inputBuffer[1] = (uint32_t *) calloc(9, sizeof(uint32_t));
     }
-    
+
     return self;
 }
 
 - (void)dealloc
 {
+    free(inputBuffer[0]);
+    free(inputBuffer[1]);
+
     delete surf;
 }
 
@@ -225,8 +231,7 @@ static void emulation_run()
         mednafenCoreAspect = OEIntSizeMake(8, 5);
         sampleRate         = 48000;
     }
-
-    if([[self systemIdentifier] isEqualToString:@"openemu.system.pce"] || [[self systemIdentifier] isEqualToString:@"openemu.system.pcecd"])
+    else if([[self systemIdentifier] isEqualToString:@"openemu.system.pce"] || [[self systemIdentifier] isEqualToString:@"openemu.system.pcecd"])
     {
         systemType = pce;
 
@@ -234,8 +239,7 @@ static void emulation_run()
         mednafenCoreAspect = OEIntSizeMake(4, 3);
         sampleRate         = 48000;
     }
-
-    if([[self systemIdentifier] isEqualToString:@"openemu.system.pcfx"])
+    else if([[self systemIdentifier] isEqualToString:@"openemu.system.pcfx"])
     {
         systemType = pcfx;
 
@@ -243,8 +247,7 @@ static void emulation_run()
         mednafenCoreAspect = OEIntSizeMake(4, 3);
         sampleRate         = 48000;
     }
-
-    if([[self systemIdentifier] isEqualToString:@"openemu.system.psx"])
+    else if([[self systemIdentifier] isEqualToString:@"openemu.system.psx"])
     {
         systemType = psx;
 
@@ -252,8 +255,7 @@ static void emulation_run()
         mednafenCoreAspect = OEIntSizeMake(4, 3);
         sampleRate         = 44100;
     }
-
-    if([[self systemIdentifier] isEqualToString:@"openemu.system.vb"])
+    else if([[self systemIdentifier] isEqualToString:@"openemu.system.vb"])
     {
         systemType = vb;
 
@@ -261,8 +263,7 @@ static void emulation_run()
         mednafenCoreAspect = OEIntSizeMake(12, 7);
         sampleRate         = 48000;
     }
-
-    if([[self systemIdentifier] isEqualToString:@"openemu.system.ws"])
+    else if([[self systemIdentifier] isEqualToString:@"openemu.system.ws"])
     {
         systemType = wswan;
 
@@ -286,16 +287,18 @@ static void emulation_run()
     
     if (systemType == pce || systemType == pcfx)
     {
-        game->SetInput(0, "gamepad", &input_buf[0]);
-        game->SetInput(1, "gamepad", &input_buf[1]);
+        game->SetInput(0, "gamepad", inputBuffer[0]);
+        game->SetInput(1, "gamepad", inputBuffer[1]);
     }
     else if (systemType == psx)
     {
-        game->SetInput(0, "dualshock", &input_buf[0]);
-        game->SetInput(1, "dualshock", &input_buf[1]);
+        game->SetInput(0, "dualshock", inputBuffer[0]);
+        game->SetInput(1, "dualshock", inputBuffer[1]);
     }
     else
-        game->SetInput(0, "gamepad", &input_buf[0]);
+    {
+        game->SetInput(0, "gamepad", inputBuffer[0]);
+    }
     
     emulation_run();
 
@@ -410,77 +413,99 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)didPushLynxButton:(OELynxButton)button forPlayer:(NSUInteger)player;
 {
-    input_buf[player-1] |= 1 << LynxMap[button];
+    inputBuffer[player-1][0] |= 1 << LynxMap[button];
 }
 
 - (oneway void)didReleaseLynxButton:(OELynxButton)button forPlayer:(NSUInteger)player;
 {
-    input_buf[player-1] &= ~(1 << LynxMap[button]);
+    inputBuffer[player-1][0] &= ~(1 << LynxMap[button]);
 }
 
 - (oneway void)didPushPCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player;
 {
-    input_buf[player-1] |= 1 << PCEMap[button];
+    inputBuffer[player-1][0] |= 1 << PCEMap[button];
 }
 
 - (oneway void)didReleasePCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player;
 {
-    input_buf[player-1] &= ~(1 << PCEMap[button]);
+    inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
 }
 
 - (oneway void)didPushPCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player;
 {
-    input_buf[player-1] |= 1 << PCEMap[button];
+    inputBuffer[player-1][0] |= 1 << PCEMap[button];
 }
 
 - (oneway void)didReleasePCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player;
 {
-    input_buf[player-1] &= ~(1 << PCEMap[button]);
+    inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
 }
 
 - (oneway void)didPushPCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player;
 {
-    input_buf[player-1] |= 1 << PCFXMap[button];
+    inputBuffer[player-1][0] |= 1 << PCFXMap[button];
 }
 
 - (oneway void)didReleasePCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player;
 {
-    input_buf[player-1] &= ~(1 << PCFXMap[button]);
-}
-
-- (oneway void)didPushPSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
-{
-    input_buf[player-1] |= 1 << PSXMap[button];
-}
-
-- (oneway void)didReleasePSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
-{
-    input_buf[player-1] &= ~(1 << PSXMap[button]);
+    inputBuffer[player-1][0] &= ~(1 << PCFXMap[button]);
 }
 
 - (oneway void)didPushVBButton:(OEVBButton)button forPlayer:(NSUInteger)player;
 {
-    input_buf[player-1] |= 1 << VBMap[button];
+    inputBuffer[player-1][0] |= 1 << VBMap[button];
 }
 
 - (oneway void)didReleaseVBButton:(OEVBButton)button forPlayer:(NSUInteger)player;
 {
-    input_buf[player-1] &= ~(1 << VBMap[button]);
+    inputBuffer[player-1][0] &= ~(1 << VBMap[button]);
 }
 
 - (oneway void)didPushWSButton:(OEWSButton)button forPlayer:(NSUInteger)player;
 {
-    input_buf[player-1] |= 1 << WSMap[button];
+    inputBuffer[player-1][0] |= 1 << WSMap[button];
 }
 
 - (oneway void)didReleaseWSButton:(OEWSButton)button forPlayer:(NSUInteger)player;
 {
-    input_buf[player-1] &= ~(1 << WSMap[button]);
+    inputBuffer[player-1][0] &= ~(1 << WSMap[button]);
+}
+
+- (oneway void)didPushPSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
+{
+    inputBuffer[player-1][0] |= 1 << PSXMap[button];
+}
+
+- (oneway void)didReleasePSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
+{
+    inputBuffer[player-1][0] &= ~(1 << PSXMap[button]);
 }
 
 - (oneway void)didMovePSXJoystickDirection:(OEPSXButton)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
-    //TODO
+    int analogNumber = PSXMap[button] - 16;
+    inputBuffer[player-1][analogNumber] = 32767 * value;
+
+//    // 17 is where the analog controls start in Mednafen PSX
+//    int analogNumber = PSXMap[button] - 17;
+//
+//    // Mednafen expects analog values from 0 - 32767
+//    int v = 32767 * value;
+//
+//    // Since Mednafen encodes the analog values in bit arrays we need to split
+//    // the number up here, and set them separately
+//    int vUpper = v >> 17;
+//    int vLower = v << 15;
+//
+//    // Clear the lower bits
+//    // 4294934528 = 11111111111111111000000000000000
+//    inputBuffer[player-1][analogNumber] &= 4294934528;
+//    inputBuffer[player-1][analogNumber] |= vUpper;
+//
+//    // Clear the higher bits
+//    // 32767 = 00000000000000000111111111111111
+//    inputBuffer[player-1][analogNumber+1] &= 32767;
+//    inputBuffer[player-1][analogNumber+1] |= vLower;
 }
 
 - (void)changeDisplayMode
