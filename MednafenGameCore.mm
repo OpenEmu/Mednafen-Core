@@ -485,27 +485,6 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 {
     int analogNumber = PSXMap[button] - 16;
     inputBuffer[player-1][analogNumber] = 32767 * value;
-
-//    // 17 is where the analog controls start in Mednafen PSX
-//    int analogNumber = PSXMap[button] - 17;
-//
-//    // Mednafen expects analog values from 0 - 32767
-//    int v = 32767 * value;
-//
-//    // Since Mednafen encodes the analog values in bit arrays we need to split
-//    // the number up here, and set them separately
-//    int vUpper = v >> 17;
-//    int vLower = v << 15;
-//
-//    // Clear the lower bits
-//    // 4294934528 = 11111111111111111000000000000000
-//    inputBuffer[player-1][analogNumber] &= 4294934528;
-//    inputBuffer[player-1][analogNumber] |= vUpper;
-//
-//    // Clear the higher bits
-//    // 32767 = 00000000000000000111111111111111
-//    inputBuffer[player-1][analogNumber+1] &= 32767;
-//    inputBuffer[player-1][analogNumber+1] |= vLower;
 }
 
 - (void)changeDisplayMode
