@@ -219,7 +219,7 @@ static void emulation_run()
     update_audio_batch(spec.SoundBuf, spec.SoundBufSize);
 }
 
-- (BOOL)loadFileAtPath:(NSString *)path
+- (BOOL)loadFileAtPath:(NSString *)path error:(NSError **)error
 {
     [[NSFileManager defaultManager] createDirectoryAtPath:[self batterySavesDirectoryPath] withIntermediateDirectories:YES attributes:nil error:NULL];
     
