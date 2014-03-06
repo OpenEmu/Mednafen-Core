@@ -1,17 +1,11 @@
-#ifndef __PCE_CDROM_H
-#define __PCE_CDROM_H
-
-#include <blip/Blip_Buffer.h>
+#ifndef __MDFN_PCE_PCECD_H
+#define __MDFN_PCE_PCECD_H
 
 typedef struct
 {
 	double CDDA_Volume;
-
-	unsigned int CD_Speed;
-
 	double ADPCM_Volume;
-
-	bool ADPCM_LPF;
+	bool ADPCM_ExtraPrecision;
 } PCECD_Settings;
 
 
@@ -42,9 +36,10 @@ void PCECD_SetRegister(const unsigned int id, const uint32 value);
 
 
 int32 PCECD_Run(uint32 in_timestamp) MDFN_WARN_UNUSED_RESULT;
-void PCECD_ResetTS(void);
+void PCECD_ResetTS(uint32 ts_base = 0);
+void PCECD_ProcessADPCMBuffer(const uint32 rsc);
 
-bool PCECD_Init(const PCECD_Settings *settings, void (*irqcb)(bool), double master_clock, unsigned int ocm, Blip_Buffer *soundbuf_l, Blip_Buffer *soundbuf_r);
+bool PCECD_Init(const PCECD_Settings *settings, void (*irqcb)(bool), double master_clock, int32* adbuf, int32* hrbuf_l, int32* hrbuf_r);
 bool PCECD_SetSettings(const PCECD_Settings *settings);
 
 void PCECD_Close();

@@ -1,17 +1,1 @@
-class SoundDriver
-{
-
-};
-
-
-class SoundDevice
-{
-
-
-};
-
-class SoundManager
-{
-
-
-};
+../drivers/sound.h

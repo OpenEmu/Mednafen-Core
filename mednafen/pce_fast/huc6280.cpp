@@ -545,6 +545,7 @@ void HuC6280_Reset(void)
  HuCPU.IRQMask = HuCPU.IRQMaskDelay = 7;
 
  HuC6280_SetMPR(0, 0xFF);
+ HuC6280_SetMPR(8, 0xFF);
  HuC6280_SetMPR(1, 0xF8);
 
  for(int i = 2; i < 8; i++)
@@ -631,11 +632,11 @@ void HuC6280_Run(int32 cycles)
 	 }
 	}
 
-	while(HuCPU.timestamp < next_user_event)
+	while(MDFN_LIKELY(HuCPU.timestamp < next_user_event))
 	{
 	 next_event = (next_user_event < HuCPU.timer_next_timestamp) ? next_user_event : HuCPU.timer_next_timestamp;
 
-	 while(HuCPU.timestamp < next_event)
+	 while(MDFN_LIKELY(HuCPU.timestamp < next_event))
 	 {
 	  uint8 b1;
 

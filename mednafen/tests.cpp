@@ -399,10 +399,26 @@ static void fptest0(void)
  assert(mdfn_fptest0_sub(36, 2) == 9);
 }
 
+volatile double mdfn_fptest1_v;
+static void fptest1(void)
+{
+ mdfn_fptest1_v = 1.0;
+
+ for(int i = 0; i < 128; i++)
+  mdfn_fptest1_v *= 2;
+
+ assert(mdfn_fptest1_v == 340282366920938463463374607431768211456.0);
+}
+
 static void RunFPTests(void)
 {
  fptest0();
+ fptest1();
 }
+
+const char* MDFN_tests_stringA = "AB\0C";
+const char* MDFN_tests_stringB = "AB\0CD";
+const char* MDFN_tests_stringC = "AB\0X";
 
 bool MDFN_RunMathTests(void)
 {
@@ -410,6 +426,9 @@ bool MDFN_RunMathTests(void)
 
  if(!DoSizeofTests())
   return(0);
+
+ assert(MDFN_tests_stringA != MDFN_tests_stringB && MDFN_tests_stringA[3] == 'C' && MDFN_tests_stringB[4] == 'D');
+ assert(MDFN_tests_stringA != MDFN_tests_stringC && MDFN_tests_stringB != MDFN_tests_stringC && MDFN_tests_stringC[3] == 'X');
 
  // Make sure the "char" type is signed(pass -fsigned-char to gcc).  New code in Mednafen shouldn't be written with the
  // assumption that "char" is signed, but there likely is at least some code that does.
