@@ -1182,14 +1182,14 @@ int MDFNI_Initialize(const char *basedir, const std::vector<MDFNSetting> &Driver
          BuildDynamicSetting(&setting, sysname, "tblur.accum.amount", MDFNSF_COMMON_TEMPLATE | MDFNSF_CAT_VIDEO, CSD_tblur_accum_amount, MDFNST_FLOAT, "50", "0", "100");
 	 dynamic_settings.push_back(setting);
 	}
+    
+	if(DriverSettings.size())
+        MDFN_MergeSettings(DriverSettings);
 
 	// First merge all settable settings, then load the settings from the SETTINGS FILE OF DOOOOM
 	MDFN_MergeSettings(MednafenSettings);
         MDFN_MergeSettings(dynamic_settings);
 	MDFN_MergeSettings(MDFNMP_Settings);
-
-	if(DriverSettings.size())
- 	 MDFN_MergeSettings(DriverSettings);
 
 	for(unsigned int x = 0; x < MDFNSystems.size(); x++)
 	{
