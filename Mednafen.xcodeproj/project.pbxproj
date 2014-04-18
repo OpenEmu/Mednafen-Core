@@ -312,8 +312,6 @@
 		8CB3D58617F1DE5A0090372A /* Joystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Joystick.h; sourceTree = "<group>"; };
 		8CB3D58717F1DE5A0090372A /* Joystick_DX5.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick_DX5.cpp; sourceTree = "<group>"; };
 		8CB3D58817F1DE5A0090372A /* Joystick_DX5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Joystick_DX5.h; sourceTree = "<group>"; };
-		8CB3D58917F1DE5A0090372A /* Joystick_DX8.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick_DX8.cpp; sourceTree = "<group>"; };
-		8CB3D58A17F1DE5A0090372A /* Joystick_DX8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Joystick_DX8.h; sourceTree = "<group>"; };
 		8CB3D58B17F1DE5A0090372A /* Joystick_Linux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick_Linux.cpp; sourceTree = "<group>"; };
 		8CB3D58C17F1DE5A0090372A /* Joystick_Linux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Joystick_Linux.h; sourceTree = "<group>"; };
 		8CB3D58D17F1DE5A0090372A /* Joystick_SDL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick_SDL.cpp; sourceTree = "<group>"; };
@@ -2284,8 +2282,6 @@
 				8CB3D58617F1DE5A0090372A /* Joystick.h */,
 				8CB3D58717F1DE5A0090372A /* Joystick_DX5.cpp */,
 				8CB3D58817F1DE5A0090372A /* Joystick_DX5.h */,
-				8CB3D58917F1DE5A0090372A /* Joystick_DX8.cpp */,
-				8CB3D58A17F1DE5A0090372A /* Joystick_DX8.h */,
 				8CB3D58B17F1DE5A0090372A /* Joystick_Linux.cpp */,
 				8CB3D58C17F1DE5A0090372A /* Joystick_Linux.h */,
 				8CB3D58D17F1DE5A0090372A /* Joystick_SDL.cpp */,
