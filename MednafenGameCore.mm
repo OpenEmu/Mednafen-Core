@@ -155,7 +155,7 @@ static void emulation_run()
     spec.surface = surf;
     spec.SoundRate = current->sampleRate;
     spec.SoundBuf = sound_buf;
-    spec.LineWidths = rects;
+    spec.LineWidths = (int32 *)rects;
     spec.SoundBufMaxSize = sizeof(sound_buf) / 2;
     spec.SoundVolume = 1.0;
     spec.soundmultiplier = 1.0;

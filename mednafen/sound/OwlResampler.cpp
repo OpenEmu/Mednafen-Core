@@ -34,8 +34,6 @@
  #error "OwlResampler.cpp not compatible with unsafe math optimizations!"
 #endif
 
-#define CPUTEST_FLAG_SSE          0x0008 ///< SSE functions
-
 OwlBuffer::OwlBuffer()
 {
  assert(sizeof(I32_F_Pudding) == 4);
@@ -843,8 +841,7 @@ OwlResampler::OwlResampler(double input_rate, double output_rate, double rate_er
 
  IntermediateBuffer.resize(OutputRate * 4 / 50);	// *4 for safety padding, / min(50,60), an approximate calculation
 
- //cpuext = cputest_get_flags();
- cpuext = 1;
+ cpuext = cputest_get_flags();
 //cpuext = 0;
  MDFN_printf("OwlResampler.cpp debug info:\n");
  MDFN_indent(1);

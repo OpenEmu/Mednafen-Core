@@ -4,7 +4,7 @@
 #ifndef BLARGG_ENDIAN
 #define BLARGG_ENDIAN
 
-#include "blargg_common.h"
+#include "fir_blargg_common.h"
 
 // BLARGG_CPU_CISC: Defined if CPU has very few general-purpose registers (< 16)
 #if defined (_M_IX86) || defined (_M_IA64) || defined (__i486__) || \

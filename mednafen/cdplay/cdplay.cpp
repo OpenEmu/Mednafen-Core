@@ -17,11 +17,9 @@
 
 // TODO: Clear Q subchannel data on disc change and manual track change, add Q subchannel mode have variable(s).
 
-//#include <mednafen/mednafen.h>
-#include "mednafen.h"
-#include "cdrom/cdromif.h"
-#include "netplay.h"
-#include <blip/Blip_Buffer.h>
+#include <mednafen/mednafen.h>
+#include <mednafen/cdrom/cdromif.h>
+#include <mednafen/netplay.h>
 #include <trio/trio.h>
 #include <vector>
 #include <math.h>
@@ -80,7 +78,7 @@ static std::vector<AudioTrackInfo> AudioTrackList;
 
 static void InitLUT(void);
 
-static int LoadCD(std::vector<CDIF *> *CDInterfaces)
+static void LoadCD(std::vector<CDIF *> *CDInterfaces)
 {
  cdifs = CDInterfaces;
 
@@ -102,10 +100,7 @@ static int LoadCD(std::vector<CDIF *> *CDInterfaces)
  }
 
  if(!AudioTrackList.size())
- {
-  puts("Audio track doesn't exist");
-  return(0);
- }
+  throw MDFN_Error(0, _("Audio track doesn't exist."));
 
  CurrentATLI = 0;
  PlaySector = AudioTrackList[CurrentATLI].lba;
@@ -119,8 +114,6 @@ static int LoadCD(std::vector<CDIF *> *CDInterfaces)
  ResampBufferPos = 0;
 
  InitLUT();
-
- return(1);
 }
 
 static bool TestMagicCD(std::vector<CDIF *> *CDInterfaces)
@@ -175,10 +168,6 @@ static void GenSubQFromSubPW(uint8 *SubPWBuf)
   memcpy(SubQBuf_LastValid, sq, 0xC);
  }
 }
-static const int lobes = 2;
-static const int oversample_shift = 5;	//1; //7;
-static const int oversample = 1 << oversample_shift;
-static const int oversample_mo = oversample - 1;
 
 static void InitLUT(void)
 {
@@ -311,59 +300,54 @@ static void Emulate(EmulateSpecStruct *espec)
 
   if(MDFN_GetSettingB("cdplay.visualization"))
   {
-  for(int i = 0; i < 588; i++)
-  {
-   int32 unip_samp;
-   int32 next_unip_samp; 
+   static const int lobes = 2;
+   static const int oversample_shift = 5;	// Don't increase without resolving integer overflow issues.
+   static const int oversample = 1 << oversample_shift;
+   static const int oversample_mo = oversample - 1;
 
-   unip_samp = ((CDDABuffer[i * 2 + 0] + CDDABuffer[i * 2 + 1]) >> 1) + 32768;
-   next_unip_samp = ((CDDABuffer[(i * 2 + 2) % 1176] + CDDABuffer[(i * 2 + 3) % 1176]) >> 1) + 32768;
+   for(int i = 0; i < 588; i++)
+   { 
+    const float rawp_adjust = 1.0 / (1 * M_PI * 2 / 65536);
+    const float unip_samp = (float)(((CDDABuffer[i * 2 + 0] + CDDABuffer[i * 2 + 1]) >> 1) + 32768) / 65536;
+    const float next_unip_samp = (float)(((CDDABuffer[(i * 2 + 2) % 1176] + CDDABuffer[(i * 2 + 3) % 1176]) >> 1) + 32768) / 65536;
+    const float sample_inc = (next_unip_samp - unip_samp) / oversample;
+    float sample = (unip_samp - 0.5) / 2;
 
-   for(int osi = 0; osi < oversample; osi++)
-   {
-    float sample;
-    int x;
-    int y;
-    float x_raw, y_raw;
-    float x_raw2, y_raw2;
-    float x_raw_prime, y_raw_prime;
-
-    sample = (float)(unip_samp * (oversample - osi) + next_unip_samp * osi) / (oversample * 65536);
-
-    int32 theta_i = (int64)65536 * (i * oversample + osi) / (oversample * 588);
-    int32 theta_i_alt = (int64)65536 * (i * oversample + osi) / (oversample * 588);
-
-    float radius = sin_lut[(lobes * theta_i) & 0xFFFF];
-    float radius2 = sin_lut[(lobes * (theta_i + 1)) & 0xFFFF];
-
-    x_raw = radius * sin_lut[(16384 + theta_i_alt) & 0xFFFF];
-    y_raw = radius * sin_lut[theta_i_alt & 0xFFFF];
-
-    x_raw2 = radius2 * sin_lut[(16384 + theta_i_alt + 1) & 0xFFFF];
-    y_raw2 = radius2 * sin_lut[(theta_i_alt + 1) & 0xFFFF];
-
-    // Approximation, of course.
-    x_raw_prime = (x_raw2 - x_raw) / (1 * M_PI * 2 / 65536);
-    y_raw_prime = (y_raw2 - y_raw) / (1 * M_PI * 2 / 65536);
-
-    //printf("%f %f\n", y_raw_prime, sin_lut[(16384 + lobes * theta_i_alt) & 0xFFFF] + sin_lut[(16384 + theta_i_alt) & 0xFFFF]);
-
-    if(x_raw_prime || y_raw_prime)
+    for(int osi = 0; osi < oversample; osi++, sample += sample_inc)
     {
-     x_raw_prime = x_raw_prime / sqrt(x_raw_prime * x_raw_prime + y_raw_prime * y_raw_prime);
-     y_raw_prime = y_raw_prime / sqrt(x_raw_prime * x_raw_prime + y_raw_prime * y_raw_prime);
+     unsigned x;	// Make sure x and y are unsigned, else we need to change our in-bounds if() check.
+     unsigned y;
+     float x_raw, y_raw;
+     float x_raw2, y_raw2;
+     float x_raw_prime, y_raw_prime;
+     int32 theta_i = (uint32)65536 * (i * oversample + osi) / (oversample * 588);
+
+     float radius = sin_lut[(lobes * theta_i) & 0xFFFF];
+     float radius2 = sin_lut[(lobes * (theta_i + 1)) & 0xFFFF];
+
+     x_raw = radius * sin_lut[(16384 + theta_i) & 0xFFFF];
+     y_raw = radius * sin_lut[theta_i & 0xFFFF];
+
+     x_raw2 = radius2 * sin_lut[(16384 + theta_i + 1) & 0xFFFF];
+     y_raw2 = radius2 * sin_lut[(theta_i + 1) & 0xFFFF];
+
+     // Approximation, of course.
+     x_raw_prime = (x_raw2 - x_raw) * rawp_adjust;
+     y_raw_prime = (y_raw2 - y_raw) * rawp_adjust;
+
+     x_raw_prime = x_raw_prime / (float)sqrt(x_raw_prime * x_raw_prime + y_raw_prime * y_raw_prime);
+     y_raw_prime = y_raw_prime / (float)sqrt(x_raw_prime * x_raw_prime + y_raw_prime * y_raw_prime);
+
+     x_raw += sample * y_raw_prime;
+     y_raw += sample * -x_raw_prime;
+
+     x = 96 + 60 * x_raw;
+     y = 72 + 60 * y_raw;
+
+     if(x < 192 && y < 144)
+      pixels[x + y * espec->surface->pitch32] = wf_color;
     }
-
-    x_raw += (sample - 0.5) * y_raw_prime / 2;
-    y_raw += (sample - 0.5) * -x_raw_prime / 2;
-
-    x = 96 + 60 * x_raw;
-    y = 72 + 60 * y_raw;
-
-    if((x >= 0 && x < 192) && (y >= 0 && y < 144))
-     pixels[x + y * espec->surface->pitch32] = wf_color;
    }
-  }
   }
 
   {

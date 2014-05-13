@@ -75,6 +75,28 @@ int MDFND_UnlockMutex(MDFN_Mutex *lock)
     return 0;
 }
 
+MDFN_Cond* MDFND_CreateCond(void)
+{
+    return (MDFN_Cond*)scond_new();
+}
+
+void MDFND_DestroyCond(MDFN_Cond* cond)
+{
+    scond_free((scond_t*)cond);
+}
+
+int MDFND_SignalCond(MDFN_Cond* cond)
+{
+    scond_signal((scond_t*)cond);
+    return 0;
+}
+
+int MDFND_WaitCond(MDFN_Cond* cond, MDFN_Mutex* mutex)
+{
+    scond_wait((scond_t*)cond, (slock_t*)mutex);
+    return 0;
+}
+
 void MDFND_SendData(const void*, uint32) {}
 void MDFND_RecvData(void *, uint32) {}
 void MDFND_NetplayText(const uint8*, bool) {}
