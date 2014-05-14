@@ -166,7 +166,7 @@ static void emulation_run()
 
     if(current->systemType == psx)
     {
-        current->videoWidth = rects[0];
+        current->videoWidth = rects[spec.DisplayRect.y];
 
         // Crop overscan for NTSC. Might remove as this kinda sucks
         if(game->VideoSystem == VIDSYS_NTSC) switch(current->videoWidth)
@@ -204,7 +204,7 @@ static void emulation_run()
     }
     else if(game->multires)
     {
-        current->videoWidth = rects[0];
+        current->videoWidth = rects[spec.DisplayRect.y];
         current->videoOffsetX = spec.DisplayRect.x;
     }
     else
