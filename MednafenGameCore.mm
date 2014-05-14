@@ -148,14 +148,14 @@ static void emulation_run()
     GET_CURRENT_AND_RETURN();
 
     static int16_t sound_buf[0x10000];
-    MDFN_Rect rects[game->fb_height];
-    rects[0].w = ~0;
+    int32 rects[game->fb_height];
+    rects[0] = ~0;
 
     EmulateSpecStruct spec = {0};
     spec.surface = surf;
     spec.SoundRate = current->sampleRate;
     spec.SoundBuf = sound_buf;
-    spec.LineWidths = (int32 *)rects;
+    spec.LineWidths = rects;
     spec.SoundBufMaxSize = sizeof(sound_buf) / 2;
     spec.SoundVolume = 1.0;
     spec.soundmultiplier = 1.0;
@@ -166,7 +166,7 @@ static void emulation_run()
 
     if(current->systemType == psx)
     {
-        current->videoWidth = rects[0].w;
+        current->videoWidth = rects[0];
 
         // Crop overscan for NTSC. Might remove as this kinda sucks
         if(game->VideoSystem == VIDSYS_NTSC) switch(current->videoWidth)
@@ -204,8 +204,8 @@ static void emulation_run()
     }
     else if(game->multires)
     {
-        current->videoWidth = rects[0].w;
-        current->videoOffsetX = rects[0].x;
+        current->videoWidth = rects[0];
+        current->videoOffsetX = spec.DisplayRect.x;
     }
     else
     {
