@@ -24,10 +24,105 @@
 	<string>OEGameCoreController</string>
 	<key>OEGameCoreClass</key>
 	<string>MednafenGameCore</string>
+	<key>OEGameCoreOptions</key>
+	<dict>
+		<key>openemu.system.lynx</key>
+		<dict>
+			<key>OEGameCoreRequiresFiles</key>
+			<true/>
+			<key>OERequiredFiles</key>
+			<array>
+				<dict>
+					<key>Description</key>
+					<string>Lynx boot ROM</string>
+					<key>MD5</key>
+					<string>fcd403db69f54290b51035d82f835e7b</string>
+					<key>Name</key>
+					<string>lynxboot.img</string>
+					<key>Size</key>
+					<integer>512</integer>
+				</dict>
+			</array>
+		</dict>
+		<key>openemu.system.pcecd</key>
+		<dict>
+			<key>OEGameCoreRequiresFiles</key>
+			<true/>
+			<key>OERequiredFiles</key>
+			<array>
+				<dict>
+					<key>Description</key>
+					<string>TurboGrafx-CD/PC Engine CD BIOS</string>
+					<key>MD5</key>
+					<string>ff1a674273fe3540ccef576376407d1d</string>
+					<key>Name</key>
+					<string>syscard3.pce</string>
+					<key>Size</key>
+					<string>262656</string>
+				</dict>
+			</array>
+		</dict>
+		<key>openemu.system.pcfx</key>
+		<dict>
+			<key>OEGameCoreRequiresFiles</key>
+			<true/>
+			<key>OERequiredFiles</key>
+			<array>
+				<dict>
+					<key>Description</key>
+					<string>PC-FX BIOS</string>
+					<key>MD5</key>
+					<string>08e36edbea28a017f79f8d4f7ff9b6d7</string>
+					<key>Name</key>
+					<string>pcfx.rom</string>
+					<key>Size</key>
+					<integer>1048576</integer>
+				</dict>
+			</array>
+		</dict>
+		<key>openemu.system.psx</key>
+		<dict>
+			<key>OEGameCoreRequiresFiles</key>
+			<true/>
+			<key>OEGameCoreSaveStatesNotSupported</key>
+			<true/>
+			<key>OERequiredFiles</key>
+			<array>
+				<dict>
+					<key>Description</key>
+					<string>PlayStation (JP) SCPH-5500 BIOS</string>
+					<key>MD5</key>
+					<string>8dd7d5296a650fac7319bce665a6a53c</string>
+					<key>Name</key>
+					<string>scph5500.bin</string>
+					<key>Size</key>
+					<integer>524288</integer>
+				</dict>
+				<dict>
+					<key>Description</key>
+					<string>PlayStation (NA) SCPH-5501 BIOS</string>
+					<key>MD5</key>
+					<string>490f666e1afb15b7362b406ed1cea246</string>
+					<key>Name</key>
+					<string>scph5501.bin</string>
+					<key>Size</key>
+					<integer>524288</integer>
+				</dict>
+				<dict>
+					<key>Description</key>
+					<string>PlayStation (EU) SCPH-5502 BIOS</string>
+					<key>MD5</key>
+					<string>32736f17079d0b2b7024407c39bd3050</string>
+					<key>Name</key>
+					<string>scph5502.bin</string>
+					<key>Size</key>
+					<integer>524288</integer>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>OEGameCorePlayerCount</key>
 	<string>2</string>
-	<key>OEGameCoreRequiresFiles</key>
-	<true/>
 	<key>OEProjectURL</key>
 	<string>http://mednafen.sourceforge.net/</string>
 	<key>OESystemIdentifiers</key>
