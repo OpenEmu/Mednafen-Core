@@ -1038,12 +1038,10 @@
 		8CB3D89917F1DE5C0090372A /* mdec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mdec.cpp; sourceTree = "<group>"; };
 		8CB3D89A17F1DE5C0090372A /* mdec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mdec.h; sourceTree = "<group>"; };
 		8CB3D89B17F1DE5C0090372A /* NOTES */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NOTES; sourceTree = "<group>"; };
-		8CB3D89C17F1DE5C0090372A /* PSX-TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "PSX-TODO"; sourceTree = "<group>"; };
 		8CB3D89D17F1DE5C0090372A /* psx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = psx.cpp; sourceTree = "<group>"; };
 		8CB3D89E17F1DE5C0090372A /* psx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = psx.h; sourceTree = "<group>"; };
 		8CB3D8A017F1DE5C0090372A /* sio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sio.cpp; sourceTree = "<group>"; };
 		8CB3D8A117F1DE5C0090372A /* sio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sio.h; sourceTree = "<group>"; };
-		8CB3D8A217F1DE5C0090372A /* SOURCES */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SOURCES; sourceTree = "<group>"; };
 		8CB3D8A317F1DE5C0090372A /* spu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = spu.cpp; sourceTree = "<group>"; };
 		8CB3D8A417F1DE5C0090372A /* spu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spu.h; sourceTree = "<group>"; };
 		8CB3D8A517F1DE5C0090372A /* spu_fir_table.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = spu_fir_table.inc; sourceTree = "<group>"; };
@@ -3264,12 +3262,10 @@
 				8CB3D89917F1DE5C0090372A /* mdec.cpp */,
 				8CB3D89A17F1DE5C0090372A /* mdec.h */,
 				8CB3D89B17F1DE5C0090372A /* NOTES */,
-				8CB3D89C17F1DE5C0090372A /* PSX-TODO */,
 				8CB3D89D17F1DE5C0090372A /* psx.cpp */,
 				8CB3D89E17F1DE5C0090372A /* psx.h */,
 				8CB3D8A017F1DE5C0090372A /* sio.cpp */,
 				8CB3D8A117F1DE5C0090372A /* sio.h */,
-				8CB3D8A217F1DE5C0090372A /* SOURCES */,
 				8CB3D8A317F1DE5C0090372A /* spu.cpp */,
 				8CB3D8A417F1DE5C0090372A /* spu.h */,
 				8CB3D8A517F1DE5C0090372A /* spu_fir_table.inc */,

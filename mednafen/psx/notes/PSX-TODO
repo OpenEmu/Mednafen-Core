@@ -22,6 +22,10 @@ Tales of Destiny (Japanese version 1.0)
 Simple 1500 Series Vol. 057 - The Maze
 	Locks up during startup;  looks to be poorly programmed and extremely sensitive to seek timing.
 
+Transformers - Beast Wars Transmetals
+	Locks up during loading screen. (CD timing issue)
+	It looks like a terrible game though, at least.
+
 Wing Commander 4
 	Frequently locks up during FMV sequences(might be sensitive to seek delays or SPU IRQ timings).
 
@@ -129,6 +133,10 @@ Resident Evil 2
 	Lockup on second disc in a certain place; probably related to seek timing.  Seems to be fixed now, but still listed
 	here for reference.
 
+
+Nightmare Creatures
+	Shoddy CD reading code that's unreasonably sensitive to CD access timings.  It's a wonder it even ever works on an actual
+	PS1(my copy of it certainly doesn't).
 
 -----------------------------------------------------------------------------------------------
 
