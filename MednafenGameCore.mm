@@ -481,42 +481,11 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     inputBuffer[player-1][0] &= ~(1 << PSXMap[button]);
 }
 
-static inline OEPSXButton _OEPSXButtonOppositeButton(OEPSXButton button)
-{
-    switch(button)
-    {
-        case OEPSXLeftAnalogUp :
-            return OEPSXLeftAnalogDown;
-        case OEPSXLeftAnalogDown :
-            return OEPSXLeftAnalogUp;
-        case OEPSXLeftAnalogLeft :
-            return OEPSXLeftAnalogRight;
-        case OEPSXLeftAnalogRight :
-            return OEPSXLeftAnalogLeft;
-
-        case OEPSXRightAnalogUp :
-            return OEPSXRightAnalogDown;
-        case OEPSXRightAnalogDown :
-            return OEPSXRightAnalogUp;
-        case OEPSXRightAnalogLeft :
-            return OEPSXRightAnalogRight;
-        case OEPSXRightAnalogRight :
-            return OEPSXRightAnalogLeft;
-
-        default:
-            return button;
-    }
-}
-
 - (oneway void)didMovePSXJoystickDirection:(OEPSXButton)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
-#define SET_ANALOG(button, value) do { \
-    int analogNumber = PSXMap[button] - 16; \
-    inputBuffer[player-1][analogNumber] = 32767 * value; \
-} while(NO)
-
-    SET_ANALOG(_OEPSXButtonOppositeButton(button), 0);
-    SET_ANALOG(button, value);
+    int analogNumber = PSXMap[button] - 17;
+    uint8_t *buf = (uint8_t *)inputBuffer[player-1];
+    *(uint16*)& buf[3 + analogNumber * 2] = 32767 * value;
 }
 
 - (void)changeDisplayMode
