@@ -449,8 +449,7 @@ static INLINE void MergeSettingSub(const MDFNSetting *setting)
   if(FindSetting(setting->name, false, true) != NULL)
   {
    printf("Duplicate setting name %s\n", setting->name);
-   //abort();
-   return;
+   abort();
   }
 
   name_hash = MakeNameHash(setting->name);
