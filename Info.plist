@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.9.35.1</string>
+	<string>0.9.36</string>
 	<key>NSPrincipalClass</key>
 	<string>OEGameCoreController</string>
 	<key>OEGameCoreClass</key>
@@ -83,8 +83,6 @@
 		<key>openemu.system.psx</key>
 		<dict>
 			<key>OEGameCoreRequiresFiles</key>
-			<true/>
-			<key>OEGameCoreSaveStatesNotSupported</key>
 			<true/>
 			<key>OERequiredFiles</key>
 			<array>

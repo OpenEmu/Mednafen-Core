@@ -101,6 +101,8 @@ static void mednafen_init()
     MDFNI_SetSetting("vb.anaglyph.rcolor", "0x000000"); // Anaglyph r color
     //MDFNI_SetSetting("vb.allow_draw_skip", "1");      // Allow draw skipping
     //MDFNI_SetSetting("vb.instant_display_hack", "1"); // Display latency reduction hack
+    
+    MDFNI_SetSetting("psx.clobbers_lament", "1"); // Enable experimental save states
 }
 
 - (id)init
