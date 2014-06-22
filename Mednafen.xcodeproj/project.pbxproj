@@ -1046,7 +1046,6 @@
 		8CB3D8A317F1DE5C0090372A /* spu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = spu.cpp; sourceTree = "<group>"; };
 		8CB3D8A417F1DE5C0090372A /* spu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spu.h; sourceTree = "<group>"; };
 		8CB3D8A517F1DE5C0090372A /* spu_fir_table.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = spu_fir_table.inc; sourceTree = "<group>"; };
-		8CB3D8A617F1DE5C0090372A /* spu_nft.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = spu_nft.inc; sourceTree = "<group>"; };
 		8CB3D8A717F1DE5C0090372A /* spu_reverb.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = spu_reverb.inc; sourceTree = "<group>"; };
 		8CB3D8A817F1DE5C0090372A /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
 		8CB3D8A917F1DE5C0090372A /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timer.h; sourceTree = "<group>"; };
@@ -2934,7 +2933,6 @@
 				8CB3D8A317F1DE5C0090372A /* spu.cpp */,
 				8CB3D8A417F1DE5C0090372A /* spu.h */,
 				8CB3D8A517F1DE5C0090372A /* spu_fir_table.inc */,
-				8CB3D8A617F1DE5C0090372A /* spu_nft.inc */,
 				8CB3D8A717F1DE5C0090372A /* spu_reverb.inc */,
 				8CB3D8A817F1DE5C0090372A /* timer.cpp */,
 				8CB3D8A917F1DE5C0090372A /* timer.h */,
@@ -4483,7 +4481,7 @@
 					"-fPIC",
 					"-DHAVE_MKDIR",
 					"-DSIZEOF_DOUBLE=8",
-					"-DMEDNAFEN_VERSION=\\\"0.9.36\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.36.1\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
 					"-DMEDNAFEN_VERSION_NUMERIC=0x000936",
 					"-DPSS_STYLE=1",
@@ -4537,7 +4535,7 @@
 					"-fPIC",
 					"-DHAVE_MKDIR",
 					"-DSIZEOF_DOUBLE=8",
-					"-DMEDNAFEN_VERSION=\\\"0.9.36\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.36.1\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
 					"-DMEDNAFEN_VERSION_NUMERIC=0x000936",
 					"-DPSS_STYLE=1",
