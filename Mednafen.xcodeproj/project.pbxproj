@@ -130,7 +130,7 @@
 		8CB3E0C717F210B70090372A /* general.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D60B17F1DE5B0090372A /* general.cpp */; };
 		8CB3E0C817F210D20090372A /* c68k.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D61117F1DE5B0090372A /* c68k.c */; };
 		8CB3E0CA17F2112B0090372A /* c68kexec.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D62417F1DE5B0090372A /* c68kexec.c */; };
-		8CB3E0CB17F211530090372A /* huc6280.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D62C17F1DE5B0090372A /* huc6280.cpp */; };
+		8CB3E0CB17F211530090372A /* huc6280.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D62C17F1DE5B0090372A /* huc6280.cpp */; settings = {COMPILER_FLAGS = "-O1"; }; };
 		8CB3E0CD17F2116D0090372A /* v810_cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D63B17F1DE5B0090372A /* v810_cpu.cpp */; };
 		8CB3E0CF17F211950090372A /* z80.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D64517F1DE5B0090372A /* z80.cpp */; };
 		8CB3E0D117F211B10090372A /* arcade_card.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D64F17F1DE5B0090372A /* arcade_card.cpp */; };
