@@ -585,7 +585,6 @@
 		8CB3D6B717F1DE5B0090372A /* pcm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pcm.h; sourceTree = "<group>"; };
 		8CB3D6B817F1DE5B0090372A /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
 		8CB3D6B917F1DE5B0090372A /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timer.h; sourceTree = "<group>"; };
-		8CB3D6BA17F1DE5B0090372A /* cpuintrf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpuintrf.h; sourceTree = "<group>"; };
 		8CB3D6BB17F1DE5B0090372A /* debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
 		8CB3D6BC17F1DE5B0090372A /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug.h; sourceTree = "<group>"; };
 		8CB3D6BD17F1DE5B0090372A /* genesis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = genesis.cpp; sourceTree = "<group>"; };
@@ -610,7 +609,6 @@
 		8CB3D6D117F1DE5B0090372A /* memvdp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memvdp.h; sourceTree = "<group>"; };
 		8CB3D6D217F1DE5B0090372A /* memz80.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memz80.cpp; sourceTree = "<group>"; };
 		8CB3D6D317F1DE5B0090372A /* memz80.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memz80.h; sourceTree = "<group>"; };
-		8CB3D6D417F1DE5B0090372A /* osd_cpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = osd_cpu.h; sourceTree = "<group>"; };
 		8CB3D6D517F1DE5B0090372A /* shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shared.h; sourceTree = "<group>"; };
 		8CB3D6D617F1DE5B0090372A /* sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sound.cpp; sourceTree = "<group>"; };
 		8CB3D6D717F1DE5B0090372A /* sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sound.h; sourceTree = "<group>"; };
@@ -2333,7 +2331,6 @@
 			children = (
 				8CB3D69617F1DE5B0090372A /* cart */,
 				8CB3D6AF17F1DE5B0090372A /* cd */,
-				8CB3D6BA17F1DE5B0090372A /* cpuintrf.h */,
 				8CB3D6BB17F1DE5B0090372A /* debug.cpp */,
 				8CB3D6BC17F1DE5B0090372A /* debug.h */,
 				8CB3D6BD17F1DE5B0090372A /* genesis.cpp */,
@@ -2355,7 +2352,6 @@
 				8CB3D6D117F1DE5B0090372A /* memvdp.h */,
 				8CB3D6D217F1DE5B0090372A /* memz80.cpp */,
 				8CB3D6D317F1DE5B0090372A /* memz80.h */,
-				8CB3D6D417F1DE5B0090372A /* osd_cpu.h */,
 				8CB3D6D517F1DE5B0090372A /* shared.h */,
 				8CB3D6D617F1DE5B0090372A /* sound.cpp */,
 				8CB3D6D717F1DE5B0090372A /* sound.h */,
@@ -4481,7 +4477,7 @@
 					"-fPIC",
 					"-DHAVE_MKDIR",
 					"-DSIZEOF_DOUBLE=8",
-					"-DMEDNAFEN_VERSION=\\\"0.9.36.3\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.36.4\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
 					"-DMEDNAFEN_VERSION_NUMERIC=0x000936",
 					"-DPSS_STYLE=1",
@@ -4535,7 +4531,7 @@
 					"-fPIC",
 					"-DHAVE_MKDIR",
 					"-DSIZEOF_DOUBLE=8",
-					"-DMEDNAFEN_VERSION=\\\"0.9.36.3\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.36.4\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
 					"-DMEDNAFEN_VERSION_NUMERIC=0x000936",
 					"-DPSS_STYLE=1",
