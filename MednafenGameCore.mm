@@ -27,6 +27,7 @@
 
 #include "mednafen.h"
 #include "settings-driver.h"
+#include "state-driver.h"
 
 #import "MednafenGameCore.h"
 #import <OpenEmuBase/OERingBuffer.h>
@@ -53,7 +54,7 @@ enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
 
 @interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
 {
-    uint32_t *inputBuffer[2];
+    uint8 *inputBuffer[2];
     int systemType;
     int videoWidth, videoHeight;
     int videoOffsetX, videoOffsetY;
@@ -102,7 +103,8 @@ static void mednafen_init()
     //MDFNI_SetSetting("vb.allow_draw_skip", "1");      // Allow draw skipping
     //MDFNI_SetSetting("vb.instant_display_hack", "1"); // Display latency reduction hack
     
-    MDFNI_SetSetting("psx.clobbers_lament", "1"); // Enable experimental save states
+    //MDFNI_SetSetting("psx.clobbers_lament", "1"); // Enable experimental save states
+    MDFNI_SetSetting("psx.h_overscan", "0"); // Remove PSX overscan
 }
 
 - (id)init
@@ -111,8 +113,8 @@ static void mednafen_init()
     {
         _current = self;
 
-        inputBuffer[0] = (uint32_t *) calloc(9, sizeof(uint32_t));
-        inputBuffer[1] = (uint32_t *) calloc(9, sizeof(uint32_t));
+        inputBuffer[0] = (uint8 *) calloc(9, sizeof(uint8));
+        inputBuffer[1] = (uint8 *) calloc(9, sizeof(uint8));
     }
 
     return self;
@@ -152,40 +154,7 @@ static void emulation_run()
     if(current->systemType == psx)
     {
         current->videoWidth = rects[spec.DisplayRect.y];
-
-        // Crop overscan for NTSC. Might remove as this kinda sucks
-        if(game->VideoSystem == VIDSYS_NTSC) switch(current->videoWidth)
-        {
-                // The shifts are not simply (padded_width - real_width) / 2.
-            case 350:
-                current->videoOffsetX = 14;
-                current->videoWidth = 320;
-                break;
-
-            case 700:
-                current->videoOffsetX = 33;
-                current->videoWidth = 640;
-                break;
-
-            case 400:
-                current->videoOffsetX = 15;
-                current->videoWidth = 364;
-                break;
-
-            case 280:
-                current->videoOffsetX = 10;
-                current->videoWidth = 256;
-                break;
-
-            case 560:
-                current->videoOffsetX = 26;
-                current->videoWidth = 512;
-                break;
-
-            default:
-                // This shouldn't happen.
-                break;
-        }
+        current->videoOffsetX = spec.DisplayRect.x;
     }
     else if(game->multires)
     {
@@ -213,7 +182,8 @@ static void emulation_run()
         systemType = lynx;
 
         mednafenCoreModule = @"lynx";
-        mednafenCoreAspect = OEIntSizeMake(8, 5);
+        //mednafenCoreAspect = OEIntSizeMake(8, 5);
+        mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 48000;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.pce"] || [[self systemIdentifier] isEqualToString:@"openemu.system.pcecd"])
@@ -221,7 +191,8 @@ static void emulation_run()
         systemType = pce;
 
         mednafenCoreModule = @"pce";
-        mednafenCoreAspect = OEIntSizeMake(4, 3);
+        //mednafenCoreAspect = OEIntSizeMake(4, 3);
+        mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 48000;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.pcfx"])
@@ -229,7 +200,8 @@ static void emulation_run()
         systemType = pcfx;
 
         mednafenCoreModule = @"pcfx";
-        mednafenCoreAspect = OEIntSizeMake(4, 3);
+        //mednafenCoreAspect = OEIntSizeMake(4, 3);
+        mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 48000;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.psx"])
@@ -237,7 +209,8 @@ static void emulation_run()
         systemType = psx;
 
         mednafenCoreModule = @"psx";
-        mednafenCoreAspect = OEIntSizeMake(4, 3);
+        //mednafenCoreAspect = OEIntSizeMake(4, 3);
+        mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 44100;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.vb"])
@@ -245,7 +218,8 @@ static void emulation_run()
         systemType = vb;
 
         mednafenCoreModule = @"vb";
-        mednafenCoreAspect = OEIntSizeMake(12, 7);
+        //mednafenCoreAspect = OEIntSizeMake(12, 7);
+        mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 48000;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.ws"])
@@ -253,7 +227,8 @@ static void emulation_run()
         systemType = wswan;
 
         mednafenCoreModule = @"wswan";
-        mednafenCoreAspect = OEIntSizeMake(14, 9);
+        //mednafenCoreAspect = OEIntSizeMake(14, 9);
+        mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 48000;
     }
 
@@ -378,12 +353,14 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 
 - (BOOL)saveStateToFileAtPath:(NSString *)fileName
 {
-    return MDFNSS_Save([fileName UTF8String], "");
+    return NO;
+    //return MDFNI_SaveState([fileName UTF8String], "", NULL, NULL, NULL);
 }
 
 - (BOOL)loadStateFromFileAtPath:(NSString *)fileName
 {
-    return MDFNSS_Load([fileName UTF8String], "");
+    return NO;
+    //return MDFNSS_Load([fileName UTF8String], "");
 }
 
 # pragma mark - Input
