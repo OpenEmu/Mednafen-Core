@@ -103,7 +103,6 @@ static void mednafen_init()
     //MDFNI_SetSetting("vb.allow_draw_skip", "1");      // Allow draw skipping
     //MDFNI_SetSetting("vb.instant_display_hack", "1"); // Display latency reduction hack
     
-    //MDFNI_SetSetting("psx.clobbers_lament", "1"); // Enable experimental save states
     MDFNI_SetSetting("psx.h_overscan", "0"); // Remove PSX overscan
 }
 
@@ -182,8 +181,8 @@ static void emulation_run()
         systemType = lynx;
 
         mednafenCoreModule = @"lynx";
-        //mednafenCoreAspect = OEIntSizeMake(8, 5);
-        mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        mednafenCoreAspect = OEIntSizeMake(8, 5);
+        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 48000;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.pce"] || [[self systemIdentifier] isEqualToString:@"openemu.system.pcecd"])
@@ -191,8 +190,8 @@ static void emulation_run()
         systemType = pce;
 
         mednafenCoreModule = @"pce";
-        //mednafenCoreAspect = OEIntSizeMake(4, 3);
-        mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        mednafenCoreAspect = OEIntSizeMake(4, 3);
+        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 48000;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.pcfx"])
@@ -200,8 +199,8 @@ static void emulation_run()
         systemType = pcfx;
 
         mednafenCoreModule = @"pcfx";
-        //mednafenCoreAspect = OEIntSizeMake(4, 3);
-        mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        mednafenCoreAspect = OEIntSizeMake(4, 3);
+        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 48000;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.psx"])
@@ -209,8 +208,8 @@ static void emulation_run()
         systemType = psx;
 
         mednafenCoreModule = @"psx";
-        //mednafenCoreAspect = OEIntSizeMake(4, 3);
-        mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        mednafenCoreAspect = OEIntSizeMake(4, 3);
+        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 44100;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.vb"])
@@ -218,8 +217,8 @@ static void emulation_run()
         systemType = vb;
 
         mednafenCoreModule = @"vb";
-        //mednafenCoreAspect = OEIntSizeMake(12, 7);
-        mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        mednafenCoreAspect = OEIntSizeMake(12, 7);
+        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 48000;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.ws"])
@@ -227,8 +226,8 @@ static void emulation_run()
         systemType = wswan;
 
         mednafenCoreModule = @"wswan";
-        //mednafenCoreAspect = OEIntSizeMake(14, 9);
-        mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        mednafenCoreAspect = OEIntSizeMake(14, 9);
+        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 48000;
     }
 
@@ -259,6 +258,8 @@ static void emulation_run()
     {
         game->SetInput(0, "gamepad", inputBuffer[0]);
     }
+    
+    MDFNI_SetMedia(0, 2, 0, 0); // Disc selection API
     
     emulation_run();
 
@@ -353,14 +354,12 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 
 - (BOOL)saveStateToFileAtPath:(NSString *)fileName
 {
-    return NO;
-    //return MDFNI_SaveState([fileName UTF8String], "", NULL, NULL, NULL);
+    return MDFNI_SaveState([fileName UTF8String], "", NULL, NULL, NULL);
 }
 
 - (BOOL)loadStateFromFileAtPath:(NSString *)fileName
 {
-    return NO;
-    //return MDFNSS_Load([fileName UTF8String], "");
+    return MDFNI_LoadState([fileName UTF8String], "");
 }
 
 # pragma mark - Input

@@ -5,15 +5,16 @@
 
 #include <iostream>
 #include <sys/time.h>
+#include <unistd.h>
 
 void MDFND_Sleep(unsigned int time)
 {
     usleep(time * 1000);
 }
 
-void MDFND_DispMessage(unsigned char *str)
+void MDFND_DispMessage(char *str)
 {
-    std::cerr << str;
+    //std::cerr << str;
 }
 
 void MDFND_Message(const char *str)
@@ -28,6 +29,12 @@ void MDFND_PrintError(const char* err)
 {
     std::cerr << err;
 }
+
+void MDFND_MediaSetNotification(uint32 drive_idx, uint32 state_idx, uint32 media_idx, uint32 orientation_idx)
+{}
+
+void MDFND_NetplayText(const char* text, bool NetEcho)
+{}
 
 MDFN_Thread *MDFND_CreateThread(int (*fn)(void *), void *data)
 {

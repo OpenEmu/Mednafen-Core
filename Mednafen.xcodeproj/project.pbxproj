@@ -203,6 +203,8 @@
 		94CFB6471A75DB60001F174F /* gpu_sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6431A75DB60001F174F /* gpu_sprite.cpp */; };
 		94CFB6581A75DC2D001F174F /* quicklz.c in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6541A75DC2D001F174F /* quicklz.c */; };
 		94CFB65B1A75DC7C001F174F /* state_rewind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6591A75DC7B001F174F /* state_rewind.cpp */; };
+		94CFB66A1A75FE7C001F174F /* c68k.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6371A75DA89001F174F /* c68k.cpp */; };
+		94CFB66B1A75FE7C001F174F /* c68kexec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6381A75DA9C001F174F /* c68kexec.cpp */; };
 		94FD853218C7F53C001B426D /* pcecd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94FD853018C7F53C001B426D /* pcecd.cpp */; };
 		94FD853518C7F58C001B426D /* trim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94FD853318C7F58C001B426D /* trim.cpp */; };
 /* End PBXBuildFile section */
@@ -4121,6 +4123,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94CFB66A1A75FE7C001F174F /* c68k.cpp in Sources */,
+				94CFB66B1A75FE7C001F174F /* c68kexec.cpp in Sources */,
 				824088360FFDDCF400F0FE7D /* MednafenGameCore.mm in Sources */,
 				8CB3E10B17F2169A0090372A /* video.cpp in Sources */,
 				8CB3DE9E17F1DE5E0090372A /* negcon.cpp in Sources */,
@@ -4349,9 +4353,9 @@
 					"-fPIC",
 					"-DHAVE_MKDIR",
 					"-DSIZEOF_DOUBLE=8",
-					"-DMEDNAFEN_VERSION=\\\"0.9.36.5\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.37.1\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x000936",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x000937",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
@@ -4371,6 +4375,7 @@
 					"-DSIZEOF_INT=4",
 					"-DSIZEOF_LONG=8",
 					"-DSIZEOF_LONG_LONG=8",
+					"-DSIZEOF_OFF_T=8",
 				);
 				OTHER_LDFLAGS = "-liconv";
 				PRODUCT_NAME = Mednafen;
@@ -4403,9 +4408,9 @@
 					"-fPIC",
 					"-DHAVE_MKDIR",
 					"-DSIZEOF_DOUBLE=8",
-					"-DMEDNAFEN_VERSION=\\\"0.9.36.5\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.37.1\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x000936",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x000937",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
@@ -4425,6 +4430,7 @@
 					"-DSIZEOF_INT=4",
 					"-DSIZEOF_LONG=8",
 					"-DSIZEOF_LONG_LONG=8",
+					"-DSIZEOF_OFF_T=8",
 				);
 				OTHER_LDFLAGS = "-liconv";
 				PRODUCT_NAME = Mednafen;
