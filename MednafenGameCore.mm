@@ -28,6 +28,7 @@
 #include "mednafen.h"
 #include "settings-driver.h"
 #include "state-driver.h"
+#include "mednafen-driver.h"
 
 #import "MednafenGameCore.h"
 #import <OpenEmuBase/OERingBuffer.h>
@@ -49,12 +50,12 @@ namespace MDFN_IEN_VB
     extern void VIP_SetAnaglyphColors(uint32 lcolor, uint32 rcolor);
     int mednafenCurrentDisplayMode = 1;
 }
-
+    
 enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
 
 @interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
 {
-    uint8 *inputBuffer[2];
+    uint32_t *inputBuffer[2];
     int systemType;
     int videoWidth, videoHeight;
     int videoOffsetX, videoOffsetY;
@@ -112,8 +113,8 @@ static void mednafen_init()
     {
         _current = self;
 
-        inputBuffer[0] = (uint8 *) calloc(9, sizeof(uint8));
-        inputBuffer[1] = (uint8 *) calloc(9, sizeof(uint8));
+        inputBuffer[0] = (uint32_t *) calloc(9, sizeof(uint32_t));
+        inputBuffer[1] = (uint32_t *) calloc(9, sizeof(uint32_t));
     }
 
     return self;
@@ -246,17 +247,17 @@ static void emulation_run()
     
     if (systemType == pce || systemType == pcfx)
     {
-        game->SetInput(0, "gamepad", inputBuffer[0]);
-        game->SetInput(1, "gamepad", inputBuffer[1]);
+        game->SetInput(0, "gamepad", (uint8_t *)inputBuffer[0]);
+        game->SetInput(1, "gamepad", (uint8_t *)inputBuffer[1]);
     }
     else if (systemType == psx)
     {
-        game->SetInput(0, "dualshock", inputBuffer[0]);
-        game->SetInput(1, "dualshock", inputBuffer[1]);
+        game->SetInput(0, "dualshock", (uint8_t *)inputBuffer[0]);
+        game->SetInput(1, "dualshock", (uint8_t *)inputBuffer[1]);
     }
     else
     {
-        game->SetInput(0, "gamepad", inputBuffer[0]);
+        game->SetInput(0, "gamepad", (uint8_t *)inputBuffer[0]);
     }
     
     MDFNI_SetMedia(0, 2, 0, 0); // Disc selection API
@@ -384,22 +385,30 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)didPushPCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] |= 1 << PCEMap[button];
+    if (button != OEPCEButtonMode) // Check for six button mode toggle
+        inputBuffer[player-1][0] |= 1 << PCEMap[button];
+    else
+        inputBuffer[player-1][0] ^= 1 << PCEMap[button];
 }
 
 - (oneway void)didReleasePCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
+    if (button != OEPCEButtonMode)
+        inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
 }
 
 - (oneway void)didPushPCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] |= 1 << PCEMap[button];
+    if (button != OEPCECDButtonMode) // Check for six button mode toggle
+        inputBuffer[player-1][0] |= 1 << PCEMap[button];
+    else
+        inputBuffer[player-1][0] ^= 1 << PCEMap[button];
 }
 
 - (oneway void)didReleasePCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
+    if (button != OEPCECDButtonMode)
+        inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
 }
 
 - (oneway void)didPushPCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player;
