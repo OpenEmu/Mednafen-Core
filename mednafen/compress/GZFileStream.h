@@ -18,7 +18,7 @@
 #ifndef __MDFN_GZFILESTREAM_H
 #define __MDFN_GZFILESTREAM_H
 
-#include "Stream.h"
+#include <mednafen/Stream.h>
 
 #include <zlib.h>
 
