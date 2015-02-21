@@ -24,6 +24,7 @@
 /* Begin PBXBuildFile section */
 		8240861B0FFDD64600F0FE7D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8240861A0FFDD64600F0FE7D /* libz.dylib */; };
 		824088360FFDDCF400F0FE7D /* MednafenGameCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 824088350FFDDCF400F0FE7D /* MednafenGameCore.mm */; };
+		8305628C1A98C6AD0030F6DB /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8305628B1A98C6AD0030F6DB /* libiconv.dylib */; };
 		8CB3DCCA17F1DE5E0090372A /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D55917F1DE5A0090372A /* debug.cpp */; };
 		8CB3DD5F17F1DE5E0090372A /* c65c02.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D67A17F1DE5B0090372A /* c65c02.cpp */; };
 		8CB3DD6017F1DE5E0090372A /* cart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D67C17F1DE5B0090372A /* cart.cpp */; };
@@ -230,6 +231,7 @@
 		824088340FFDDCF400F0FE7D /* MednafenGameCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MednafenGameCore.h; sourceTree = "<group>"; };
 		824088350FFDDCF400F0FE7D /* MednafenGameCore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MednafenGameCore.mm; sourceTree = "<group>"; };
 		82CFBC510FFEF432002B6C7C /* Mednafen.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Mednafen.icns; sourceTree = "<group>"; };
+		8305628B1A98C6AD0030F6DB /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		8CB3D52417F1DE5A0090372A /* CDAccess.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CDAccess.cpp; sourceTree = "<group>"; };
 		8CB3D52517F1DE5A0090372A /* CDAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAccess.h; sourceTree = "<group>"; };
 		8CB3D52617F1DE5A0090372A /* CDAccess_CCD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CDAccess_CCD.cpp; sourceTree = "<group>"; };
@@ -1582,6 +1584,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8305628C1A98C6AD0030F6DB /* libiconv.dylib in Frameworks */,
 				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
 				8240861B0FFDD64600F0FE7D /* libz.dylib in Frameworks */,
 				94454E3E17852F23006C057B /* OpenEmuBase.framework in Frameworks */,
@@ -1594,6 +1597,7 @@
 		089C166AFE841209C02AAC07 /* Mednafen */ = {
 			isa = PBXGroup;
 			children = (
+				8305628B1A98C6AD0030F6DB /* libiconv.dylib */,
 				08FB77AFFE84173DC02AAC07 /* Classes */,
 				32C88E010371C26100C91783 /* Other Sources */,
 				089C167CFE841241C02AAC07 /* Resources */,
@@ -4347,6 +4351,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/include\"",
@@ -4389,7 +4394,6 @@
 					"-DSIZEOF_LONG_LONG=8",
 					"-DSIZEOF_OFF_T=8",
 				);
-				OTHER_LDFLAGS = "-liconv";
 				PRODUCT_NAME = Mednafen;
 				SKIP_INSTALL = YES;
 				VALID_ARCHS = x86_64;
@@ -4444,7 +4448,6 @@
 					"-DSIZEOF_LONG_LONG=8",
 					"-DSIZEOF_OFF_T=8",
 				);
-				OTHER_LDFLAGS = "-liconv";
 				PRODUCT_NAME = Mednafen;
 				SKIP_INSTALL = YES;
 				VALID_ARCHS = x86_64;
