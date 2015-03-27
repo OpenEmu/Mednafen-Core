@@ -179,6 +179,11 @@
 		8CB3E10C17F216B60090372A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3DC9817F1DE5D0090372A /* main.cpp */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 		94454E3E17852F23006C057B /* OpenEmuBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94454E3D17852F23006C057B /* OpenEmuBase.framework */; };
+		9453E3751AC5D820004F42AD /* CDAFReader_SF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94B082471A8697EF00D3C0BC /* CDAFReader_SF.cpp */; };
+		9453E3771AC5DA22004F42AD /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9453E3761AC5DA22004F42AD /* libsndfile.a */; };
+		9453E37B1AC5E051004F42AD /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9453E37A1AC5E051004F42AD /* libFLAC.a */; };
+		9453E37D1AC5E1E9004F42AD /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9453E37C1AC5E1E9004F42AD /* libvorbis.a */; };
+		9453E37F1AC5E305004F42AD /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9453E37E1AC5E305004F42AD /* libvorbisenc.a */; };
 		9454E32B19516301005A5CFE /* comm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9454E32919516301005A5CFE /* comm.cpp */; };
 		94817C2D1922B45500FDFC99 /* cdplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94817C2A1922B45500FDFC99 /* cdplay.cpp */; };
 		94817C3B1922B53900FDFC99 /* okiadpcm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94817C381922B53900FDFC99 /* okiadpcm.cpp */; };
@@ -1485,6 +1490,11 @@
 		94454E3717852E44006C057B /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
 		94454E3B17852E61006C057B /* stubs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stubs.cpp; sourceTree = "<group>"; };
 		94454E3D17852F23006C057B /* OpenEmuBase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenEmuBase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9453E3761AC5DA22004F42AD /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile.a; path = libsndfile/libsndfile.a; sourceTree = "<group>"; };
+		9453E3791AC5DA93004F42AD /* sndfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sndfile.h; path = libsndfile/sndfile.h; sourceTree = "<group>"; };
+		9453E37A1AC5E051004F42AD /* libFLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFLAC.a; path = libsndfile/libFLAC.a; sourceTree = "<group>"; };
+		9453E37C1AC5E1E9004F42AD /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = libsndfile/libvorbis.a; sourceTree = "<group>"; };
+		9453E37E1AC5E305004F42AD /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = libsndfile/libvorbisenc.a; sourceTree = "<group>"; };
 		9454E32919516301005A5CFE /* comm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = comm.cpp; sourceTree = "<group>"; };
 		9454E32A19516301005A5CFE /* comm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = comm.h; sourceTree = "<group>"; };
 		94817C2A1922B45500FDFC99 /* cdplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cdplay.cpp; sourceTree = "<group>"; };
@@ -1584,6 +1594,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9453E3771AC5DA22004F42AD /* libsndfile.a in Frameworks */,
+				9453E37B1AC5E051004F42AD /* libFLAC.a in Frameworks */,
+				9453E37D1AC5E1E9004F42AD /* libvorbis.a in Frameworks */,
+				9453E37F1AC5E305004F42AD /* libvorbisenc.a in Frameworks */,
 				8305628C1A98C6AD0030F6DB /* libiconv.dylib in Frameworks */,
 				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
 				8240861B0FFDD64600F0FE7D /* libz.dylib in Frameworks */,
@@ -1597,7 +1611,6 @@
 		089C166AFE841209C02AAC07 /* Mednafen */ = {
 			isa = PBXGroup;
 			children = (
-				8305628B1A98C6AD0030F6DB /* libiconv.dylib */,
 				08FB77AFFE84173DC02AAC07 /* Classes */,
 				32C88E010371C26100C91783 /* Other Sources */,
 				089C167CFE841241C02AAC07 /* Resources */,
@@ -1610,6 +1623,12 @@
 		089C1671FE841209C02AAC07 /* Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				9453E37E1AC5E305004F42AD /* libvorbisenc.a */,
+				9453E37C1AC5E1E9004F42AD /* libvorbis.a */,
+				9453E37A1AC5E051004F42AD /* libFLAC.a */,
+				9453E3791AC5DA93004F42AD /* sndfile.h */,
+				9453E3761AC5DA22004F42AD /* libsndfile.a */,
+				8305628B1A98C6AD0030F6DB /* libiconv.dylib */,
 				94454E3D17852F23006C057B /* OpenEmuBase.framework */,
 				8240861A0FFDD64600F0FE7D /* libz.dylib */,
 				1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */,
@@ -4321,6 +4340,7 @@
 				94817C461922D29B00FDFC99 /* demo.cpp in Sources */,
 				94CFB6341A75D740001F174F /* sha256.cpp in Sources */,
 				94817C471922D36300FDFC99 /* primitives.cpp in Sources */,
+				9453E3751AC5D820004F42AD /* CDAFReader_SF.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4358,13 +4378,16 @@
 					"\"$(SRCROOT)/mednafen/hw_misc\"",
 					"\"$(SRCROOT)/mednafen/hw_sound\"",
 					"\"$(SRCROOT)/mednafen/hw_video\"",
+					"\"$(SRCROOT)/libsndfile\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "\"$(USER_LIBRARY_DIR)/Application Support/OpenEmu/Cores\"";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/libsndfile";
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-funroll-loops",
 					"-DHAVE_MKDIR",
+					"-DHAVE_LIBSNDFILE",
 					"-DSIZEOF_DOUBLE=8",
 					"-DMEDNAFEN_VERSION=\\\"0.9.38.3\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
@@ -4409,13 +4432,16 @@
 					"\"$(SRCROOT)/mednafen/hw_misc\"",
 					"\"$(SRCROOT)/mednafen/hw_sound\"",
 					"\"$(SRCROOT)/mednafen/hw_video\"",
+					"\"$(SRCROOT)/libsndfile\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "\"$(USER_LIBRARY_DIR)/Application Support/OpenEmu/Cores\"";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/libsndfile";
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-funroll-loops",
 					"-DHAVE_MKDIR",
+					"-DHAVE_LIBSNDFILE",
 					"-DSIZEOF_DOUBLE=8",
 					"-DMEDNAFEN_VERSION=\\\"0.9.38.3\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
