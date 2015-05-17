@@ -50,7 +50,7 @@ namespace MDFN_IEN_VB
     extern void VIP_SetAnaglyphColors(uint32 lcolor, uint32 rcolor);
     int mednafenCurrentDisplayMode = 1;
 }
-    
+
 enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
 
 @interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
@@ -62,10 +62,11 @@ enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
     NSString *romName;
     double sampleRate;
     double masterClock;
-    
+
     NSString *mednafenCoreModule;
     NSTimeInterval mednafenCoreTiming;
     OEIntSize mednafenCoreAspect;
+    NSUInteger maxDiscs;
 }
 
 @end
@@ -80,14 +81,14 @@ static void mednafen_init()
 
     std::vector<MDFNGI*> ext;
     MDFNI_InitializeModules(ext);
-    
+
     std::vector<MDFNSetting> settings;
-    
+
     NSString *batterySavesDirectory = current.batterySavesDirectoryPath;
     NSString *biosPath = current.biosDirectoryPath;
-    
+
     MDFNI_Initialize([biosPath UTF8String], settings);
-    
+
     // Set bios/system file and memcard save paths
     MDFNI_SetSetting("pce.cdbios", [[[biosPath stringByAppendingPathComponent:@"syscard3"] stringByAppendingPathExtension:@"pce"] UTF8String]); // PCE CD BIOS
     MDFNI_SetSetting("pcfx.bios", [[[biosPath stringByAppendingPathComponent:@"pcfx"] stringByAppendingPathExtension:@"rom"] UTF8String]); // PCFX BIOS
@@ -95,7 +96,7 @@ static void mednafen_init()
     MDFNI_SetSetting("psx.bios_na", [[[biosPath stringByAppendingPathComponent:@"scph5501"] stringByAppendingPathExtension:@"bin"] UTF8String]); // NA SCPH-5501 BIOS
     MDFNI_SetSetting("psx.bios_eu", [[[biosPath stringByAppendingPathComponent:@"scph5502"] stringByAppendingPathExtension:@"bin"] UTF8String]); // EU SCPH-5502 BIOS
     MDFNI_SetSetting("filesys.path_sav", [batterySavesDirectory UTF8String]); // Memcards
-    
+
     // VB defaults. dox http://mednafen.sourceforge.net/documentation/09x/vb.html
     MDFNI_SetSetting("vb.disable_parallax", "1");       // Disable parallax for BG and OBJ rendering
     MDFNI_SetSetting("vb.anaglyph.preset", "disabled"); // Disable anaglyph preset
@@ -103,7 +104,7 @@ static void mednafen_init()
     MDFNI_SetSetting("vb.anaglyph.rcolor", "0x000000"); // Anaglyph r color
     //MDFNI_SetSetting("vb.allow_draw_skip", "1");      // Allow draw skipping
     //MDFNI_SetSetting("vb.instant_display_hack", "1"); // Display latency reduction hack
-    
+
     MDFNI_SetSetting("psx.h_overscan", "0"); // Remove PSX overscan
 }
 
@@ -176,7 +177,7 @@ static void emulation_run()
 - (BOOL)loadFileAtPath:(NSString *)path error:(NSError **)error
 {
     [[NSFileManager defaultManager] createDirectoryAtPath:[self batterySavesDirectoryPath] withIntermediateDirectories:YES attributes:nil error:NULL];
-    
+
     if([[self systemIdentifier] isEqualToString:@"openemu.system.lynx"])
     {
         systemType = lynx;
@@ -244,7 +245,7 @@ static void emulation_run()
     surf = new MDFN_Surface(NULL, game->fb_width, game->fb_height, game->fb_width, pix_fmt);
 
     masterClock = game->MasterClock >> 32;
-    
+
     if (systemType == pce || systemType == pcfx)
     {
         game->SetInput(0, "gamepad", (uint8_t *)inputBuffer[0]);
@@ -259,9 +260,21 @@ static void emulation_run()
     {
         game->SetInput(0, "gamepad", (uint8_t *)inputBuffer[0]);
     }
-    
+
     MDFNI_SetMedia(0, 2, 0, 0); // Disc selection API
-    
+
+    // Parse number of discs in m3u
+    if([[[path pathExtension] lowercaseString] isEqualToString:@"m3u"])
+    {
+        NSString *m3uString = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@".cue" options:NSRegularExpressionCaseInsensitive error:nil];
+        NSUInteger numberOfMatches = [regex numberOfMatchesInString:m3uString options:0 range:NSMakeRange(0, [m3uString length])];
+
+        NSLog(@"Loaded m3u containing %lu cue sheets",numberOfMatches);
+
+        maxDiscs = numberOfMatches;
+    }
+
     emulation_run();
 
     return YES;
@@ -285,7 +298,7 @@ static void emulation_run()
 - (void)stopEmulation
 {
     MDFNI_CloseGame();
-    
+
     [super stopEmulation];
 }
 
@@ -469,60 +482,76 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
                 MDFN_IEN_VB::VIP_SetParallaxDisable(true);
                 MDFN_IEN_VB::mednafenCurrentDisplayMode++;
                 break;
-                
+
             case 1: // (2D) white/black
                 MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFFFFFF, 0x000000);
                 MDFN_IEN_VB::VIP_SetParallaxDisable(true);
                 MDFN_IEN_VB::mednafenCurrentDisplayMode++;
                 break;
-                
+
             case 2: // (2D) purple/black
                 MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF00FF, 0x000000);
                 MDFN_IEN_VB::VIP_SetParallaxDisable(true);
                 MDFN_IEN_VB::mednafenCurrentDisplayMode++;
                 break;
-                
+
             case 3: // (3D) red/blue
                 MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x0000FF);
                 MDFN_IEN_VB::VIP_SetParallaxDisable(false);
                 MDFN_IEN_VB::mednafenCurrentDisplayMode++;
                 break;
-                
+
             case 4: // (3D) red/cyan
                 MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x00B7EB);
                 MDFN_IEN_VB::VIP_SetParallaxDisable(false);
                 MDFN_IEN_VB::mednafenCurrentDisplayMode++;
                 break;
-                
+
             case 5: // (3D) red/electric cyan
                 MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x00FFFF);
                 MDFN_IEN_VB::VIP_SetParallaxDisable(false);
                 MDFN_IEN_VB::mednafenCurrentDisplayMode++;
                 break;
-                
+
             case 6: // (3D) red/green
                 MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x00FF00);
                 MDFN_IEN_VB::VIP_SetParallaxDisable(false);
                 MDFN_IEN_VB::mednafenCurrentDisplayMode++;
                 break;
-                
+
             case 7: // (3D) green/red
                 MDFN_IEN_VB::VIP_SetAnaglyphColors(0x00FF00, 0xFF0000);
                 MDFN_IEN_VB::VIP_SetParallaxDisable(false);
                 MDFN_IEN_VB::mednafenCurrentDisplayMode++;
                 break;
-                
+
             case 8: // (3D) yellow/blue
                 MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFFFF00, 0x0000FF);
                 MDFN_IEN_VB::VIP_SetParallaxDisable(false);
                 MDFN_IEN_VB::mednafenCurrentDisplayMode = 0;
                 break;
-                
+
             default:
                 return;
                 break;
         }
     }
+}
+
+- (void)setDisc:(NSUInteger)discNumber
+{
+    uint32_t index = discNumber - 1; // 0-based index
+    MDFNI_SetMedia(0, 0, 0, 0); // open drive/eject disc
+
+    // Open/eject needs a bit of delay, so wait 1 second until inserting new disc
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        MDFNI_SetMedia(0, 2, index, 0); // close drive/insert disc (2 = close)
+    });
+}
+
+- (NSUInteger)discCount
+{
+    return maxDiscs ? maxDiscs : 1;
 }
 
 @end
