@@ -237,6 +237,29 @@
 		824088350FFDDCF400F0FE7D /* MednafenGameCore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MednafenGameCore.mm; sourceTree = "<group>"; };
 		82CFBC510FFEF432002B6C7C /* Mednafen.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Mednafen.icns; sourceTree = "<group>"; };
 		8305628B1A98C6AD0030F6DB /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		87CD091F1B3DFB3100021C64 /* SNSFLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SNSFLoader.cpp; sourceTree = "<group>"; };
+		87CD09201B3DFB3100021C64 /* SNSFLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SNSFLoader.h; sourceTree = "<group>"; };
+		87CD09211B3DFB4500021C64 /* SPCReader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SPCReader.cpp; sourceTree = "<group>"; };
+		87CD09221B3DFB4500021C64 /* SPCReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SPCReader.h; sourceTree = "<group>"; };
+		87CD09241B3DFB7600021C64 /* apu.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = apu.cpp; path = snes_faust/apu.cpp; sourceTree = "<group>"; };
+		87CD09251B3DFB7600021C64 /* apu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = apu.h; path = snes_faust/apu.h; sourceTree = "<group>"; };
+		87CD09261B3DFB7600021C64 /* cart.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cart.cpp; path = snes_faust/cart.cpp; sourceTree = "<group>"; };
+		87CD09271B3DFB7600021C64 /* cart.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = cart.h; path = snes_faust/cart.h; sourceTree = "<group>"; };
+		87CD09281B3DFB7600021C64 /* cpu_loop_body.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; name = cpu_loop_body.inc; path = snes_faust/cpu_loop_body.inc; sourceTree = "<group>"; };
+		87CD09291B3DFB7600021C64 /* cpu.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cpu.cpp; path = snes_faust/cpu.cpp; sourceTree = "<group>"; };
+		87CD092A1B3DFB7600021C64 /* cpu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = cpu.h; path = snes_faust/cpu.h; sourceTree = "<group>"; };
+		87CD092B1B3DFB7600021C64 /* dma.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; name = dma.inc; path = snes_faust/dma.inc; sourceTree = "<group>"; };
+		87CD092C1B3DFB7600021C64 /* dsp.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; name = dsp.inc; path = snes_faust/dsp.inc; sourceTree = "<group>"; };
+		87CD092D1B3DFB7600021C64 /* input.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = input.cpp; path = snes_faust/input.cpp; sourceTree = "<group>"; };
+		87CD092E1B3DFB7600021C64 /* input.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = input.h; path = snes_faust/input.h; sourceTree = "<group>"; };
+		87CD092F1B3DFB7600021C64 /* Makefile.am */ = {isa = PBXFileReference; lastKnownFileType = text; name = Makefile.am; path = snes_faust/Makefile.am; sourceTree = "<group>"; };
+		87CD09301B3DFB7600021C64 /* Makefile.in */ = {isa = PBXFileReference; lastKnownFileType = text; name = Makefile.in; path = snes_faust/Makefile.in; sourceTree = "<group>"; };
+		87CD09311B3DFB7600021C64 /* PPU_DESIGN */ = {isa = PBXFileReference; lastKnownFileType = text; name = PPU_DESIGN; path = snes_faust/PPU_DESIGN; sourceTree = "<group>"; };
+		87CD09321B3DFB7600021C64 /* ppu.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ppu.cpp; path = snes_faust/ppu.cpp; sourceTree = "<group>"; };
+		87CD09331B3DFB7600021C64 /* ppu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ppu.h; path = snes_faust/ppu.h; sourceTree = "<group>"; };
+		87CD09341B3DFB7600021C64 /* snes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = snes.cpp; path = snes_faust/snes.cpp; sourceTree = "<group>"; };
+		87CD09351B3DFB7600021C64 /* snes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = snes.h; path = snes_faust/snes.h; sourceTree = "<group>"; };
+		87CD09361B3DFB7600021C64 /* spc700.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; name = spc700.inc; path = snes_faust/spc700.inc; sourceTree = "<group>"; };
 		87DC74711AE45DCF006F1CD7 /* notes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = notes; sourceTree = "<group>"; };
 		87DC74721AE45E31006F1CD7 /* notes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = notes; sourceTree = "<group>"; };
 		8CB3D52417F1DE5A0090372A /* CDAccess.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CDAccess.cpp; sourceTree = "<group>"; };
@@ -1528,7 +1551,6 @@
 		94B082511A86982900D3C0BC /* GZFileStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GZFileStream.cpp; sourceTree = "<group>"; };
 		94B082521A86982900D3C0BC /* GZFileStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZFileStream.h; sourceTree = "<group>"; };
 		94B082541A86987300D3C0BC /* FastFIFO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastFIFO.h; sourceTree = "<group>"; };
-		94B082551A8698A200D3C0BC /* linefuzz.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = linefuzz.exe; sourceTree = "<group>"; };
 		94B082561A8698A200D3C0BC /* PROBLEMATIC-GAMES */ = {isa = PBXFileReference; lastKnownFileType = text; path = "PROBLEMATIC-GAMES"; sourceTree = "<group>"; };
 		94CFB61E1A75D654001F174F /* git.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = git.cpp; sourceTree = "<group>"; };
 		94CFB6231A75D6CB001F174F /* ZLInflateFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZLInflateFilter.cpp; sourceTree = "<group>"; };
@@ -1558,8 +1580,6 @@
 		94CFB6421A75DB60001F174F /* gpu_polygon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gpu_polygon.cpp; sourceTree = "<group>"; };
 		94CFB6431A75DB60001F174F /* gpu_sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gpu_sprite.cpp; sourceTree = "<group>"; };
 		94CFB6481A75DBAC001F174F /* masmem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = masmem.h; sourceTree = "<group>"; };
-		94CFB64A1A75DBE2001F174F /* gpuprec.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = gpuprec.exe; sourceTree = "<group>"; };
-		94CFB64B1A75DBE2001F174F /* multires-newgpu.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = "multires-newgpu.exe"; sourceTree = "<group>"; };
 		94CFB64C1A75DBE2001F174F /* MULTITAP */ = {isa = PBXFileReference; lastKnownFileType = text; path = MULTITAP; sourceTree = "<group>"; };
 		94CFB64D1A75DBE2001F174F /* PSX-TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = "PSX-TODO"; sourceTree = "<group>"; };
 		94CFB64E1A75DBE2001F174F /* SOURCES */ = {isa = PBXFileReference; lastKnownFileType = text; path = SOURCES; sourceTree = "<group>"; };
@@ -1700,6 +1720,32 @@
 			name = "Other Sources";
 			sourceTree = "<group>";
 		};
+		87CD09231B3DFB5400021C64 /* snes_faust */ = {
+			isa = PBXGroup;
+			children = (
+				87CD09241B3DFB7600021C64 /* apu.cpp */,
+				87CD09251B3DFB7600021C64 /* apu.h */,
+				87CD09261B3DFB7600021C64 /* cart.cpp */,
+				87CD09271B3DFB7600021C64 /* cart.h */,
+				87CD09281B3DFB7600021C64 /* cpu_loop_body.inc */,
+				87CD09291B3DFB7600021C64 /* cpu.cpp */,
+				87CD092A1B3DFB7600021C64 /* cpu.h */,
+				87CD092B1B3DFB7600021C64 /* dma.inc */,
+				87CD092C1B3DFB7600021C64 /* dsp.inc */,
+				87CD092D1B3DFB7600021C64 /* input.cpp */,
+				87CD092E1B3DFB7600021C64 /* input.h */,
+				87CD092F1B3DFB7600021C64 /* Makefile.am */,
+				87CD09301B3DFB7600021C64 /* Makefile.in */,
+				87CD09311B3DFB7600021C64 /* PPU_DESIGN */,
+				87CD09321B3DFB7600021C64 /* ppu.cpp */,
+				87CD09331B3DFB7600021C64 /* ppu.h */,
+				87CD09341B3DFB7600021C64 /* snes.cpp */,
+				87CD09351B3DFB7600021C64 /* snes.h */,
+				87CD09361B3DFB7600021C64 /* spc700.inc */,
+			);
+			name = snes_faust;
+			sourceTree = "<group>";
+		};
 		8CB3D51D17F1DE5A0090372A /* mednafen */ = {
 			isa = PBXGroup;
 			children = (
@@ -1782,7 +1828,12 @@
 				8CB3D8B817F1DE5C0090372A /* sexyal */,
 				8CB3D8C917F1DE5C0090372A /* sms */,
 				8CB3D8E817F1DE5C0090372A /* snes */,
+				87CD09231B3DFB5400021C64 /* snes_faust */,
+				87CD091F1B3DFB3100021C64 /* SNSFLoader.cpp */,
+				87CD09201B3DFB3100021C64 /* SNSFLoader.h */,
 				8CB3DC0817F1DE5D0090372A /* sound */,
+				87CD09211B3DFB4500021C64 /* SPCReader.cpp */,
+				87CD09221B3DFB4500021C64 /* SPCReader.h */,
 				94CFB6591A75DC7B001F174F /* state_rewind.cpp */,
 				94CFB65A1A75DC7B001F174F /* state_rewind.h */,
 				8CB3DC1017F1DE5D0090372A /* state-common.h */,
@@ -4035,9 +4086,6 @@
 		94CFB6491A75DBE2001F174F /* notes */ = {
 			isa = PBXGroup;
 			children = (
-				94CFB64A1A75DBE2001F174F /* gpuprec.exe */,
-				94CFB64B1A75DBE2001F174F /* multires-newgpu.exe */,
-				94B082551A8698A200D3C0BC /* linefuzz.exe */,
 				94CFB64C1A75DBE2001F174F /* MULTITAP */,
 				94B082561A8698A200D3C0BC /* PROBLEMATIC-GAMES */,
 				94CFB64D1A75DBE2001F174F /* PSX-TODO */,
@@ -4390,7 +4438,7 @@
 					"-DHAVE_MKDIR",
 					"-DHAVE_LIBSNDFILE",
 					"-DSIZEOF_DOUBLE=8",
-					"-DMEDNAFEN_VERSION=\\\"0.9.38.4\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.38.5\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
 					"-DMEDNAFEN_VERSION_NUMERIC=0x000938",
 					"-DPSS_STYLE=1",
@@ -4447,7 +4495,7 @@
 					"-DHAVE_MKDIR",
 					"-DHAVE_LIBSNDFILE",
 					"-DSIZEOF_DOUBLE=8",
-					"-DMEDNAFEN_VERSION=\\\"0.9.38.4\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.38.5\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
 					"-DMEDNAFEN_VERSION_NUMERIC=0x000938",
 					"-DPSS_STYLE=1",
