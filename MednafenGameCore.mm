@@ -55,7 +55,7 @@ enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
 
 @interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
 {
-    uint32_t *inputBuffer[2];
+    uint32_t *inputBuffer[8];
     int systemType;
     int videoWidth, videoHeight;
     int videoOffsetX, videoOffsetY;
@@ -114,8 +114,8 @@ static void mednafen_init()
     {
         _current = self;
 
-        inputBuffer[0] = (uint32_t *) calloc(9, sizeof(uint32_t));
-        inputBuffer[1] = (uint32_t *) calloc(9, sizeof(uint32_t));
+        for(unsigned i = 0; i < 8; i++)
+            inputBuffer[i] = (uint32_t *) calloc(9, sizeof(uint32_t));
     }
 
     return self;
@@ -123,8 +123,8 @@ static void mednafen_init()
 
 - (void)dealloc
 {
-    free(inputBuffer[0]);
-    free(inputBuffer[1]);
+    for(unsigned i = 0; i < 8; i++)
+        free(inputBuffer[i]);
 
     delete surf;
 }
@@ -246,7 +246,15 @@ static void emulation_run()
 
     masterClock = game->MasterClock >> 32;
 
-    if (systemType == pce || systemType == pcfx)
+    if (systemType == pce)
+    {
+        game->SetInput(0, "gamepad", (uint8_t *)inputBuffer[0]);
+        game->SetInput(1, "gamepad", (uint8_t *)inputBuffer[1]);
+        game->SetInput(2, "gamepad", (uint8_t *)inputBuffer[2]);
+        game->SetInput(3, "gamepad", (uint8_t *)inputBuffer[3]);
+        game->SetInput(4, "gamepad", (uint8_t *)inputBuffer[4]);
+    }
+    else if (systemType == pcfx)
     {
         game->SetInput(0, "gamepad", (uint8_t *)inputBuffer[0]);
         game->SetInput(1, "gamepad", (uint8_t *)inputBuffer[1]);
