@@ -106,6 +106,9 @@ static void mednafen_init()
     //MDFNI_SetSetting("vb.allow_draw_skip", "1");      // Allow draw skipping
     //MDFNI_SetSetting("vb.instant_display_hack", "1"); // Display latency reduction hack
 
+    MDFNI_SetSetting("pce.slstart", "0"); // PCE: First rendered scanline
+    MDFNI_SetSetting("pce.slend", "239"); // PCE: Last rendered scanline
+
     MDFNI_SetSetting("psx.h_overscan", "0"); // Remove PSX overscan
 
     // PlayStation Multitap supported games (incomplete list)
@@ -912,7 +915,7 @@ static void emulation_run()
         systemType = pce;
 
         mednafenCoreModule = @"pce";
-        mednafenCoreAspect = OEIntSizeMake(4, 3);
+        mednafenCoreAspect = OEIntSizeMake(256 * (8.0/7.0), 240);
         //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 48000;
     }
