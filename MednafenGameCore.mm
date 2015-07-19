@@ -903,7 +903,7 @@ static void emulation_run()
         systemType = lynx;
 
         mednafenCoreModule = @"lynx";
-        mednafenCoreAspect = OEIntSizeMake(8, 5);
+        mednafenCoreAspect = OEIntSizeMake(80, 51);
         //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 48000;
     }
