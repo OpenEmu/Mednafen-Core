@@ -30,6 +30,12 @@
 		<dict>
 			<key>OEGameCoreRequiresFiles</key>
 			<true/>
+			<key>OEGameCoreRewindBufferSeconds</key>
+			<integer>3600</integer>
+			<key>OEGameCoreRewindInterval</key>
+			<integer>0</integer>
+			<key>OEGameCoreSupportsRewinding</key>
+			<true/>
 			<key>OERequiredFiles</key>
 			<array>
 				<dict>
@@ -44,9 +50,24 @@
 				</dict>
 			</array>
 		</dict>
+		<key>openemu.system.pce</key>
+		<dict>
+			<key>OEGameCoreRewindBufferSeconds</key>
+			<integer>3600</integer>
+			<key>OEGameCoreRewindInterval</key>
+			<integer>0</integer>
+			<key>OEGameCoreSupportsRewinding</key>
+			<true/>
+		</dict>
 		<key>openemu.system.pcecd</key>
 		<dict>
 			<key>OEGameCoreRequiresFiles</key>
+			<true/>
+			<key>OEGameCoreRewindBufferSeconds</key>
+			<integer>1200</integer>
+			<key>OEGameCoreRewindInterval</key>
+			<integer>0</integer>
+			<key>OEGameCoreSupportsRewinding</key>
 			<true/>
 			<key>OERequiredFiles</key>
 			<array>
@@ -119,6 +140,24 @@
 					<integer>524288</integer>
 				</dict>
 			</array>
+		</dict>
+		<key>openemu.system.vb</key>
+		<dict>
+			<key>OEGameCoreRewindBufferSeconds</key>
+			<integer>3600</integer>
+			<key>OEGameCoreRewindInterval</key>
+			<integer>0</integer>
+			<key>OEGameCoreSupportsRewinding</key>
+			<true/>
+		</dict>
+		<key>openemu.system.ws</key>
+		<dict>
+			<key>OEGameCoreRewindBufferSeconds</key>
+			<integer>3600</integer>
+			<key>OEGameCoreRewindInterval</key>
+			<integer>0</integer>
+			<key>OEGameCoreSupportsRewinding</key>
+			<true/>
 		</dict>
 	</dict>
 	<key>OEGameCorePlayerCount</key>
