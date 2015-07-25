@@ -1112,7 +1112,7 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 
 - (NSData *)serializeStateWithError:(NSError **)outError
 {
-    MemoryStream stream(65536, -1);
+    MemoryStream stream(65536, false);
     MDFNSS_SaveSM(&stream, true);
     size_t length = stream.map_size();
     void *bytes = stream.map();
