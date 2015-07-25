@@ -29,6 +29,7 @@
 #include "settings-driver.h"
 #include "state-driver.h"
 #include "mednafen-driver.h"
+#include "MemoryStream.h"
 
 #import "MednafenGameCore.h"
 #import <OpenEmuBase/OERingBuffer.h>
@@ -1107,6 +1108,68 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 - (BOOL)loadStateFromFileAtPath:(NSString *)fileName
 {
     return MDFNI_LoadState([fileName UTF8String], "");
+}
+
+- (NSData *)serializeStateWithError:(NSError **)outError
+{
+    MemoryStream stream(65536, -1);
+    MDFNSS_SaveSM(&stream, true);
+    size_t length = stream.map_size();
+    void *bytes = stream.map();
+
+    if(length)
+    {
+        return [NSData dataWithBytes:bytes length:length];
+    }
+    else
+    {
+        NSError *error = [NSError errorWithDomain:OEGameCoreErrorDomain
+                                             code:OEGameCoreCouldNotSaveStateError
+                                         userInfo:@{
+                                                    NSLocalizedDescriptionKey : @"Save state data could not be written",
+                                                    NSLocalizedRecoverySuggestionErrorKey : @"The emulator could not write the state data."
+                                                    }];
+        if(outError)
+        {
+            *outError = error;
+        }
+        return nil;
+    }
+}
+
+- (BOOL)deserializeState:(NSData *)state withError:(NSError **)outError
+{
+    NSError *error;
+    const void *bytes = [state bytes];
+    size_t length = [state length];
+
+    MemoryStream stream(length, -1);
+    memcpy(stream.map(), bytes, length);
+    MDFNSS_LoadSM(&stream, true);
+    size_t serialSize = stream.map_size();
+
+    if(serialSize != length)
+    {
+        error = [NSError errorWithDomain:OEGameCoreErrorDomain
+                                    code:OEGameCoreStateHasWrongSizeError
+                                userInfo:@{
+                                           NSLocalizedDescriptionKey : @"Save state has wrong file size.",
+                                           NSLocalizedRecoverySuggestionErrorKey : [NSString stringWithFormat:@"The size of the save state does not have the right size, %lu expected, got: %ld.", serialSize, [state length]],
+                                        }];
+    }
+
+    if(error)
+    {
+        if(outError)
+        {
+            *outError = error;
+        }
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 # pragma mark - Input
