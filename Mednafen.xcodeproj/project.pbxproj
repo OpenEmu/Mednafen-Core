@@ -44,7 +44,6 @@
 		8CB3DE5A17F1DE5E0090372A /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D81E17F1DE5C0090372A /* input.cpp */; };
 		8CB3DE5D17F1DE5E0090372A /* mcgenjin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D82217F1DE5C0090372A /* mcgenjin.cpp */; };
 		8CB3DE5F17F1DE5E0090372A /* pce.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D82517F1DE5C0090372A /* pce.cpp */; };
-		8CB3DE6017F1DE5E0090372A /* subhw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D82717F1DE5C0090372A /* subhw.cpp */; };
 		8CB3DE6317F1DE5E0090372A /* tsushin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D82B17F1DE5C0090372A /* tsushin.cpp */; };
 		8CB3DE6417F1DE5E0090372A /* vce.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D82D17F1DE5C0090372A /* vce.cpp */; };
 		8CB3DE7317F1DE5E0090372A /* fxscsi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D84717F1DE5C0090372A /* fxscsi.cpp */; };
@@ -933,8 +932,6 @@
 		8CB3D82317F1DE5C0090372A /* mcgenjin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mcgenjin.h; sourceTree = "<group>"; };
 		8CB3D82517F1DE5C0090372A /* pce.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pce.cpp; sourceTree = "<group>"; };
 		8CB3D82617F1DE5C0090372A /* pce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pce.h; sourceTree = "<group>"; };
-		8CB3D82717F1DE5C0090372A /* subhw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = subhw.cpp; sourceTree = "<group>"; };
-		8CB3D82817F1DE5C0090372A /* subhw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = subhw.h; sourceTree = "<group>"; };
 		8CB3D82B17F1DE5C0090372A /* tsushin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tsushin.cpp; sourceTree = "<group>"; };
 		8CB3D82C17F1DE5C0090372A /* tsushin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tsushin.h; sourceTree = "<group>"; };
 		8CB3D82D17F1DE5C0090372A /* vce.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vce.cpp; sourceTree = "<group>"; };
@@ -2805,8 +2802,6 @@
 				87DC74711AE45DCF006F1CD7 /* notes */,
 				8CB3D82517F1DE5C0090372A /* pce.cpp */,
 				8CB3D82617F1DE5C0090372A /* pce.h */,
-				8CB3D82717F1DE5C0090372A /* subhw.cpp */,
-				8CB3D82817F1DE5C0090372A /* subhw.h */,
 				8CB3D82B17F1DE5C0090372A /* tsushin.cpp */,
 				8CB3D82C17F1DE5C0090372A /* tsushin.h */,
 				8CB3D82D17F1DE5C0090372A /* vce.cpp */,
@@ -4230,7 +4225,6 @@
 				8CB3DEA217F1DE5E0090372A /* mdec.cpp in Sources */,
 				8CB3E08417F1DE5E0090372A /* tcache.cpp in Sources */,
 				8CB3E0C717F210B70090372A /* general.cpp in Sources */,
-				8CB3DE6017F1DE5E0090372A /* subhw.cpp in Sources */,
 				8CB3E06417F1DE5E0090372A /* vsu.cpp in Sources */,
 				8CB3DE8E17F1DE5E0090372A /* frontio.cpp in Sources */,
 				8CB3E04517F1DE5E0090372A /* framing.c in Sources */,
@@ -4438,7 +4432,7 @@
 					"-DHAVE_MKDIR",
 					"-DHAVE_LIBSNDFILE",
 					"-DSIZEOF_DOUBLE=8",
-					"-DMEDNAFEN_VERSION=\\\"0.9.38.6\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.38.7\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
 					"-DMEDNAFEN_VERSION_NUMERIC=0x000938",
 					"-DPSS_STYLE=1",
@@ -4495,7 +4489,7 @@
 					"-DHAVE_MKDIR",
 					"-DHAVE_LIBSNDFILE",
 					"-DSIZEOF_DOUBLE=8",
-					"-DMEDNAFEN_VERSION=\\\"0.9.38.6\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.38.7\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
 					"-DMEDNAFEN_VERSION_NUMERIC=0x000938",
 					"-DPSS_STYLE=1",
