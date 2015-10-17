@@ -22,7 +22,9 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		27FF3AC51B1D19BA002F941E /* libsndfile_FLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27FF3AC11B1CF78F002F941E /* libsndfile_FLAC.a */; };
+		3DCDE7191BD2D8FD00392D0D /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9453E37C1AC5E1E9004F42AD /* libvorbis.a */; };
+		3DDC76191BD2D825002E7674 /* CDAFReader_SF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94B082471A8697EF00D3C0BC /* CDAFReader_SF.cpp */; };
+		3DDC761A1BD2D86B002E7674 /* libsndfile_FLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27FF3AC11B1CF78F002F941E /* libsndfile_FLAC.a */; };
 		8240861B0FFDD64600F0FE7D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8240861A0FFDD64600F0FE7D /* libz.dylib */; };
 		824088360FFDDCF400F0FE7D /* MednafenGameCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 824088350FFDDCF400F0FE7D /* MednafenGameCore.mm */; };
 		8305628C1A98C6AD0030F6DB /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8305628B1A98C6AD0030F6DB /* libiconv.dylib */; };
@@ -179,8 +181,6 @@
 		8CB3E10C17F216B60090372A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3DC9817F1DE5D0090372A /* main.cpp */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 		94454E3E17852F23006C057B /* OpenEmuBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94454E3D17852F23006C057B /* OpenEmuBase.framework */; };
-		9453E3751AC5D820004F42AD /* CDAFReader_SF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94B082471A8697EF00D3C0BC /* CDAFReader_SF.cpp */; };
-		9453E37D1AC5E1E9004F42AD /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9453E37C1AC5E1E9004F42AD /* libvorbis.a */; };
 		9453E37F1AC5E305004F42AD /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9453E37E1AC5E305004F42AD /* libvorbisenc.a */; };
 		9454E32B19516301005A5CFE /* comm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9454E32919516301005A5CFE /* comm.cpp */; };
 		94817C2D1922B45500FDFC99 /* cdplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94817C2A1922B45500FDFC99 /* cdplay.cpp */; };
@@ -199,11 +199,9 @@
 		94CFB61F1A75D654001F174F /* git.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB61E1A75D654001F174F /* git.cpp */; };
 		94CFB6251A75D6CB001F174F /* ZLInflateFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6231A75D6CB001F174F /* ZLInflateFilter.cpp */; };
 		94CFB6281A75D70C001F174F /* IPSPatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6261A75D70C001F174F /* IPSPatcher.cpp */; };
-		94CFB6311A75D73F001F174F /* Makefile.am.inc in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB62A1A75D73F001F174F /* Makefile.am.inc */; };
 		94CFB6321A75D73F001F174F /* md5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB62B1A75D73F001F174F /* md5.cpp */; };
 		94CFB6331A75D740001F174F /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB62D1A75D73F001F174F /* sha1.cpp */; };
 		94CFB6341A75D740001F174F /* sha256.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB62F1A75D73F001F174F /* sha256.cpp */; };
-		94CFB6441A75DB60001F174F /* gpu_common.inc in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6401A75DB60001F174F /* gpu_common.inc */; };
 		94CFB6451A75DB60001F174F /* gpu_line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6411A75DB60001F174F /* gpu_line.cpp */; };
 		94CFB6461A75DB60001F174F /* gpu_polygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6421A75DB60001F174F /* gpu_polygon.cpp */; };
 		94CFB6471A75DB60001F174F /* gpu_sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6431A75DB60001F174F /* gpu_sprite.cpp */; };
@@ -1572,7 +1570,7 @@
 		94CFB63D1A75DB15001F174F /* megamouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = megamouse.h; sourceTree = "<group>"; };
 		94CFB63E1A75DB15001F174F /* multitap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = multitap.cpp; sourceTree = "<group>"; };
 		94CFB63F1A75DB15001F174F /* multitap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = multitap.h; sourceTree = "<group>"; };
-		94CFB6401A75DB60001F174F /* gpu_common.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = gpu_common.inc; sourceTree = "<group>"; };
+		94CFB6401A75DB60001F174F /* gpu_common.inc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = gpu_common.inc; sourceTree = "<group>"; };
 		94CFB6411A75DB60001F174F /* gpu_line.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gpu_line.cpp; sourceTree = "<group>"; };
 		94CFB6421A75DB60001F174F /* gpu_polygon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gpu_polygon.cpp; sourceTree = "<group>"; };
 		94CFB6431A75DB60001F174F /* gpu_sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gpu_sprite.cpp; sourceTree = "<group>"; };
@@ -1610,11 +1608,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27FF3AC51B1D19BA002F941E /* libsndfile_FLAC.a in Frameworks */,
-				9453E37D1AC5E1E9004F42AD /* libvorbis.a in Frameworks */,
 				9453E37F1AC5E305004F42AD /* libvorbisenc.a in Frameworks */,
 				8305628C1A98C6AD0030F6DB /* libiconv.dylib in Frameworks */,
 				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
+				3DDC761A1BD2D86B002E7674 /* libsndfile_FLAC.a in Frameworks */,
+				3DCDE7191BD2D8FD00392D0D /* libvorbis.a in Frameworks */,
 				8240861B0FFDD64600F0FE7D /* libz.dylib in Frameworks */,
 				94454E3E17852F23006C057B /* OpenEmuBase.framework in Frameworks */,
 			);
@@ -4218,6 +4216,7 @@
 				8CB3DE7517F1DE5E0090372A /* huc6273.cpp in Sources */,
 				8CB3E0BC17F20F810090372A /* crc32.cpp in Sources */,
 				8CB3DEA717F1DE5E0090372A /* sio.cpp in Sources */,
+				3DDC76191BD2D825002E7674 /* CDAFReader_SF.cpp in Sources */,
 				8CB3E0FF17F216370090372A /* mapping0.c in Sources */,
 				8CB3E0FB17F2161B0090372A /* registry.c in Sources */,
 				94817C3B1922B53900FDFC99 /* okiadpcm.cpp in Sources */,
@@ -4336,11 +4335,9 @@
 				8CB3DE8417F1DE5E0090372A /* rainbow.cpp in Sources */,
 				8CB3E06017F1DE5E0090372A /* timer.cpp in Sources */,
 				94B082531A86982900D3C0BC /* GZFileStream.cpp in Sources */,
-				94CFB6311A75D73F001F174F /* Makefile.am.inc in Sources */,
 				94CFB6281A75D70C001F174F /* IPSPatcher.cpp in Sources */,
 				8CB3DD6717F1DE5E0090372A /* rom.cpp in Sources */,
 				8CB3E0BF17F20FB40090372A /* unzip.c in Sources */,
-				94CFB6441A75DB60001F174F /* gpu_common.inc in Sources */,
 				8CB3E0EC17F214140090372A /* resample.c in Sources */,
 				8CB3E0B217F20EFA0090372A /* cdromif.cpp in Sources */,
 				9454E32B19516301005A5CFE /* comm.cpp in Sources */,
@@ -4380,7 +4377,6 @@
 				94817C461922D29B00FDFC99 /* demo.cpp in Sources */,
 				94CFB6341A75D740001F174F /* sha256.cpp in Sources */,
 				94817C471922D36300FDFC99 /* primitives.cpp in Sources */,
-				9453E3751AC5D820004F42AD /* CDAFReader_SF.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4428,9 +4424,7 @@
 				);
 				OTHER_CFLAGS = (
 					"-fwrapv",
-					"-funroll-loops",
 					"-DHAVE_MKDIR",
-					"-DHAVE_LIBSNDFILE",
 					"-DSIZEOF_DOUBLE=8",
 					"-DMEDNAFEN_VERSION=\\\"0.9.38.7\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
@@ -4455,11 +4449,11 @@
 					"-DSIZEOF_LONG=8",
 					"-DSIZEOF_LONG_LONG=8",
 					"-DSIZEOF_OFF_T=8",
+					"-DHAVE_LIBSNDFILE",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.openemu.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = Mednafen;
 				SKIP_INSTALL = YES;
-				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = oecoreplugin;
 			};
 			name = Debug;
@@ -4486,9 +4480,7 @@
 				);
 				OTHER_CFLAGS = (
 					"-fwrapv",
-					"-funroll-loops",
 					"-DHAVE_MKDIR",
-					"-DHAVE_LIBSNDFILE",
 					"-DSIZEOF_DOUBLE=8",
 					"-DMEDNAFEN_VERSION=\\\"0.9.38.7\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
@@ -4513,11 +4505,11 @@
 					"-DSIZEOF_LONG=8",
 					"-DSIZEOF_LONG_LONG=8",
 					"-DSIZEOF_OFF_T=8",
+					"-DHAVE_LIBSNDFILE",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.openemu.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = Mednafen;
 				SKIP_INSTALL = YES;
-				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = oecoreplugin;
 			};
 			name = Release;
@@ -4537,12 +4529,13 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
+				ENABLE_TESTABILITY = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = 1;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -4551,9 +4544,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				ONLY_ACTIVE_ARCH = YES;
+				LLVM_LTO = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -4576,6 +4568,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
@@ -4588,7 +4581,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				SDKROOT = macosx;
 			};
 			name = Release;
