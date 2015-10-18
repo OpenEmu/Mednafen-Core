@@ -4450,6 +4450,8 @@
 					"-DSIZEOF_LONG_LONG=8",
 					"-DSIZEOF_OFF_T=8",
 					"-DHAVE_LIBSNDFILE",
+					"-mllvm",
+					"-disable-lsr",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.openemu.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = Mednafen;
@@ -4506,6 +4508,8 @@
 					"-DSIZEOF_LONG_LONG=8",
 					"-DSIZEOF_OFF_T=8",
 					"-DHAVE_LIBSNDFILE",
+					"-mllvm",
+					"-disable-lsr",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.openemu.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = Mednafen;
