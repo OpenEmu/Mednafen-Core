@@ -79,7 +79,7 @@ static __weak MednafenGameCore *_current;
 
 static void mednafen_init()
 {
-    GET_CURRENT_AND_RETURN();
+    GET_CURRENT_OR_RETURN();
 
     std::vector<MDFNGI*> ext;
     MDFNI_InitializeModules(ext);
@@ -857,7 +857,7 @@ static void mednafen_init()
 
 static void emulation_run()
 {
-    GET_CURRENT_AND_RETURN();
+    GET_CURRENT_OR_RETURN();
 
     static int16_t sound_buf[0x10000];
     int32 rects[game->fb_height];
@@ -1082,7 +1082,7 @@ static void emulation_run()
 
 static size_t update_audio_batch(const int16_t *data, size_t frames)
 {
-    GET_CURRENT_AND_RETURN(frames);
+    GET_CURRENT_OR_RETURN(frames);
 
     [[current ringBufferAtIndex:0] write:data maxLength:frames * [current channelCount] * 2];
     return frames;
