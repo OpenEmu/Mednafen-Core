@@ -1016,11 +1016,6 @@ static void emulation_run()
 
 - (void)executeFrame
 {
-    [self executeFrameSkippingFrame:NO];
-}
-
-- (void)executeFrameSkippingFrame: (BOOL) skip
-{
     emulation_run();
 }
 
@@ -1100,14 +1095,14 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 
 # pragma mark - Save States
 
-- (BOOL)saveStateToFileAtPath:(NSString *)fileName
+- (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-    return MDFNI_SaveState([fileName UTF8String], "", NULL, NULL, NULL);
+    block(MDFNI_SaveState(fileName.fileSystemRepresentation, "", NULL, NULL, NULL), nil);
 }
 
-- (BOOL)loadStateFromFileAtPath:(NSString *)fileName
+- (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-    return MDFNI_LoadState([fileName UTF8String], "");
+    block(MDFNI_LoadState(fileName.fileSystemRepresentation, ""), nil);
 }
 
 - (NSData *)serializeStateWithError:(NSError **)outError
@@ -1118,23 +1113,16 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
     void *bytes = stream.map();
 
     if(length)
-    {
         return [NSData dataWithBytes:bytes length:length];
+
+    if(outError) {
+        *outError = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError  userInfo:@{
+            NSLocalizedDescriptionKey : @"Save state data could not be written",
+            NSLocalizedRecoverySuggestionErrorKey : @"The emulator could not write the state data."
+        }];
     }
-    else
-    {
-        NSError *error = [NSError errorWithDomain:OEGameCoreErrorDomain
-                                             code:OEGameCoreCouldNotSaveStateError
-                                         userInfo:@{
-                                                    NSLocalizedDescriptionKey : @"Save state data could not be written",
-                                                    NSLocalizedRecoverySuggestionErrorKey : @"The emulator could not write the state data."
-                                                    }];
-        if(outError)
-        {
-            *outError = error;
-        }
-        return nil;
-    }
+
+    return nil;
 }
 
 - (BOOL)deserializeState:(NSData *)state withError:(NSError **)outError
