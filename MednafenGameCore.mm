@@ -82,8 +82,7 @@ static void mednafen_init()
 {
     GET_CURRENT_OR_RETURN();
 
-    std::vector<MDFNGI*> ext;
-    MDFNI_InitializeModules(ext);
+    MDFNI_InitializeModules();
 
     std::vector<MDFNSetting> settings;
 
@@ -1006,6 +1005,7 @@ static void emulation_run()
     {
         game->SetInput(0, "gamepad", (uint8_t *)inputBuffer[0]);
         game->SetInput(1, "gamepad", (uint8_t *)inputBuffer[1]);
+        game->SetInput(12, "builtin", (uint8_t *)inputBuffer[7]); // reset button status
     }
     else
     {
@@ -1114,12 +1114,18 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 
 - (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-    block(MDFNI_SaveState(fileName.fileSystemRepresentation, "", NULL, NULL, NULL), nil);
+    if(systemType == ss)
+        block(NO, nil);
+    else
+        block(MDFNI_SaveState(fileName.fileSystemRepresentation, "", NULL, NULL, NULL), nil);
 }
 
 - (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-    block(MDFNI_LoadState(fileName.fileSystemRepresentation, ""), nil);
+    if(systemType == ss)
+        block(NO, nil);
+    else
+        block(MDFNI_LoadState(fileName.fileSystemRepresentation, ""), nil);
 }
 
 - (NSData *)serializeStateWithError:(NSError **)outError
@@ -1184,7 +1190,7 @@ const int LynxMap[] = { 6, 7, 4, 5, 0, 1, 3, 2 };
 const int PCEMap[]  = { 4, 6, 7, 5, 0, 1, 8, 9, 10, 11, 3, 2, 12 };
 const int PCFXMap[] = { 8, 10, 11, 9, 0, 1, 2, 3, 4, 5, 7, 6 };
 const int PSXMap[]  = { 4, 6, 7, 5, 12, 13, 14, 15, 10, 8, 1, 11, 9, 2, 3, 0, 16, 24, 23, 22, 21, 20, 19, 18, 17 };
-const int SSMap[]   = { 4, 5, 6, 7, 10, 9, 2, 1, 0, 15, 3, 11 };
+const int SSMap[]   = { 4, 5, 6, 7, 10, 8, 9, 2, 1, 0, 15, 3, 11 };
 const int VBMap[]   = { 9, 8, 7, 6, 4, 13, 12, 5, 3, 2, 0, 1, 10, 11 };
 const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
