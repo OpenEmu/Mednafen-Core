@@ -1,19 +1,23 @@
-/* Mednafen - Multi-system Emulator
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+/******************************************************************************/
+/* Mednafen - Multi-system Emulator                                           */
+/******************************************************************************/
+/* nongl.cpp:
+**  Copyright (C) 2005-2016 Mednafen Team
+**
+** This program is free software; you can redistribute it and/or
+** modify it under the terms of the GNU General Public License
+** as published by the Free Software Foundation; either version 2
+** of the License, or (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program; if not, write to the Free Software Foundation, Inc.,
+** 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
 
 #include "main.h"
 #include "video.h"
@@ -382,34 +386,34 @@ static void BlitSScale(const MDFN_Surface *src_surface, const MDFN_Rect *src_rec
  }
 }
 
-void MDFN_StretchBlitSurface(MDFN_Surface *src_surface, const MDFN_Rect *src_rect, MDFN_Surface *dest_surface, const MDFN_Rect *dest_rect, bool source_alpha, int scanlines, const MDFN_Rect *original_src_rect, int rotated, int InterlaceField)
+void MDFN_StretchBlitSurface(const MDFN_Surface* src_surface, const MDFN_Rect& src_rect, MDFN_Surface* dest_surface, const MDFN_Rect& dest_rect, bool source_alpha, int scanlines, const MDFN_Rect* original_src_rect, int rotated, int InterlaceField)
 {
- if(!CheckSourceRect(src_surface, src_rect))
+ if(!CheckSourceRect(src_surface, &src_rect))
   return;
 
- if(!CheckDestRect(dest_surface, dest_rect))
+ if(!CheckDestRect(dest_surface, &dest_rect))
   return;
 
- const bool NeedClipping = CheckDRNeedsClipping(dest_surface, dest_rect);
+ const bool NeedClipping = CheckDRNeedsClipping(dest_surface, &dest_rect);
 
 
  if(original_src_rect == NULL)
-  original_src_rect = src_rect;
+  original_src_rect = &src_rect;
 
  MDFN_Rect sr, dr, o_sr;
 
- sr = *src_rect;
+ sr = src_rect;
  o_sr = *original_src_rect;
- dr = *dest_rect;
+ dr = dest_rect;
 
  //printf("%d:%d, %d:%d, %d:%d\n", sr.x, sr.w, sr.y, sr.h, src_surface->w, src_surface->h);
 
  if(rotated != MDFN_ROTATE0)
  {
   if(scanlines)
-   BlitSScale<uint32, 31, true, true>(src_surface, src_rect, dest_surface, dest_rect, original_src_rect, scanlines, rotated, InterlaceField);
+   BlitSScale<uint32, 31, true, true>(src_surface, &src_rect, dest_surface, &dest_rect, original_src_rect, scanlines, rotated, InterlaceField);
   else
-   BlitSScale<uint32, 31, true, true>(src_surface, src_rect, dest_surface, dest_rect, original_src_rect,	 0, rotated);
+   BlitSScale<uint32, 31, true, true>(src_surface, &src_rect, dest_surface, &dest_rect, original_src_rect,	 0, rotated);
 
   return;
  }
@@ -439,7 +443,7 @@ void MDFN_StretchBlitSurface(MDFN_Surface *src_surface, const MDFN_Rect *src_rec
   switch(source_alpha ? (int)src_surface->format.Ashift : -1)
   {
    case -1:  if((dw_to_sw_ratio == dh_to_sh_ratio) && dw_to_sw_ratio <= 5)
-	      nnx(dw_to_sw_ratio, src_surface, &sr, dest_surface, &dr);
+	      nnx(dw_to_sw_ratio, src_surface, sr, dest_surface, dr);
 	     else	
 	      BlitIScale<uint32, 31>(src_surface, sr, dest_surface, dr, dw_to_sw_ratio, dh_to_sh_ratio);
 	     break;
@@ -454,15 +458,15 @@ void MDFN_StretchBlitSurface(MDFN_Surface *src_surface, const MDFN_Rect *src_rec
  {
   if(scanlines)
   {
-   BlitSScale<uint32, 31, true, false>(src_surface, src_rect, dest_surface, dest_rect, original_src_rect, scanlines, 0, InterlaceField);
+   BlitSScale<uint32, 31, true, false>(src_surface, &src_rect, dest_surface, &dest_rect, original_src_rect, scanlines, 0, InterlaceField);
   }
   else switch(source_alpha ? (int)src_surface->format.Ashift : -1)
   {
-   case -1:  BlitSScale<uint32, 31, false, false>(src_surface, src_rect, dest_surface, dest_rect, original_src_rect); break;
-   case  0:  BlitSScale<uint32,  0, false, false>(src_surface, src_rect, dest_surface, dest_rect, original_src_rect); break;
-   case  8:  BlitSScale<uint32,  8, false, false>(src_surface, src_rect, dest_surface, dest_rect, original_src_rect); break;
-   case  16: BlitSScale<uint32, 16, false, false>(src_surface, src_rect, dest_surface, dest_rect, original_src_rect); break;
-   case  24: BlitSScale<uint32, 24, false, false>(src_surface, src_rect, dest_surface, dest_rect, original_src_rect); break;
+   case -1:  BlitSScale<uint32, 31, false, false>(src_surface, &src_rect, dest_surface, &dest_rect, original_src_rect); break;
+   case  0:  BlitSScale<uint32,  0, false, false>(src_surface, &src_rect, dest_surface, &dest_rect, original_src_rect); break;
+   case  8:  BlitSScale<uint32,  8, false, false>(src_surface, &src_rect, dest_surface, &dest_rect, original_src_rect); break;
+   case  16: BlitSScale<uint32, 16, false, false>(src_surface, &src_rect, dest_surface, &dest_rect, original_src_rect); break;
+   case  24: BlitSScale<uint32, 24, false, false>(src_surface, &src_rect, dest_surface, &dest_rect, original_src_rect); break;
   }
  }
 }

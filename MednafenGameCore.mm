@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013, OpenEmu Team
+ Copyright (c) 2016, OpenEmu Team
 
 
  Redistribution and use in source and binary forms, with or without
@@ -39,6 +39,7 @@
 #import "OEPCECDSystemResponderClient.h"
 #import "OEPCFXSystemResponderClient.h"
 #import "OEPSXSystemResponderClient.h"
+#import "OESaturnSystemResponderClient.h"
 #import "OEVBSystemResponderClient.h"
 #import "OEWSSystemResponderClient.h"
 
@@ -52,9 +53,9 @@ namespace MDFN_IEN_VB
     int mednafenCurrentDisplayMode = 1;
 }
 
-enum systemTypes{ lynx, pce, pcfx, psx, vb, wswan };
+enum systemTypes{ lynx, pce, pcfx, psx, ss, vb, wswan };
 
-@interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
+@interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OESaturnSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
 {
     uint32_t *inputBuffer[8];
     int systemType;
@@ -97,6 +98,8 @@ static void mednafen_init()
     MDFNI_SetSetting("psx.bios_jp", [[[biosPath stringByAppendingPathComponent:@"scph5500"] stringByAppendingPathExtension:@"bin"] UTF8String]); // JP SCPH-5500 BIOS
     MDFNI_SetSetting("psx.bios_na", [[[biosPath stringByAppendingPathComponent:@"scph5501"] stringByAppendingPathExtension:@"bin"] UTF8String]); // NA SCPH-5501 BIOS
     MDFNI_SetSetting("psx.bios_eu", [[[biosPath stringByAppendingPathComponent:@"scph5502"] stringByAppendingPathExtension:@"bin"] UTF8String]); // EU SCPH-5502 BIOS
+    MDFNI_SetSetting("ss.bios_jp", [[[biosPath stringByAppendingPathComponent:@"sega_101"] stringByAppendingPathExtension:@"bin"] UTF8String]); // JP SS BIOS
+    MDFNI_SetSetting("ss.bios_na_eu", [[[biosPath stringByAppendingPathComponent:@"mpr-17933"] stringByAppendingPathExtension:@"bin"] UTF8String]); // NA/EU SS BIOS
     MDFNI_SetSetting("filesys.path_sav", [batterySavesDirectory UTF8String]); // Memcards
 
     // VB defaults. dox http://mednafen.sourceforge.net/documentation/09x/vb.html
@@ -938,6 +941,15 @@ static void emulation_run()
         //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 44100;
     }
+    else if([[self systemIdentifier] isEqualToString:@"openemu.system.saturn"])
+    {
+        systemType = ss;
+
+        mednafenCoreModule = @"ss";
+        mednafenCoreAspect = OEIntSizeMake(4, 3);
+        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        sampleRate         = 44100;
+    }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.vb"])
     {
         systemType = vb;
@@ -989,6 +1001,11 @@ static void emulation_run()
 
         for(unsigned i = 0; i < multiTapPlayerCount; i++)
             game->SetInput(i, "dualshock", (uint8_t *)inputBuffer[i]);
+    }
+    else if (systemType == ss)
+    {
+        game->SetInput(0, "gamepad", (uint8_t *)inputBuffer[0]);
+        game->SetInput(1, "gamepad", (uint8_t *)inputBuffer[1]);
     }
     else
     {
@@ -1167,6 +1184,7 @@ const int LynxMap[] = { 6, 7, 4, 5, 0, 1, 3, 2 };
 const int PCEMap[]  = { 4, 6, 7, 5, 0, 1, 8, 9, 10, 11, 3, 2, 12 };
 const int PCFXMap[] = { 8, 10, 11, 9, 0, 1, 2, 3, 4, 5, 7, 6 };
 const int PSXMap[]  = { 4, 6, 7, 5, 12, 13, 14, 15, 10, 8, 1, 11, 9, 2, 3, 0, 16, 24, 23, 22, 21, 20, 19, 18, 17 };
+const int SSMap[]   = { 4, 5, 6, 7, 10, 9, 2, 1, 0, 15, 3, 11 };
 const int VBMap[]   = { 9, 8, 7, 6, 4, 13, 12, 5, 3, 2, 0, 1, 10, 11 };
 const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
@@ -1216,6 +1234,16 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 - (oneway void)didReleasePCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player;
 {
     inputBuffer[player-1][0] &= ~(1 << PCFXMap[button]);
+}
+
+- (oneway void)didPushSaturnButton:(OESaturnButton)button forPlayer:(NSUInteger)player
+{
+    inputBuffer[player-1][0] |= 1 << SSMap[button];
+}
+
+- (oneway void)didReleaseSaturnButton:(OESaturnButton)button forPlayer:(NSUInteger)player
+{
+    inputBuffer[player-1][0] &= ~(1 << SSMap[button]);
 }
 
 - (oneway void)didPushVBButton:(OEVBButton)button forPlayer:(NSUInteger)player;

@@ -1,3 +1,24 @@
+/******************************************************************************/
+/* Mednafen - Multi-system Emulator                                           */
+/******************************************************************************/
+/* nnx.h:
+**  Copyright (C) 2005-2016 Mednafen Team
+**
+** This program is free software; you can redistribute it and/or
+** modify it under the terms of the GNU General Public License
+** as published by the Free Software Foundation; either version 2
+** of the License, or (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program; if not, write to the Free Software Foundation, Inc.,
+** 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
 /* Nearest-neighbor simple scalers */
 // FIXME: non-32bpp scaling not working yet.
 
@@ -5,14 +26,14 @@
 #include "nnx.h"
 
 template<typename T>
-static void t_nnx(int factor, MDFN_Surface *src, MDFN_Rect *src_rect, MDFN_Surface *dest, MDFN_Rect *dest_rect)
+static void t_nnx(int factor, const MDFN_Surface *src, const MDFN_Rect *src_rect, MDFN_Surface *dest, const MDFN_Rect *dest_rect)
 {
- T *source_pixies = src->pixels + src_rect->y * src->pitchinpix;
+ const T *source_pixies = src->pix<T>() + src_rect->y * src->pitchinpix;
  source_pixies += src_rect->x;
  int source_pitch = src->pitchinpix;
  int source_pitch_diff = source_pitch - src_rect->w;
 
- T *dest_pixies = dest->pixels + dest_rect->y * dest->pitchinpix;
+ T *dest_pixies = dest->pix<T>() + dest_rect->y * dest->pitchinpix;
  dest_pixies += dest_rect->x;
  int dest_pitch = dest->pitchinpix;
  int dest_pitch_diff = dest_pitch - dest_rect->w + dest_pitch * (factor - 1);
@@ -100,14 +121,14 @@ static void t_nnx(int factor, MDFN_Surface *src, MDFN_Rect *src_rect, MDFN_Surfa
 }
 
 template<typename T>
-static void t_nnyx(int factor, MDFN_Surface *src, MDFN_Rect *src_rect, MDFN_Surface *dest, MDFN_Rect *dest_rect)
+static void t_nnyx(int factor, const MDFN_Surface *src, const MDFN_Rect *src_rect, MDFN_Surface *dest, const MDFN_Rect *dest_rect)
 {
- T *source_pixies = src->pixels + src_rect->y * src->pitchinpix;
+ const T *source_pixies = src->pix<T>() + src_rect->y * src->pitchinpix;
  source_pixies += src_rect->x;
  int source_pitch = src->pitchinpix;
  int source_pitch_diff = source_pitch - src_rect->w;
 
- T *dest_pixies = dest->pixels + dest_rect->y * dest->pitchinpix;
+ T *dest_pixies = dest->pix<T>() + dest_rect->y * dest->pitchinpix;
  dest_pixies += dest_rect->x;
  int dest_pitch = dest->pitchinpix;
  int dest_pitch_diff = dest_pitch - dest_rect->w + dest_pitch * (factor - 1);
@@ -166,7 +187,7 @@ static void t_nnyx(int factor, MDFN_Surface *src, MDFN_Rect *src_rect, MDFN_Surf
  }
 }
 
-void nnx(int factor, MDFN_Surface *src, MDFN_Rect *src_rect, MDFN_Surface *dest, MDFN_Rect *dest_rect)
+void nnx(int factor, const MDFN_Surface* src, const MDFN_Rect& src_rect, MDFN_Surface* dest, const MDFN_Rect& dest_rect)
 {
  switch(src->format.bpp)
  {
@@ -180,12 +201,12 @@ void nnx(int factor, MDFN_Surface *src, MDFN_Rect *src_rect, MDFN_Surface *dest,
 	break;
 #endif
   case 32:
-	t_nnx<uint32>(factor, src, src_rect, dest, dest_rect);
+	t_nnx<uint32>(factor, src, &src_rect, dest, &dest_rect);
 	break;
  }
 }
 
-void nnyx(int factor, MDFN_Surface *src, MDFN_Rect *src_rect, MDFN_Surface *dest, MDFN_Rect *dest_rect)
+void nnyx(int factor, const MDFN_Surface* src, const MDFN_Rect& src_rect, MDFN_Surface* dest, const MDFN_Rect& dest_rect)
 {
  switch(src->format.bpp)
  {
@@ -199,7 +220,7 @@ void nnyx(int factor, MDFN_Surface *src, MDFN_Rect *src_rect, MDFN_Surface *dest
         break;
 #endif
   case 32:
-        t_nnyx<uint32>(factor, src, src_rect, dest, dest_rect);
+        t_nnyx<uint32>(factor, src, &src_rect, dest, &dest_rect);
         break;
  }
 }

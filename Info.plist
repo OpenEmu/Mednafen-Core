@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.9.38.7.1</string>
+	<string>0.9.39</string>
 	<key>NSPrincipalClass</key>
 	<string>OEGameCoreController</string>
 	<key>OEGameCoreClass</key>
@@ -141,6 +141,38 @@
 				</dict>
 			</array>
 		</dict>
+		<key>openemu.system.saturn</key>
+		<dict>
+			<key>OEGameCoreHasGlitches</key>
+			<true/>
+			<key>OEGameCoreRequiresFiles</key>
+			<true/>
+			<key>OEGameCoreSaveStatesNotSupported</key>
+			<true/>
+			<key>OERequiredFiles</key>
+			<array>
+				<dict>
+					<key>Description</key>
+					<string>Sega Saturn (JP 941228) v1.01 BIOS</string>
+					<key>MD5</key>
+					<string>85ec9ca47d8f6807718151cbcca8b964</string>
+					<key>Name</key>
+					<string>sega_101.bin</string>
+					<key>Size</key>
+					<integer>524288</integer>
+				</dict>
+				<dict>
+					<key>Description</key>
+					<string>Sega Saturn (NA/EU 941115) v1.01a BIOS</string>
+					<key>MD5</key>
+					<string>3240872c70984b6cbfda1586cab68dbe</string>
+					<key>Name</key>
+					<string>mpr-17933.bin</string>
+					<key>Size</key>
+					<integer>524288</integer>
+				</dict>
+			</array>
+		</dict>
 		<key>openemu.system.vb</key>
 		<dict>
 			<key>OEGameCoreRewindBufferSeconds</key>
@@ -171,6 +203,7 @@
 		<string>openemu.system.pcecd</string>
 		<string>openemu.system.pcfx</string>
 		<string>openemu.system.psx</string>
+		<string>openemu.system.saturn</string>
 		<string>openemu.system.vb</string>
 		<string>openemu.system.ws</string>
 	</array>
