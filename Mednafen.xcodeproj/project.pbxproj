@@ -52,6 +52,33 @@
 		8715A97C1D6E54E3003ADE26 /* 3dpad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A9381D6E5273003ADE26 /* 3dpad.cpp */; };
 		8715A97D1D6E54E3003ADE26 /* gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A93B1D6E5273003ADE26 /* gamepad.cpp */; };
 		8715A97E1D6E54E3003ADE26 /* mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A93D1D6E5273003ADE26 /* mouse.cpp */; };
+		87D380E91D962E8800FC657D /* bios.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7C717F1DE5B0090372A /* bios.cpp */; };
+		87D380EA1D962E8800FC657D /* biosHLE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7C917F1DE5B0090372A /* biosHLE.cpp */; };
+		87D380EB1D962E8800FC657D /* dma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7CA17F1DE5B0090372A /* dma.cpp */; };
+		87D380EC1D962E8800FC657D /* flash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7CC17F1DE5B0090372A /* flash.cpp */; };
+		87D380ED1D962E8800FC657D /* gfx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7CE17F1DE5B0090372A /* gfx.cpp */; };
+		87D380EE1D962E8800FC657D /* gfx_scanline_colour.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7D017F1DE5B0090372A /* gfx_scanline_colour.cpp */; };
+		87D380EF1D962E8800FC657D /* gfx_scanline_mono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7D117F1DE5B0090372A /* gfx_scanline_mono.cpp */; };
+		87D380F01D962E8800FC657D /* interrupt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7D217F1DE5B0090372A /* interrupt.cpp */; };
+		87D380F11D962E8800FC657D /* mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7D617F1DE5B0090372A /* mem.cpp */; };
+		87D380F21D962E8800FC657D /* neopop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7D817F1DE5B0090372A /* neopop.cpp */; };
+		87D380F31D962E8800FC657D /* rom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7DA17F1DE5B0090372A /* rom.cpp */; };
+		87D380F41D962E8800FC657D /* rtc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7DB17F1DE5B0090372A /* rtc.cpp */; };
+		87D380F51D962E8800FC657D /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7DD17F1DE5B0090372A /* sound.cpp */; };
+		87D380F61D962E8800FC657D /* T6W28_Apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7DF17F1DE5B0090372A /* T6W28_Apu.cpp */; };
+		87D380F71D962E8800FC657D /* TLCS900h_disassemble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7E317F1DE5B0090372A /* TLCS900h_disassemble.cpp */; };
+		87D380F81D962E8800FC657D /* TLCS900h_disassemble_dst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7E517F1DE5B0090372A /* TLCS900h_disassemble_dst.cpp */; };
+		87D380F91D962E8800FC657D /* TLCS900h_disassemble_extra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7E617F1DE5B0090372A /* TLCS900h_disassemble_extra.cpp */; };
+		87D380FA1D962E8800FC657D /* TLCS900h_disassemble_reg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7E717F1DE5B0090372A /* TLCS900h_disassemble_reg.cpp */; };
+		87D380FB1D962E8800FC657D /* TLCS900h_disassemble_src.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7E817F1DE5B0090372A /* TLCS900h_disassemble_src.cpp */; };
+		87D380FC1D962E8800FC657D /* TLCS900h_interpret.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7E917F1DE5B0090372A /* TLCS900h_interpret.cpp */; };
+		87D380FD1D962E8800FC657D /* TLCS900h_interpret_dst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7EB17F1DE5B0090372A /* TLCS900h_interpret_dst.cpp */; };
+		87D380FE1D962E8800FC657D /* TLCS900h_interpret_reg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7ED17F1DE5B0090372A /* TLCS900h_interpret_reg.cpp */; };
+		87D380FF1D962E8800FC657D /* TLCS900h_interpret_single.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7EF17F1DE5B0090372A /* TLCS900h_interpret_single.cpp */; };
+		87D381001D962E8800FC657D /* TLCS900h_interpret_src.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7F117F1DE5B0090372A /* TLCS900h_interpret_src.cpp */; };
+		87D381011D962E8800FC657D /* TLCS900h_registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7F317F1DE5B0090372A /* TLCS900h_registers.cpp */; };
+		87D381021D962E8800FC657D /* Z80_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D80417F1DE5B0090372A /* Z80_interface.cpp */; };
+		87D381031D9634D100FC657D /* z80_ops.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D64C17F1DE5B0090372A /* z80_ops.cpp */; };
 		8CB3DCCA17F1DE5E0090372A /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D55917F1DE5A0090372A /* debug.cpp */; };
 		8CB3DD5F17F1DE5E0090372A /* c65c02.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D67A17F1DE5B0090372A /* c65c02.cpp */; };
 		8CB3DD6017F1DE5E0090372A /* cart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D67C17F1DE5B0090372A /* cart.cpp */; };
@@ -393,6 +420,7 @@
 		87CD09341B3DFB7600021C64 /* snes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = snes.cpp; path = snes_faust/snes.cpp; sourceTree = "<group>"; };
 		87CD09351B3DFB7600021C64 /* snes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = snes.h; path = snes_faust/snes.h; sourceTree = "<group>"; };
 		87CD09361B3DFB7600021C64 /* spc700.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; name = spc700.inc; path = snes_faust/spc700.inc; sourceTree = "<group>"; };
+		87D380E81D960EA500FC657D /* OENGPSystemResponderClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OENGPSystemResponderClient.h; path = ../OpenEmu/NeoGeoPocket/OENGPSystemResponderClient.h; sourceTree = "<group>"; };
 		87DC74711AE45DCF006F1CD7 /* notes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = notes; sourceTree = "<group>"; };
 		87DC74721AE45E31006F1CD7 /* notes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = notes; sourceTree = "<group>"; };
 		8CB3D52417F1DE5A0090372A /* CDAccess.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CDAccess.cpp; sourceTree = "<group>"; };
@@ -1706,6 +1734,7 @@
 				8CB3E08917F1DFFF0090372A /* include */,
 				8CB3D51D17F1DE5A0090372A /* mednafen */,
 				8CB3E0A517F1E1B80090372A /* OELynxSystemResponderClient.h */,
+				87D380E81D960EA500FC657D /* OENGPSystemResponderClient.h */,
 				944543EF1785282E006C057B /* OEPCESystemResponderClient.h */,
 				940553AC17A3533E009B505D /* OEPCECDSystemResponderClient.h */,
 				944543F01785283A006C057B /* OEPCFXSystemResponderClient.h */,
@@ -4329,6 +4358,7 @@
 				8CB3E0F217F215C50090372A /* ConvertUTF.cpp in Sources */,
 				8715A8F61D6E421E003ADE26 /* psx.cpp in Sources */,
 				8CB3E0CF17F211950090372A /* z80.cpp in Sources */,
+				87D381031D9634D100FC657D /* z80_ops.cpp in Sources */,
 				8CB3E0C417F210720090372A /* file.cpp in Sources */,
 				8CB3E0B317F20F010090372A /* CDAccess.cpp in Sources */,
 				8CB3DE9A17F1DE5E0090372A /* justifier.cpp in Sources */,
@@ -4455,6 +4485,32 @@
 				8715A97C1D6E54E3003ADE26 /* 3dpad.cpp in Sources */,
 				8715A97D1D6E54E3003ADE26 /* gamepad.cpp in Sources */,
 				8715A97E1D6E54E3003ADE26 /* mouse.cpp in Sources */,
+				87D380E91D962E8800FC657D /* bios.cpp in Sources */,
+				87D380EA1D962E8800FC657D /* biosHLE.cpp in Sources */,
+				87D380EB1D962E8800FC657D /* dma.cpp in Sources */,
+				87D380EC1D962E8800FC657D /* flash.cpp in Sources */,
+				87D380ED1D962E8800FC657D /* gfx.cpp in Sources */,
+				87D380EE1D962E8800FC657D /* gfx_scanline_colour.cpp in Sources */,
+				87D380EF1D962E8800FC657D /* gfx_scanline_mono.cpp in Sources */,
+				87D380F01D962E8800FC657D /* interrupt.cpp in Sources */,
+				87D380F11D962E8800FC657D /* mem.cpp in Sources */,
+				87D380F21D962E8800FC657D /* neopop.cpp in Sources */,
+				87D380F31D962E8800FC657D /* rom.cpp in Sources */,
+				87D380F41D962E8800FC657D /* rtc.cpp in Sources */,
+				87D380F51D962E8800FC657D /* sound.cpp in Sources */,
+				87D380F61D962E8800FC657D /* T6W28_Apu.cpp in Sources */,
+				87D380F71D962E8800FC657D /* TLCS900h_disassemble.cpp in Sources */,
+				87D380F81D962E8800FC657D /* TLCS900h_disassemble_dst.cpp in Sources */,
+				87D380F91D962E8800FC657D /* TLCS900h_disassemble_extra.cpp in Sources */,
+				87D380FA1D962E8800FC657D /* TLCS900h_disassemble_reg.cpp in Sources */,
+				87D380FB1D962E8800FC657D /* TLCS900h_disassemble_src.cpp in Sources */,
+				87D380FC1D962E8800FC657D /* TLCS900h_interpret.cpp in Sources */,
+				87D380FD1D962E8800FC657D /* TLCS900h_interpret_dst.cpp in Sources */,
+				87D380FE1D962E8800FC657D /* TLCS900h_interpret_reg.cpp in Sources */,
+				87D380FF1D962E8800FC657D /* TLCS900h_interpret_single.cpp in Sources */,
+				87D381001D962E8800FC657D /* TLCS900h_interpret_src.cpp in Sources */,
+				87D381011D962E8800FC657D /* TLCS900h_registers.cpp in Sources */,
+				87D381021D962E8800FC657D /* Z80_interface.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4512,6 +4568,7 @@
 					"-DARCH_X86",
 					"-DARCH_X86_64",
 					"-DWANT_LYNX_EMU",
+					"-DWANT_NGP_EMU",
 					"-DWANT_PCE_EMU",
 					"-DWANT_PCFX_EMU",
 					"-DWANT_PSX_EMU",
@@ -4571,6 +4628,7 @@
 					"-DARCH_X86",
 					"-DARCH_X86_64",
 					"-DWANT_LYNX_EMU",
+					"-DWANT_NGP_EMU",
 					"-DWANT_PCE_EMU",
 					"-DWANT_PCFX_EMU",
 					"-DWANT_PSX_EMU",

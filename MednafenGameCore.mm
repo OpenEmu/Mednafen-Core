@@ -35,6 +35,7 @@
 #import <OpenEmuBase/OERingBuffer.h>
 #import <OpenGL/gl.h>
 #import "OELynxSystemResponderClient.h"
+#import "OENGPSystemResponderClient.h"
 #import "OEPCESystemResponderClient.h"
 #import "OEPCECDSystemResponderClient.h"
 #import "OEPCFXSystemResponderClient.h"
@@ -53,9 +54,9 @@ namespace MDFN_IEN_VB
     int mednafenCurrentDisplayMode = 1;
 }
 
-enum systemTypes{ lynx, pce, pcfx, psx, ss, vb, wswan };
+enum systemTypes{ lynx, ngp, pce, pcfx, psx, ss, vb, wswan };
 
-@interface MednafenGameCore () <OELynxSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OESaturnSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
+@interface MednafenGameCore () <OELynxSystemResponderClient, OENGPSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OESaturnSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
 {
     uint32_t *inputBuffer[8];
     int systemType;
@@ -913,6 +914,15 @@ static void emulation_run()
         //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         sampleRate         = 48000;
     }
+    else if([[self systemIdentifier] isEqualToString:@"openemu.system.ngp"])
+    {
+        systemType = ngp;
+
+        mednafenCoreModule = @"ngp";
+        mednafenCoreAspect = OEIntSizeMake(20, 19);
+        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        sampleRate         = 48000;
+    }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.pce"] || [[self systemIdentifier] isEqualToString:@"openemu.system.pcecd"])
     {
         systemType = pce;
@@ -1187,6 +1197,7 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 
 // Map OE button order to Mednafen button order
 const int LynxMap[] = { 6, 7, 4, 5, 0, 1, 3, 2 };
+const int NGPMap[]  = { 0, 1, 2, 3, 4, 5, 6 };
 const int PCEMap[]  = { 4, 6, 7, 5, 0, 1, 8, 9, 10, 11, 3, 2, 12 };
 const int PCFXMap[] = { 8, 10, 11, 9, 0, 1, 2, 3, 4, 5, 7, 6 };
 const int PSXMap[]  = { 4, 6, 7, 5, 12, 13, 14, 15, 10, 8, 1, 11, 9, 2, 3, 0, 16, 24, 23, 22, 21, 20, 19, 18, 17 };
@@ -1202,6 +1213,16 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 - (oneway void)didReleaseLynxButton:(OELynxButton)button forPlayer:(NSUInteger)player;
 {
     inputBuffer[player-1][0] &= ~(1 << LynxMap[button]);
+}
+
+- (oneway void)didPushNGPButton:(OENGPButton)button;
+{
+    inputBuffer[0][0] |= 1 << NGPMap[button];
+}
+
+- (oneway void)didReleaseNGPButton:(OENGPButton)button;
+{
+    inputBuffer[0][0] &= ~(1 << NGPMap[button]);
 }
 
 - (oneway void)didPushPCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player;

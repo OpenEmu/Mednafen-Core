@@ -50,6 +50,15 @@
 				</dict>
 			</array>
 		</dict>
+		<key>openemu.system.ngp</key>
+		<dict>
+			<key>OEGameCoreRewindBufferSeconds</key>
+			<integer>60</integer>
+			<key>OEGameCoreRewindInterval</key>
+			<integer>0</integer>
+			<key>OEGameCoreSupportsRewinding</key>
+			<true/>
+		</dict>
 		<key>openemu.system.pce</key>
 		<dict>
 			<key>OEGameCoreRewindBufferSeconds</key>
@@ -199,6 +208,7 @@
 	<key>OESystemIdentifiers</key>
 	<array>
 		<string>openemu.system.lynx</string>
+		<string>openemu.system.ngp</string>
 		<string>openemu.system.pce</string>
 		<string>openemu.system.pcecd</string>
 		<string>openemu.system.pcfx</string>
