@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* Mednafen - Multi-system Emulator                                           */
 /******************************************************************************/
-/* NetClient_POSIX.h:
+/* Net.cpp:
 **  Copyright (C) 2012-2016 Mednafen Team
 **
 ** This program is free software; you can redistribute it and/or
@@ -19,34 +19,45 @@
 ** 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef __MDFN_DRIVERS_NETCLIENT_POSIX_H
-#define __MDFN_DRIVERS_NETCLIENT_POSIX_H
+#include <mednafen/mednafen.h>
 
-#include "NetClient.h"
+#include "Net.h"
 
-class NetClient_POSIX : public NetClient
-{
- public:
-
- NetClient_POSIX();   //const char *host);
- virtual ~NetClient_POSIX();
-
- virtual void Connect(const char *host, unsigned int port);
-
- virtual void Disconnect(void);
-
- virtual bool IsConnected(void);
-
- virtual bool CanSend(int32 timeout = 0);
- virtual bool CanReceive(int32 timeout = 0);
-
- virtual uint32 Send(const void *data, uint32 len);
-
- virtual uint32 Receive(void *data, uint32 len);
-
- private:
-
- int fd;
-};
-
+#ifdef HAVE_POSIX_SOCKETS
+#include "Net_POSIX.h"
 #endif
+
+#ifdef WIN32
+#include "Net_WS2.h"
+#endif
+
+namespace Net
+{
+
+Connection::~Connection() { }
+
+std::unique_ptr<Connection> Connect(const char *host, unsigned int port)
+{
+ #ifdef HAVE_POSIX_SOCKETS
+ return POSIX_Connect(host, port);
+ #elif defined(WIN32)
+ return WS2_Connect(host, port);
+ #else
+ throw MDFN_Error(0, _("Networking system API support not compiled in."));
+ #endif
+}
+
+#if 0
+std::unique_ptr<Connection> Listen(unsigned int port)
+{
+ #ifdef HAVE_POSIX_SOCKETS
+ return POSIX_Accept(port);
+ #elif defined(WIN32)
+ return WS2_Accept(port);
+ #else
+ throw MDFN_Error(0, _("Networking system API support not compiled in."));
+ #endif
+}
+#endif
+
+}

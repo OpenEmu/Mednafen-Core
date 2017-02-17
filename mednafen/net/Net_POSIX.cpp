@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* Mednafen - Multi-system Emulator                                           */
 /******************************************************************************/
-/* NetClient_POSIX.cpp:
+/* Net_POSIX.cpp:
 **  Copyright (C) 2012-2016 Mednafen Team
 **
 ** This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 ** 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "NetClient_POSIX.h"
+#include "Net_POSIX.h"
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -36,17 +36,48 @@
  #define SOL_TCP IPPROTO_TCP
 #endif
 
-NetClient_POSIX::NetClient_POSIX() : fd(-1)
+namespace Net
 {
 
-}
-
-NetClient_POSIX::~NetClient_POSIX()
+class POSIX_Connection : public Connection
 {
- Disconnect();
-}
+ public:
 
-void NetClient_POSIX::Connect(const char *host, unsigned int port)
+ POSIX_Connection();
+ virtual ~POSIX_Connection() override;
+
+ virtual bool CanSend(int32 timeout = 0) override;
+ virtual bool CanReceive(int32 timeout = 0) override;
+
+ virtual uint32 Send(const void *data, uint32 len) override;
+
+ virtual uint32 Receive(void *data, uint32 len) override;
+
+ protected:
+
+ int fd = -1;
+ bool fully_established = false;
+};
+
+class POSIX_Client : public POSIX_Connection
+{
+ public:
+ POSIX_Client(const char *host, unsigned int port);
+
+ virtual bool Established(int32 timeout = 0) override;
+};
+
+#if 0
+class POSIX_Server : public POSIX_Connection
+{
+ public:
+ POSIX_Server(unsigned int port);
+
+ virtual bool Established(bool wait = false) override;
+};
+#endif
+
+POSIX_Client::POSIX_Client(const char *host, unsigned int port)
 {
  {
   struct addrinfo hints;
@@ -84,6 +115,7 @@ void NetClient_POSIX::Connect(const char *host, unsigned int port)
    for(struct addrinfo *rp = result; rp != NULL; rp = rp->ai_next)
    {
     //printf("%u\n", rp->ai_family);
+
     if(tryit == 0 && rp->ai_family != AF_INET)
      continue;
 
@@ -97,15 +129,36 @@ void NetClient_POSIX::Connect(const char *host, unsigned int port)
      throw(MDFN_Error(ene.Errno(), _("socket() failed: %s"), ene.StrError()));
     }
 
+    #ifdef SO_NOSIGPIPE
+    {
+     int opt = 1;
+
+     if(setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &opt, sizeof(opt)) == -1)
+     {
+      ErrnoHolder ene(errno);
+
+      throw MDFN_Error(ene.Errno(), _("setsockopt() failed: %s"), ene.StrError());
+     }
+    }
+    #endif
+
+    fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
+
+    TryConnectAgain:;
     if(connect(fd, rp->ai_addr, rp->ai_addrlen) == -1)
     {
-     ErrnoHolder ene(errno);
+     if(errno == EINTR)
+      goto TryConnectAgain;
+     else if(errno != EINPROGRESS)
+     {
+      ErrnoHolder ene(errno);
 
-     freeaddrinfo(result);
-     close(fd);
-     fd = -1;
+      freeaddrinfo(result);
+      close(fd);
+      fd = -1;
 
-     throw(MDFN_Error(ene.Errno(), _("connect() failed: %s"), ene.StrError()));
+      throw MDFN_Error(ene.Errno(), _("connect() failed: %s"), ene.StrError());
+     }
     }
     goto BreakOut;
    }
@@ -121,39 +174,55 @@ void NetClient_POSIX::Connect(const char *host, unsigned int port)
    throw MDFN_Error(0, "BOOGA BOOGA");
   }
  }
+}
 
- fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
+bool POSIX_Client::Established(int32 timeout)
+{
+ if(fully_established)
+  return true;
+
+ if(!CanSend(timeout))
+  return false;
+
+ {
+  int errc = 0;
+  socklen_t errc_len = sizeof(errc);
+
+  if(getsockopt(fd, SOL_SOCKET, SO_ERROR, &errc, &errc_len) == -1)
+  {
+   ErrnoHolder ene(errno);
+
+   throw MDFN_Error(ene.Errno(), _("getsockopt() failed: %s"), ene.StrError());
+  }
+  else if(errc)
+  {
+   ErrnoHolder ene(errc);
+
+   throw MDFN_Error(ene.Errno(), _("connect() failed: %s"), ene.StrError());
+  }
+ }
+
  {
   int tcpopt = 1;
   if(setsockopt(fd, SOL_TCP, TCP_NODELAY, &tcpopt, sizeof(int)) == -1)
   {
    ErrnoHolder ene(errno);
 
-   close(fd);
-   fd = -1;
-
-   throw(MDFN_Error(ene.Errno(), _("setsockopt() failed: %s"), ene.StrError()));
+   throw MDFN_Error(ene.Errno(), _("setsockopt() failed: %s"), ene.StrError());
   }
  }
 
- #ifdef SO_NOSIGPIPE
- {
-  int opt = 1;
+ fully_established = true;
 
-  if(setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &opt, sizeof(opt)) == -1)
-  {
-   ErrnoHolder ene(errno);
-
-   close(fd);
-   fd = -1;
-
-   throw(MDFN_Error(ene.Errno(), _("setsockopt() failed: %s"), ene.StrError()));
-  }
- }
- #endif
+ return true;
 }
 
-void NetClient_POSIX::Disconnect(void)
+POSIX_Connection::POSIX_Connection()
+{
+
+}
+
+POSIX_Connection::~POSIX_Connection()
 {
  if(fd != -1)
  {
@@ -163,21 +232,12 @@ void NetClient_POSIX::Disconnect(void)
  }
 }
 
-bool NetClient_POSIX::IsConnected(void)
-{
- if(fd == -1)
-  return(false);
-
-
- return(true);
-}
-
 //
 // Use poll() instead of select() so the code doesn't malfunction when
 // exceeding the FD_SETSIZE ceiling(which can occur in some quasi-pathological Mednafen use cases, such as making and running with an M3U file
 // that ultimately references thousands of files through CUE sheets).
 //
-bool NetClient_POSIX::CanSend(int32 timeout)
+bool POSIX_Connection::CanSend(int32 timeout)
 {
  int rv;
  struct pollfd fds[1];
@@ -204,7 +264,7 @@ bool NetClient_POSIX::CanSend(int32 timeout)
  return (bool)(fds[0].revents & (POLLOUT | POLLERR));
 }
 
-bool NetClient_POSIX::CanReceive(int32 timeout)
+bool POSIX_Connection::CanReceive(int32 timeout)
 {
  int rv;
  struct pollfd fds[1];
@@ -231,8 +291,11 @@ bool NetClient_POSIX::CanReceive(int32 timeout)
  return (bool)(fds[0].revents & (POLLIN | POLLHUP | POLLERR));
 }
 
-uint32 NetClient_POSIX::Send(const void *data, uint32 len)
+uint32 POSIX_Connection::Send(const void* data, uint32 len)
 {
+ if(!fully_established)
+  throw MDFN_Error(0, _("Bug: Send() called when connection not fully established."));
+
  ssize_t rv;
 
  #ifdef MSG_NOSIGNAL
@@ -255,8 +318,11 @@ uint32 NetClient_POSIX::Send(const void *data, uint32 len)
  return rv;
 }
 
-uint32 NetClient_POSIX::Receive(void *data, uint32 len)
+uint32 POSIX_Connection::Receive(void* data, uint32 len)
 {
+ if(!fully_established)
+  throw MDFN_Error(0, _("Bug: Receive() called when connection not fully established."));
+
  ssize_t rv;
 
  rv = recv(fd, data, len, 0);
@@ -278,3 +344,16 @@ uint32 NetClient_POSIX::Receive(void *data, uint32 len)
  return rv;
 }
 
+std::unique_ptr<Connection> POSIX_Connect(const char* host, unsigned int port)
+{
+ return std::unique_ptr<Connection>(new POSIX_Client(host, port));
+}
+
+#if 0
+std::unique_ptr<Connection> POSIX_Accept(unsigned int port)
+{
+ return new POSIX_Server(port);
+}
+#endif
+
+}

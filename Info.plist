@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.9.39.2</string>
+	<string>0.9.41</string>
 	<key>NSPrincipalClass</key>
 	<string>OEGameCoreController</string>
 	<key>OEGameCoreClass</key>
@@ -96,6 +96,8 @@
 		<dict>
 			<key>OEGameCoreRequiresFiles</key>
 			<true/>
+			<key>OEGameCoreSupportsMultipleDiscs</key>
+			<true/>
 			<key>OERequiredFiles</key>
 			<array>
 				<dict>
@@ -157,6 +159,8 @@
 			<key>OEGameCoreRequiresFiles</key>
 			<true/>
 			<key>OEGameCoreSaveStatesNotSupported</key>
+			<true/>
+			<key>OEGameCoreSupportsMultipleDiscs</key>
 			<true/>
 			<key>OERequiredFiles</key>
 			<array>

@@ -731,10 +731,10 @@ static void LoadCommon(std::vector<CDIF *> *CDInterfaces)
   {
    std::string save_path = MDFN_MakeFName(MDFNMKF_SAV, 0, "sav");
    GZFileStream savefp(save_path, GZFileStream::MODE::READ);
-   //const uint64 fp_size_tmp = savefp.size();
+   const uint64 fp_size_tmp = savefp.size();
 
-   //if(fp_size_tmp != 65536)
-    //throw MDFN_Error(0, _("Save game memory file \"%s\" is an incorrect size(%llu bytes).  The correct size is %llu bytes."), save_path.c_str(), (unsigned long long)fp_size_tmp, (unsigned long long)65536);
+   if(fp_size_tmp != 65536)
+    throw MDFN_Error(0, _("Save game memory file \"%s\" is an incorrect size(%llu bytes).  The correct size is %llu bytes."), save_path.c_str(), (unsigned long long)fp_size_tmp, (unsigned long long)65536);
 
    savefp.read(BackupRAM, 0x8000);
    savefp.read(ExBackupRAM, 0x8000);

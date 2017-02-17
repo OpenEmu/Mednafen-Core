@@ -193,10 +193,10 @@ static void LoadSaveMemory(const std::string& path, uint8* const data, const uin
  try
  {
   std::unique_ptr<Stream> fp(possibly_gz ? (Stream*)(new GZFileStream(path, GZFileStream::MODE::READ)) : (Stream*)(new FileStream(path, FileStream::MODE_READ)));
-  //const uint64 fp_size_tmp = fp->size();
+  const uint64 fp_size_tmp = fp->size();
 
-  //if(fp_size_tmp != len)
-  // throw MDFN_Error(0, _("Save game memory file \"%s\" is an incorrect size(%llu bytes).  The correct size is %llu bytes."), path.c_str(), (unsigned long long)fp_size_tmp, (unsigned long long)len);
+  if(fp_size_tmp != len)
+   throw MDFN_Error(0, _("Save game memory file \"%s\" is an incorrect size(%llu bytes).  The correct size is %llu bytes."), path.c_str(), (unsigned long long)fp_size_tmp, (unsigned long long)len);
 
   fp->read(data, len);
  }

@@ -1,7 +1,7 @@
 /******************************************************************************/
 /* Mednafen - Multi-system Emulator                                           */
 /******************************************************************************/
-/* NetClient_WS2.cpp:
+/* Net_WS2.cpp:
 **  Copyright (C) 2012-2016 Mednafen Team
 **
 ** This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 ** 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "NetClient_WS2.h"
+#include "Net_WS2.h"
 
 #include <sys/time.h>
 #include <winsock2.h>
@@ -33,6 +33,37 @@
 #endif
 
 #include <string>
+
+namespace Net
+{
+
+class WS2_Connection : public Connection
+{
+ public:
+
+ WS2_Connection();
+ virtual ~WS2_Connection() override;
+
+ virtual bool CanSend(int32 timeout = 0) override;
+ virtual bool CanReceive(int32 timeout = 0) override;
+
+ virtual uint32 Send(const void *data, uint32 len) override;
+
+ virtual uint32 Receive(void *data, uint32 len) override;
+
+ protected:
+
+ SOCKET sd = INVALID_SOCKET;
+ bool fully_established = false;
+};
+
+class WS2_Client : public WS2_Connection
+{
+ public:
+ WS2_Client(const char *host, unsigned int port);
+
+ virtual bool Established(int32 timeout = 0) override;
+};
 
 static std::string ErrCodeToString(int errcode)
 {
@@ -67,7 +98,7 @@ static std::string ErrCodeToString(int errcode)
  return(ret);
 }
 
-NetClient_WS2::NetClient_WS2()
+WS2_Connection::WS2_Connection()
 {
  WORD requested_version;
  WSADATA wsa_data;
@@ -86,20 +117,20 @@ NetClient_WS2::NetClient_WS2()
   WSACleanup();
   throw MDFN_Error(0, _("Suitable version of Winsock not found."));
  }
-
- sd = new SOCKET;
- *(SOCKET*)sd = INVALID_SOCKET;
 }
 
-NetClient_WS2::~NetClient_WS2()
+WS2_Connection::~WS2_Connection()
 {
- Disconnect();
- delete (SOCKET*)sd;
-
+ if(sd != INVALID_SOCKET)
+ {
+  //shutdown(sd, SHUT_RDWR); // TODO: investigate usage scenarios
+  closesocket(sd);
+  sd = INVALID_SOCKET;
+ }
  WSACleanup();
 }
 
-void NetClient_WS2::Connect(const char *host, unsigned int port)
+WS2_Client::WS2_Client(const char *host, unsigned int port)
 {
  {
   struct addrinfo hints;
@@ -107,7 +138,7 @@ void NetClient_WS2::Connect(const char *host, unsigned int port)
   int rv;
   char service[64];
 
-  *(SOCKET*)sd = INVALID_SOCKET;
+  sd = INVALID_SOCKET;
 
   snprintf(service, sizeof(service), "%u", port);
 
@@ -132,8 +163,8 @@ void NetClient_WS2::Connect(const char *host, unsigned int port)
     if(tryit == 0 && rp->ai_family != AF_INET)
      continue;
 
-    *(SOCKET *)sd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
-    if(*(SOCKET *)sd == INVALID_SOCKET)
+    sd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+    if(sd == INVALID_SOCKET)
     {
      int errcode = WSAGetLastError();
 
@@ -142,16 +173,34 @@ void NetClient_WS2::Connect(const char *host, unsigned int port)
      throw MDFN_Error(0, _("socket() failed: %d %s"), errcode, ErrCodeToString(errcode).c_str());
     }
 
-    if(connect(*(SOCKET*)sd, rp->ai_addr, rp->ai_addrlen) != 0)
     {
-     int errcode = WSAGetLastError();
+     unsigned long nbv = 1;
+     DWORD numbytesout = 0;
 
-     freeaddrinfo(result);
+     if(WSAIoctl(sd, FIONBIO, &nbv, sizeof(nbv), NULL, 0, &numbytesout, NULL, NULL) == SOCKET_ERROR)
+     {
+      int errcode = WSAGetLastError();
 
-     closesocket(*(SOCKET *)sd);
-     *(SOCKET *)sd = INVALID_SOCKET;
+      closesocket(sd);
+      sd = INVALID_SOCKET;
 
-     throw MDFN_Error(0, _("connect() failed: %d %s"), errcode, ErrCodeToString(errcode).c_str());
+      throw MDFN_Error(0, _("WSAIoctl() failed: %d %s"), errcode, ErrCodeToString(errcode).c_str());
+     }
+    }
+
+    if(connect(sd, rp->ai_addr, rp->ai_addrlen) != 0)
+    {
+     const int errcode = WSAGetLastError();
+
+     if(errcode != WSAEWOULDBLOCK)
+     {
+      freeaddrinfo(result);
+
+      closesocket(sd);
+      sd = INVALID_SOCKET;
+
+      throw MDFN_Error(0, _("connect() failed: %d %s"), errcode, ErrCodeToString(errcode).c_str());
+     }
     }
     goto BreakOut;
    }
@@ -162,72 +211,92 @@ void NetClient_WS2::Connect(const char *host, unsigned int port)
   freeaddrinfo(result);
   result = NULL;
 
-  if(*(SOCKET *)sd == INVALID_SOCKET)
+  if(sd == INVALID_SOCKET)
   {
    throw MDFN_Error(0, "BOOGA BOOGA");
+  }
+ }
+}
+
+bool WS2_Client::Established(int32 timeout)
+{
+ if(fully_established)
+  return true;
+
+ {
+  int rv;
+  fd_set wfds, efds;
+  struct timeval tv;
+
+  FD_ZERO(&wfds);
+  FD_ZERO(&efds);
+  FD_SET(sd, &wfds);
+  FD_SET(sd, &efds);
+
+  tv.tv_sec = timeout / (1000 * 1000);
+  tv.tv_usec = timeout % (1000 * 1000);
+
+  rv = select(-1, NULL, &wfds, &efds, (timeout >= 0) ? &tv : NULL);
+
+  if(rv == -1)
+  {
+   int errcode = WSAGetLastError();
+
+   throw MDFN_Error(0, _("select() failed: %d %s"), errcode, ErrCodeToString(errcode).c_str());
+  }
+  else if(!rv)
+   return false;
+  else
+  {
+   if(FD_ISSET(sd, &efds))
+   {
+    int errc = 0;
+    int errc_len = sizeof(errc);
+
+    if(getsockopt(sd, SOL_SOCKET, SO_ERROR, (char*)&errc, &errc_len) == -1)
+    {
+     const int errcode = WSAGetLastError();
+
+     throw MDFN_Error(0, _("getsockopt() failed: %d %s"), errcode, ErrCodeToString(errcode).c_str());
+    }
+
+    throw MDFN_Error(0, _("connect() failed: %d %s"), errc, ErrCodeToString(errc).c_str());
+   }
   }
  }
 
  {
   BOOL tcpopt = 1;
-  if(setsockopt(*(SOCKET*)sd, IPPROTO_TCP, TCP_NODELAY, (char*)&tcpopt, sizeof(BOOL)) == SOCKET_ERROR)
+  if(setsockopt(sd, IPPROTO_TCP, TCP_NODELAY, (char*)&tcpopt, sizeof(BOOL)) == SOCKET_ERROR)
   {
    int errcode = WSAGetLastError();
 
-   closesocket(*(SOCKET *)sd);
-   *(SOCKET *)sd = INVALID_SOCKET;
+   closesocket(sd);
+   sd = INVALID_SOCKET;
 
    throw MDFN_Error(0, _("setsockopt() failed: %d %s"), errcode, ErrCodeToString(errcode).c_str());
   }
  }
 
- {
-  unsigned long nbv = 1;
-  DWORD numbytesout = 0;
+ fully_established = true;
 
-  if(WSAIoctl(*(SOCKET*)sd, FIONBIO, &nbv, sizeof(nbv), NULL, 0, &numbytesout, NULL, NULL) == SOCKET_ERROR)
-  {
-   int errcode = WSAGetLastError();
-
-   closesocket(*(SOCKET *)sd);
-   *(SOCKET *)sd = INVALID_SOCKET;
-
-   throw MDFN_Error(0, _("WSAIoctl() failed: %d %s"), errcode, ErrCodeToString(errcode).c_str());
-  }
- }
+ return true;
 }
 
-void NetClient_WS2::Disconnect(void)
-{
- if(*(SOCKET *)sd != INVALID_SOCKET)
- {
-  //shutdown(*(SOCKET*)sd, SHUT_RDWR); // TODO: investigate usage scenarios
-  closesocket(*(SOCKET *)sd);
-  *(SOCKET *)sd = INVALID_SOCKET;
- }
-}
 
-bool NetClient_WS2::IsConnected(void)
-{
- if(*(SOCKET *)sd == INVALID_SOCKET)
-  return(false);
-
- return(true);
-}
-
-bool NetClient_WS2::CanSend(int32 timeout)
+bool WS2_Connection::CanSend(int32 timeout)
 {
  int rv;
  fd_set wfds;
  struct timeval tv;
 
  FD_ZERO(&wfds);
- FD_SET(*(SOCKET*)sd, &wfds);
+ FD_SET(sd, &wfds);
 
  tv.tv_sec = timeout / (1000 * 1000);
  tv.tv_usec = timeout % (1000 * 1000);
 
- rv = select(-1, NULL, &wfds, NULL, &tv);
+ rv = select(-1, NULL, &wfds, NULL, (timeout >= 0) ? &tv : NULL);
 
  if(rv == -1)
  {
@@ -239,19 +308,19 @@ bool NetClient_WS2::CanSend(int32 timeout)
  return (bool)rv;
 }
 
-bool NetClient_WS2::CanReceive(int32 timeout)
+bool WS2_Connection::CanReceive(int32 timeout)
 {
  int rv;
  fd_set rfds;
  struct timeval tv;
 
  FD_ZERO(&rfds);
- FD_SET(*(SOCKET*)sd, &rfds);
+ FD_SET(sd, &rfds);
 
  tv.tv_sec = timeout / (1000 * 1000);
  tv.tv_usec = timeout % (1000 * 1000);
 
- rv = select(-1, &rfds, NULL, NULL, (timeout == -1) ? NULL : &tv);
+ rv = select(-1, &rfds, NULL, NULL, (timeout >= 0) ? &tv : NULL);
 
  if(rv == -1)
  {
@@ -263,11 +332,14 @@ bool NetClient_WS2::CanReceive(int32 timeout)
  return (bool)rv;
 }
 
-uint32 NetClient_WS2::Send(const void *data, uint32 len)
+uint32 WS2_Connection::Send(const void *data, uint32 len)
 {
+ if(!fully_established)
+  throw MDFN_Error(0, _("Bug: Send() called when connection not fully established."));
+
  int rv;
 
- rv = send(*(SOCKET*)sd, (const char *)data, len, 0);
+ rv = send(sd, (const char *)data, len, 0);
 
  if(rv < 0)
  {
@@ -282,11 +354,14 @@ uint32 NetClient_WS2::Send(const void *data, uint32 len)
  return rv;
 }
 
-uint32 NetClient_WS2::Receive(void *data, uint32 len)
+uint32 WS2_Connection::Receive(void *data, uint32 len)
 {
+ if(!fully_established)
+  throw MDFN_Error(0, _("Bug: Receive() called when connection not fully established."));
+
  int rv;
 
- rv = recv(*(SOCKET*)sd, (char *)data, len, 0);
+ rv = recv(sd, (char *)data, len, 0);
 
  if(rv < 0)
  {
@@ -305,3 +380,9 @@ uint32 NetClient_WS2::Receive(void *data, uint32 len)
  return rv;
 }
 
+std::unique_ptr<Connection> WS2_Connect(const char* host, unsigned int port)
+{
+ return std::unique_ptr<Connection>(new WS2_Client(host, port));
+}
+
+}

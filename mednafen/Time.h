@@ -1,8 +1,8 @@
 /******************************************************************************/
 /* Mednafen - Multi-system Emulator                                           */
 /******************************************************************************/
-/* NetClient_WS2.h:
-**  Copyright (C) 2012-2016 Mednafen Team
+/* Time.h:
+**  Copyright (C) 2017 Mednafen Team
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -19,34 +19,35 @@
 ** 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef __MDFN_DRIVERS_NETCLIENT_WS2_H
-#define __MDFN_DRIVERS_NETCLIENT_WS2_H
+#ifndef __MDFN_TIME_H
+#define __MDFN_TIME_H
 
-#include "NetClient.h"
+#include <mednafen/types.h>
 
-class NetClient_WS2 : public NetClient
+#include <time.h>
+
+#include <string>
+
+namespace Time
 {
- public:
+ void Time_Init(void);
 
- NetClient_WS2();
- virtual ~NetClient_WS2();
+ int64 EpochTime(void);
+ struct tm LocalTime(const int64 ept);
+ static INLINE struct tm LocalTime(void) { return LocalTime(EpochTime()); }
 
- virtual void Connect(const char *host, unsigned int port);
+ struct tm UTCTime(const int64 ept);
+ static INLINE struct tm UTCTime(void) { return UTCTime(EpochTime()); }
 
- virtual void Disconnect(void);
+ std::string StrTime(const char* format, const struct tm& tin);
+ static INLINE std::string StrTime(const char* format) { return StrTime(format, LocalTime()); }
+ static INLINE std::string StrTime(const struct tm& tin) { return StrTime("%c", tin); }
+ static INLINE std::string StrTime(void) { return StrTime("%c", LocalTime()); }
 
- virtual bool IsConnected(void);
+ uint32 MonoMS(void);	// Milliseconds
+ int64 MonoUS(void);	// Microseconds
+ void SleepMS(uint32) noexcept;	// Sleep for approximately the time specified in milliseconds.
+}
 
- virtual bool CanSend(int32 timeout = 0);
- virtual bool CanReceive(int32 timeout = 0);
-
- virtual uint32 Send(const void *data, uint32 len);
-
- virtual uint32 Receive(void *data, uint32 len);
-
- private:
-
- void *sd;
-};
 
 #endif
