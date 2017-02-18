@@ -1,8 +1,8 @@
 /******************************************************************************/
 /* Mednafen - Multi-system Emulator                                           */
 /******************************************************************************/
-/* trim.h:
-**  Copyright (C) 2007-2016 Mednafen Team
+/* string.h:
+**  Copyright (C) 2007-2017 Mednafen Team
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -19,8 +19,8 @@
 ** 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef __MDFN_STRING_TRIM_H
-#define __MDFN_STRING_TRIM_H
+#ifndef __MDFN_STRING_STRING_H
+#define __MDFN_STRING_STRING_H
 
 // Removes whitespace from the beginning of the string.
 void MDFN_ltrim(char* s);
@@ -38,4 +38,5 @@ void MDFN_trim(std::string& s);
 void MDFN_zapctrlchars(char* s);
 void MDFN_zapctrlchars(std::string& s);
 
+std::vector<std::string> MDFN_strsplit(const std::string& str, const std::string& delim = ",");
 #endif

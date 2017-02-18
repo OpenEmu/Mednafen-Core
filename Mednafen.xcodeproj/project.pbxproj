@@ -53,6 +53,7 @@
 		8715A97D1D6E54E3003ADE26 /* gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A93B1D6E5273003ADE26 /* gamepad.cpp */; };
 		8715A97E1D6E54E3003ADE26 /* mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A93D1D6E5273003ADE26 /* mouse.cpp */; };
 		87A30A421E57A44500114B03 /* Time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87A30A401E57A44500114B03 /* Time.cpp */; };
+		87A30A471E57CBF700114B03 /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87A30A451E57CBF700114B03 /* string.cpp */; };
 		87D380E91D962E8800FC657D /* bios.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7C717F1DE5B0090372A /* bios.cpp */; };
 		87D380EA1D962E8800FC657D /* biosHLE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7C917F1DE5B0090372A /* biosHLE.cpp */; };
 		87D380EB1D962E8800FC657D /* dma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7CA17F1DE5B0090372A /* dma.cpp */; };
@@ -259,7 +260,6 @@
 		94CFB6581A75DC2D001F174F /* quicklz.c in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6541A75DC2D001F174F /* quicklz.c */; };
 		94CFB65B1A75DC7C001F174F /* state_rewind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6591A75DC7B001F174F /* state_rewind.cpp */; };
 		94FD853218C7F53C001B426D /* pcecd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94FD853018C7F53C001B426D /* pcecd.cpp */; };
-		94FD853518C7F58C001B426D /* trim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94FD853318C7F58C001B426D /* trim.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -410,6 +410,9 @@
 		87A30A401E57A44500114B03 /* Time.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Time.cpp; sourceTree = "<group>"; };
 		87A30A411E57A44500114B03 /* Time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Time.h; sourceTree = "<group>"; };
 		87A30A431E57AE4D00114B03 /* shader_scale2x.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; path = shader_scale2x.inc; sourceTree = "<group>"; };
+		87A30A441E57BCCC00114B03 /* 190.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = 190.cpp; sourceTree = "<group>"; };
+		87A30A451E57CBF700114B03 /* string.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string.cpp; sourceTree = "<group>"; };
+		87A30A461E57CBF700114B03 /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string.h; sourceTree = "<group>"; };
 		87CD091F1B3DFB3100021C64 /* SNSFLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SNSFLoader.cpp; sourceTree = "<group>"; };
 		87CD09201B3DFB3100021C64 /* SNSFLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SNSFLoader.h; sourceTree = "<group>"; };
 		87CD09211B3DFB4500021C64 /* SPCReader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SPCReader.cpp; sourceTree = "<group>"; };
@@ -1450,20 +1453,16 @@
 		8CB3DC2517F1DE5D0090372A /* bitwise.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bitwise.c; sourceTree = "<group>"; };
 		8CB3DC2617F1DE5D0090372A /* block.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = block.c; sourceTree = "<group>"; };
 		8CB3DC2717F1DE5D0090372A /* block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = block.h; sourceTree = "<group>"; };
-		8CB3DC2817F1DE5D0090372A /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		8CB3DC2917F1DE5D0090372A /* codebook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = codebook.c; sourceTree = "<group>"; };
 		8CB3DC2A17F1DE5D0090372A /* codebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = codebook.h; sourceTree = "<group>"; };
 		8CB3DC2B17F1DE5D0090372A /* codec_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = codec_internal.h; sourceTree = "<group>"; };
-		8CB3DC2C17F1DE5D0090372A /* configure.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = configure.in; sourceTree = "<group>"; };
 		8CB3DC2D17F1DE5D0090372A /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		8CB3DC2E17F1DE5D0090372A /* floor0.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = floor0.c; sourceTree = "<group>"; };
 		8CB3DC2F17F1DE5D0090372A /* floor1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = floor1.c; sourceTree = "<group>"; };
 		8CB3DC3017F1DE5D0090372A /* framing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = framing.c; sourceTree = "<group>"; };
 		8CB3DC3117F1DE5D0090372A /* info.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = info.c; sourceTree = "<group>"; };
-		8CB3DC3217F1DE5D0090372A /* iseeking_example.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = iseeking_example.c; sourceTree = "<group>"; };
 		8CB3DC3317F1DE5D0090372A /* ivorbiscodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ivorbiscodec.h; sourceTree = "<group>"; };
 		8CB3DC3417F1DE5D0090372A /* ivorbisfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ivorbisfile.h; sourceTree = "<group>"; };
-		8CB3DC3517F1DE5D0090372A /* ivorbisfile_example.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ivorbisfile_example.c; sourceTree = "<group>"; };
 		8CB3DC3617F1DE5D0090372A /* lsp_lookup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lsp_lookup.h; sourceTree = "<group>"; };
 		8CB3DC3717F1DE5D0090372A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
 		8CB3DC3817F1DE5D0090372A /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
@@ -1475,15 +1474,12 @@
 		8CB3DC3E17F1DE5D0090372A /* ogg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ogg.h; sourceTree = "<group>"; };
 		8CB3DC3F17F1DE5D0090372A /* os.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = os.h; sourceTree = "<group>"; };
 		8CB3DC4017F1DE5D0090372A /* os_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = os_types.h; sourceTree = "<group>"; };
-		8CB3DC4117F1DE5D0090372A /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		8CB3DC4217F1DE5D0090372A /* registry.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = registry.c; sourceTree = "<group>"; };
 		8CB3DC4317F1DE5D0090372A /* registry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = registry.h; sourceTree = "<group>"; };
 		8CB3DC4417F1DE5D0090372A /* res012.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = res012.c; sourceTree = "<group>"; };
 		8CB3DC4517F1DE5D0090372A /* sharedbook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sharedbook.c; sourceTree = "<group>"; };
 		8CB3DC4617F1DE5D0090372A /* synthesis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = synthesis.c; sourceTree = "<group>"; };
-		8CB3DC4717F1DE5D0090372A /* Version_script.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Version_script.in; sourceTree = "<group>"; };
 		8CB3DC4817F1DE5D0090372A /* vorbisfile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vorbisfile.c; sourceTree = "<group>"; };
-		8CB3DC4917F1DE5D0090372A /* vorbisidec.pc.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vorbisidec.pc.in; sourceTree = "<group>"; };
 		8CB3DC4A17F1DE5D0090372A /* window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = window.c; sourceTree = "<group>"; };
 		8CB3DC4B17F1DE5D0090372A /* window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = window.h; sourceTree = "<group>"; };
 		8CB3DC4C17F1DE5D0090372A /* window_lookup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = window_lookup.h; sourceTree = "<group>"; };
@@ -1671,8 +1667,6 @@
 		94CFB6661A75DCB0001F174F /* voice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = voice.cpp; sourceTree = "<group>"; };
 		94FD853018C7F53C001B426D /* pcecd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pcecd.cpp; sourceTree = "<group>"; };
 		94FD853118C7F53C001B426D /* pcecd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pcecd.h; sourceTree = "<group>"; };
-		94FD853318C7F58C001B426D /* trim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = trim.cpp; sourceTree = "<group>"; };
-		94FD853418C7F58C001B426D /* trim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trim.h; sourceTree = "<group>"; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -2703,6 +2697,7 @@
 				8CB3D72117F1DE5B0090372A /* 185.cpp */,
 				8CB3D72217F1DE5B0090372A /* 187.cpp */,
 				8CB3D72317F1DE5B0090372A /* 189.cpp */,
+				87A30A441E57BCCC00114B03 /* 190.cpp */,
 				8CB3D72417F1DE5B0090372A /* 193.cpp */,
 				8CB3D72517F1DE5B0090372A /* 208.cpp */,
 				8CB3D72617F1DE5B0090372A /* 21.cpp */,
@@ -3956,13 +3951,13 @@
 		8CB3DC1717F1DE5D0090372A /* string */ = {
 			isa = PBXGroup;
 			children = (
-				94FD853318C7F58C001B426D /* trim.cpp */,
-				94FD853418C7F58C001B426D /* trim.h */,
 				8CB3DC1817F1DE5D0090372A /* ConvertUTF.cpp */,
 				8CB3DC1917F1DE5D0090372A /* ConvertUTF.h */,
 				8CB3DC1A17F1DE5D0090372A /* escape.cpp */,
 				8CB3DC1B17F1DE5D0090372A /* escape.h */,
 				8CB3DC1C17F1DE5D0090372A /* Makefile.am.inc */,
+				87A30A451E57CBF700114B03 /* string.cpp */,
+				87A30A461E57CBF700114B03 /* string.h */,
 			);
 			path = string;
 			sourceTree = "<group>";
@@ -3976,20 +3971,16 @@
 				8CB3DC2517F1DE5D0090372A /* bitwise.c */,
 				8CB3DC2617F1DE5D0090372A /* block.c */,
 				8CB3DC2717F1DE5D0090372A /* block.h */,
-				8CB3DC2817F1DE5D0090372A /* CHANGELOG */,
 				8CB3DC2917F1DE5D0090372A /* codebook.c */,
 				8CB3DC2A17F1DE5D0090372A /* codebook.h */,
 				8CB3DC2B17F1DE5D0090372A /* codec_internal.h */,
-				8CB3DC2C17F1DE5D0090372A /* configure.in */,
 				8CB3DC2D17F1DE5D0090372A /* COPYING */,
 				8CB3DC2E17F1DE5D0090372A /* floor0.c */,
 				8CB3DC2F17F1DE5D0090372A /* floor1.c */,
 				8CB3DC3017F1DE5D0090372A /* framing.c */,
 				8CB3DC3117F1DE5D0090372A /* info.c */,
-				8CB3DC3217F1DE5D0090372A /* iseeking_example.c */,
 				8CB3DC3317F1DE5D0090372A /* ivorbiscodec.h */,
 				8CB3DC3417F1DE5D0090372A /* ivorbisfile.h */,
-				8CB3DC3517F1DE5D0090372A /* ivorbisfile_example.c */,
 				8CB3DC3617F1DE5D0090372A /* lsp_lookup.h */,
 				8CB3DC3717F1DE5D0090372A /* Makefile.am */,
 				8CB3DC3817F1DE5D0090372A /* Makefile.in */,
@@ -4001,15 +3992,12 @@
 				8CB3DC3E17F1DE5D0090372A /* ogg.h */,
 				8CB3DC3F17F1DE5D0090372A /* os.h */,
 				8CB3DC4017F1DE5D0090372A /* os_types.h */,
-				8CB3DC4117F1DE5D0090372A /* README */,
 				8CB3DC4217F1DE5D0090372A /* registry.c */,
 				8CB3DC4317F1DE5D0090372A /* registry.h */,
 				8CB3DC4417F1DE5D0090372A /* res012.c */,
 				8CB3DC4517F1DE5D0090372A /* sharedbook.c */,
 				8CB3DC4617F1DE5D0090372A /* synthesis.c */,
-				8CB3DC4717F1DE5D0090372A /* Version_script.in */,
 				8CB3DC4817F1DE5D0090372A /* vorbisfile.c */,
-				8CB3DC4917F1DE5D0090372A /* vorbisidec.pc.in */,
 				8CB3DC4A17F1DE5D0090372A /* window.c */,
 				8CB3DC4B17F1DE5D0090372A /* window.h */,
 				8CB3DC4C17F1DE5D0090372A /* window_lookup.h */,
@@ -4405,7 +4393,6 @@
 				8CB3E07B17F1DE5E0090372A /* gfx.cpp in Sources */,
 				8CB3DE7317F1DE5E0090372A /* fxscsi.cpp in Sources */,
 				94CFB6471A75DB60001F174F /* gpu_sprite.cpp in Sources */,
-				94FD853518C7F58C001B426D /* trim.cpp in Sources */,
 				8CB3DE7817F1DE5E0090372A /* input.cpp in Sources */,
 				8CB3DE9D17F1DE5E0090372A /* multitap.cpp in Sources */,
 				8CB3DD6417F1DE5E0090372A /* memmap.cpp in Sources */,
@@ -4502,6 +4489,7 @@
 				8715A9791D6E547C003ADE26 /* vdp1.cpp in Sources */,
 				8715A97A1D6E547C003ADE26 /* vdp2_render.cpp in Sources */,
 				8715A97B1D6E547C003ADE26 /* vdp2.cpp in Sources */,
+				87A30A471E57CBF700114B03 /* string.cpp in Sources */,
 				8715A97C1D6E54E3003ADE26 /* 3dpad.cpp in Sources */,
 				8715A97D1D6E54E3003ADE26 /* gamepad.cpp in Sources */,
 				8715A97E1D6E54E3003ADE26 /* mouse.cpp in Sources */,
@@ -4579,10 +4567,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DSIZEOF_DOUBLE=8",
-					"-DMEDNAFEN_VERSION=\\\"0.9.41\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.42\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00094100",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00094200",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
@@ -4643,10 +4630,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DSIZEOF_DOUBLE=8",
-					"-DMEDNAFEN_VERSION=\\\"0.9.41\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.42\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00094100",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00094200",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",

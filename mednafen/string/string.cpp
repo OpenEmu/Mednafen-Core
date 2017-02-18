@@ -1,8 +1,8 @@
 /******************************************************************************/
 /* Mednafen - Multi-system Emulator                                           */
 /******************************************************************************/
-/* trim.cpp:
-**  Copyright (C) 2007-2016 Mednafen Team
+/* string.cpp:
+**  Copyright (C) 2007-2017 Mednafen Team
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 */
 
 #include <mednafen/mednafen.h>
-#include "trim.h"
+#include "string.h"
 
 static INLINE bool IsWS(const char c)
 {
@@ -148,3 +148,22 @@ void MDFN_zapctrlchars(std::string& s)
    c = ' ';
 }
 
+
+std::vector<std::string> MDFN_strsplit(const std::string& str, const std::string& delim)
+{
+ std::vector<std::string> ret;
+ size_t bpos = 0;
+
+ for(;;)
+ {
+  size_t spos = str.find_first_not_of(delim, bpos);
+  bpos = str.find_first_of(delim, spos);
+
+  if(spos == bpos)
+   break;
+
+  ret.push_back(str.substr(spos, bpos - spos));
+ }
+
+ return ret;
+}
