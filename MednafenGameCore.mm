@@ -1313,9 +1313,15 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)didMovePSXJoystickDirection:(OEPSXButton)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
+    // Fix the analog circle-to-square axis range conversion by scaling between a value of 1.00 and 1.50
+    // We cannot use MDFNI_SetSetting("psx.input.port1.dualshock.axis_scale", "1.33") directly.
+    // Background: https://mednafen.github.io/documentation/psx.html#Section_analog_range
+    value *= 32767; // de-normalize
+    double scaledValue = MIN(floor(0.5 + value * 1.33), 32767); // 30712 / cos(2*pi/8) / 32767 = 1.33
+
     int analogNumber = PSXMap[button] - 17;
     uint8_t *buf = (uint8_t *)inputBuffer[player-1];
-    *(uint16*)& buf[3 + analogNumber * 2] = 32767 * value;
+    *(uint16*)& buf[3 + analogNumber * 2] = scaledValue;
 }
 
 - (void)changeDisplayMode
