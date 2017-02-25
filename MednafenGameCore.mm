@@ -1028,8 +1028,8 @@ static void emulation_run()
     if([[[path pathExtension] lowercaseString] isEqualToString:@"m3u"])
     {
         NSString *m3uString = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@".cue|.ccd" options:NSRegularExpressionCaseInsensitive error:nil];
-        NSUInteger numberOfMatches = [regex numberOfMatchesInString:m3uString options:0 range:NSMakeRange(0, [m3uString length])];
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\.cue|\\.ccd" options:NSRegularExpressionCaseInsensitive error:nil];
+        NSUInteger numberOfMatches = [regex numberOfMatchesInString:m3uString options:0 range:NSMakeRange(0, m3uString.length)];
 
         NSLog(@"Loaded m3u containing %lu cue sheets or ccd",numberOfMatches);
 
