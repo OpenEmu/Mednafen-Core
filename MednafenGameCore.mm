@@ -63,7 +63,6 @@ enum systemTypes{ lynx, ngp, pce, pcfx, psx, ss, vb, wswan };
     int videoWidth, videoHeight;
     int videoOffsetX, videoOffsetY;
     int multiTapPlayerCount;
-    NSString *romName;
     double sampleRate;
     double masterClock;
 
@@ -71,6 +70,8 @@ enum systemTypes{ lynx, ngp, pce, pcfx, psx, ss, vb, wswan };
     NSTimeInterval mednafenCoreTiming;
     OEIntSize mednafenCoreAspect;
     NSUInteger maxDiscs;
+    BOOL isSBIRequired;
+    NSMutableArray *allCueSheetFiles;
 }
 
 @end
@@ -114,6 +115,213 @@ static void mednafen_init()
     MDFNI_SetSetting("pce.slend", "239"); // PCE: Last rendered scanline
 
     MDFNI_SetSetting("psx.h_overscan", "0"); // Remove PSX overscan
+
+    // PlayStation SBI required games (LibCrypt)
+    NSDictionary *sbiRequiredGames =
+    @{
+      @"SLES-01226" : @1, // Actua Ice Hockey 2 (Europe)
+      @"SLES-02563" : @1, // Anstoss - Premier Manager (Germany)
+      @"SCES-01564" : @1, // Ape Escape (Europe)
+      @"SCES-02028" : @1, // Ape Escape (France)
+      @"SCES-02029" : @1, // Ape Escape (Germany)
+      @"SCES-02030" : @1, // Ape Escape (Italy)
+      @"SCES-02031" : @1, // Ape Escape - La Invasión de los Monos (Spain)
+      @"SLES-03324" : @1, // Astérix - Mega Madness (Europe) (En,Fr,De,Es,It,Nl)
+      @"SCES-02366" : @1, // Barbie - Aventure Equestre (France)
+      @"SCES-02365" : @1, // Barbie - Race & Ride (Europe)
+      @"SCES-02367" : @1, // Barbie - Race & Ride (Germany)
+      @"SCES-02368" : @1, // Barbie - Race & Ride (Italy)
+      @"SCES-02369" : @1, // Barbie - Race & Ride (Spain)
+      @"SCES-02488" : @1, // Barbie - Sports Extrême (France)
+      @"SCES-02489" : @1, // Barbie - Super Sport (Germany)
+      @"SCES-02487" : @1, // Barbie - Super Sports (Europe)
+      @"SCES-02490" : @1, // Barbie - Super Sports (Italy)
+      @"SCES-02491" : @1, // Barbie - Super Sports (Spain)
+      @"SLES-02977" : @1, // BDFL Manager 2001 (Germany)
+      @"SLES-03605" : @1, // BDFL Manager 2002 (Germany)
+      @"SLES-02293" : @1, // Canal+ Premier Manager (Europe) (Fr,Es,It)
+      @"SCES-02834" : @1, // Crash Bash (Europe) (En,Fr,De,Es,It)
+      @"SCES-02105" : @1, // CTR - Crash Team Racing (Europe) (En,Fr,De,Es,It,Nl) (EDC) / (No EDC)
+      @"SLES-02207" : @1, // Dino Crisis (Europe)
+      @"SLES-02208" : @1, // Dino Crisis (France)
+      @"SLES-02209" : @1, // Dino Crisis (Germany)
+      @"SLES-02210" : @1, // Dino Crisis (Italy)
+      @"SLES-02211" : @1, // Dino Crisis (Spain)
+      @"SCES-02004" : @1, // Disney Fais Ton Histoire! - Mulan (France)
+      @"SCES-02006" : @1, // Disney Libro Animato Creativo - Mulan (Italy)
+      @"SCES-01516" : @1, // Disney Tarzan (France)
+      @"SCES-01519" : @1, // Disney Tarzan (Spain)
+      @"SLES-03191" : @1, // Disney's 102 Dalmatians - Puppies to the Rescue (Europe) (Fr,De,Es,It,Nl)
+      @"SLES-03189" : @1, // Disney's 102 Dalmatians - Puppies to the Rescue (Europe)
+      @"SCES-02007" : @1, // Disney's Aventura Interactiva - Mulan (Spain)
+      @"SCES-01695" : @1, // Disney's Story Studio - Mulan (Europe)
+      @"SCES-01431" : @1, // Disney's Tarzan (Europe)
+      @"SCES-02185" : @1, // Disney's Tarzan (Netherlands)
+      @"SCES-02182" : @1, // Disney's Tarzan (Sweden)
+      @"SCES-02264" : @1, // Disney's Verhalenstudio - Mulan (Netherlands)
+      @"SCES-02005" : @1, // Disneys Interaktive Abenteuer - Mulan (Germany)
+      @"SCES-01517" : @1, // Disneys Tarzan (Germany)
+      @"SCES-01518" : @1, // Disneys Tarzan (Italy)
+      @"SLES-02538" : @1, // EA Sports Superbike 2000 (Europe) (En,Fr,De,Es,It,Sv)
+      @"SLES-01715" : @1, // Eagle One - Harrier Attack (Europe) (En,Fr,De,Es,It)
+      @"SCES-01704" : @1, // Esto es Futbol (Spain)
+      @"SLES-03061" : @1, // F.A. Premier League Football Manager 2001, The (Europe)
+      @"SLES-02722" : @1, // F1 2000 (Europe) (En,Fr,De,Nl)
+      @"SLES-02724" : @1, // F1 2000 (Italy)
+      @"SLES-02965" : @1, // Final Fantasy IX (Europe) (Disc 1)
+      @"SLES-12965" : @1, // Final Fantasy IX (Europe) (Disc 2)
+      @"SLES-22965" : @1, // Final Fantasy IX (Europe) (Disc 3)
+      @"SLES-32965" : @1, // Final Fantasy IX (Europe) (Disc 4)
+      @"SLES-02966" : @1, // Final Fantasy IX (France) (Disc 1)
+      @"SLES-12966" : @1, // Final Fantasy IX (France) (Disc 2)
+      @"SLES-22966" : @1, // Final Fantasy IX (France) (Disc 3)
+      @"SLES-32966" : @1, // Final Fantasy IX (France) (Disc 4)
+      @"SLES-02967" : @1, // Final Fantasy IX (Germany) (Disc 1)
+      @"SLES-12967" : @1, // Final Fantasy IX (Germany) (Disc 2)
+      @"SLES-22967" : @1, // Final Fantasy IX (Germany) (Disc 3)
+      @"SLES-32967" : @1, // Final Fantasy IX (Germany) (Disc 4)
+      @"SLES-02968" : @1, // Final Fantasy IX (Italy) (Disc 1)
+      @"SLES-12968" : @1, // Final Fantasy IX (Italy) (Disc 2)
+      @"SLES-22968" : @1, // Final Fantasy IX (Italy) (Disc 3)
+      @"SLES-32968" : @1, // Final Fantasy IX (Italy) (Disc 4)
+      @"SLES-02969" : @1, // Final Fantasy IX (Spain) (Disc 1)
+      @"SLES-12969" : @1, // Final Fantasy IX (Spain) (Disc 2)
+      @"SLES-22969" : @1, // Final Fantasy IX (Spain) (Disc 3)
+      @"SLES-32969" : @1, // Final Fantasy IX (Spain) (Disc 4)
+      @"SLES-02080" : @1, // Final Fantasy VIII (Europe, Australia) (Disc 1)
+      @"SLES-12080" : @1, // Final Fantasy VIII (Europe, Australia) (Disc 2)
+      @"SLES-22080" : @1, // Final Fantasy VIII (Europe, Australia) (Disc 3)
+      @"SLES-32080" : @1, // Final Fantasy VIII (Europe, Australia) (Disc 4)
+      @"SLES-02081" : @1, // Final Fantasy VIII (France) (Disc 1)
+      @"SLES-12081" : @1, // Final Fantasy VIII (France) (Disc 2)
+      @"SLES-22081" : @1, // Final Fantasy VIII (France) (Disc 3)
+      @"SLES-32081" : @1, // Final Fantasy VIII (France) (Disc 4)
+      @"SLES-02082" : @1, // Final Fantasy VIII (Germany) (Disc 1)
+      @"SLES-12082" : @1, // Final Fantasy VIII (Germany) (Disc 2)
+      @"SLES-22082" : @1, // Final Fantasy VIII (Germany) (Disc 3)
+      @"SLES-32082" : @1, // Final Fantasy VIII (Germany) (Disc 4)
+      @"SLES-02083" : @1, // Final Fantasy VIII (Italy) (Disc 1)
+      @"SLES-12083" : @1, // Final Fantasy VIII (Italy) (Disc 2)
+      @"SLES-22083" : @1, // Final Fantasy VIII (Italy) (Disc 3)
+      @"SLES-32083" : @1, // Final Fantasy VIII (Italy) (Disc 4)
+      @"SLES-02084" : @1, // Final Fantasy VIII (Spain) (Disc 1)
+      @"SLES-12084" : @1, // Final Fantasy VIII (Spain) (Disc 2)
+      @"SLES-22084" : @1, // Final Fantasy VIII (Spain) (Disc 3)
+      @"SLES-32084" : @1, // Final Fantasy VIII (Spain) (Disc 4)
+      @"SLES-02978" : @1, // Football Manager Campionato 2001 (Italy)
+      @"SCES-02222" : @1, // Formula One 99 (Europe) (En,Es,Fi)
+      @"SCES-01979" : @1, // Formula One 99 (Europe) (En,Fr,De,It)
+      @"SLES-02767" : @1, // Frontschweine (Germany)
+      @"SCES-01702" : @1, // Fussball Live (Germany)
+      @"SLES-03062" : @1, // Fussball Manager 2001 (Germany)
+      @"SLES-02328" : @1, // Galerians (Europe) (Disc 1)
+      @"SLES-12328" : @1, // Galerians (Europe) (Disc 2)
+      @"SLES-22328" : @1, // Galerians (Europe) (Disc 3)
+      @"SLES-02329" : @1, // Galerians (France) (Disc 1)
+      @"SLES-12329" : @1, // Galerians (France) (Disc 2)
+      @"SLES-22329" : @1, // Galerians (France) (Disc 3)
+      @"SLES-02330" : @1, // Galerians (Germany) (Disc 1)
+      @"SLES-12330" : @1, // Galerians (Germany) (Disc 2)
+      @"SLES-22330" : @1, // Galerians (Germany) (Disc 3)
+      @"SLES-01241" : @1, // Gekido - Urban Fighters (Europe) (En,Fr,De,Es,It)
+      @"SLES-01041" : @1, // Hogs of War (Europe)
+      @"SLES-03489" : @1, // Italian Job, The (Europe)
+      @"SLES-03626" : @1, // Italian Job, The (Europe) (Fr,De,Es)
+      @"SCES-01444" : @1, // Jackie Chan Stuntmaster (Europe)
+      @"SLES-01362" : @1, // Le Mans 24 Hours (Europe) (En,Fr,De,Es,It,Pt)
+      @"SLES-01301" : @1, // Legacy of Kain - Soul Reaver (Europe)
+      @"SLES-02024" : @1, // Legacy of Kain - Soul Reaver (France)
+      @"SLES-02025" : @1, // Legacy of Kain - Soul Reaver (Germany)
+      @"SLES-02027" : @1, // Legacy of Kain - Soul Reaver (Italy)
+      @"SLES-02026" : @1, // Legacy of Kain - Soul Reaver (Spain)
+      @"SLES-02766" : @1, // Les Cochons de Guerre (France)
+      @"SLES-02975" : @1, // LMA Manager 2001 (Europe)
+      @"SLES-03603" : @1, // LMA Manager 2002 (Europe)
+      @"SLES-03530" : @1, // Lucky Luke - Western Fever (Europe) (En,Fr,De,Es,It,Nl)
+      @"SCES-00311" : @1, // MediEvil (Europe)
+      @"SCES-01492" : @1, // MediEvil (France)
+      @"SCES-01493" : @1, // MediEvil (Germany)
+      @"SCES-01494" : @1, // MediEvil (Italy)
+      @"SCES-01495" : @1, // MediEvil (Spain)
+      @"SCES-02544" : @1, // MediEvil 2 (Europe) (En,Fr,De)
+      @"SCES-02545" : @1, // MediEvil 2 (Europe) (Es,It,Pt)
+      @"SCES-02546" : @1, // MediEvil 2 (Russia)
+      @"SLES-03519" : @1, // Men in Black - The Series - Crashdown (Europe)
+      @"SLES-03520" : @1, // Men in Black - The Series - Crashdown (France)
+      @"SLES-03521" : @1, // Men in Black - The Series - Crashdown (Germany)
+      @"SLES-03522" : @1, // Men in Black - The Series - Crashdown (Italy)
+      @"SLES-03523" : @1, // Men in Black - The Series - Crashdown (Spain)
+      @"SLES-01545" : @1, // Michelin Rally Masters - Race of Champions (Europe) (En,De,Sv)
+      @"SLES-02395" : @1, // Michelin Rally Masters - Race of Champions (Europe) (Fr,Es,It)
+      @"SLES-02839" : @1, // Mike Tyson Boxing (Europe) (En,Fr,De,Es,It)
+      @"SLES-01906" : @1, // Mission - Impossible (Europe) (En,Fr,De,Es,It)
+      @"SLES-02830" : @1, // MoHo (Europe) (En,Fr,De,Es,It)
+      @"SCES-01701" : @1, // Monde des Bleus, Le - Le jeu officiel de l'équipe de France (France)
+      @"SLES-02086" : @1, // N-Gen Racing (Europe) (En,Fr,De,Es,It)
+      @"SLES-02689" : @1, // Need for Speed - Porsche 2000 (Europe) (En,De,Sv)
+      @"SLES-02700" : @1, // Need for Speed - Porsche 2000 (Europe) (Fr,Es,It)
+      @"SLES-02558" : @1, // Parasite Eve II (Europe) (Disc 1)
+      @"SLES-12558" : @1, // Parasite Eve II (Europe) (Disc 2)
+      @"SLES-02559" : @1, // Parasite Eve II (France) (Disc 1)
+      @"SLES-12559" : @1, // Parasite Eve II (France) (Disc 2)
+      @"SLES-02560" : @1, // Parasite Eve II (Germany) (Disc 1)
+      @"SLES-12560" : @1, // Parasite Eve II (Germany) (Disc 2)
+      @"SLES-02562" : @1, // Parasite Eve II (Italy) (Disc 1)
+      @"SLES-12562" : @1, // Parasite Eve II (Italy) (Disc 2)
+      @"SLES-02561" : @1, // Parasite Eve II (Spain) (Disc 1)
+      @"SLES-12561" : @1, // Parasite Eve II (Spain) (Disc 2)
+      @"SLES-02061" : @1, // PGA European Tour Golf (Europe) (En,De)
+      @"SLES-02292" : @1, // Premier Manager 2000 (Europe)
+      @"SLES-00017" : @1, // Prince Naseem Boxing (Europe) (En,Fr,De,Es,It)
+      @"SLES-01943" : @1, // Radikal Bikers (Europe) (En,Fr,De,Es,It)
+      @"SLES-02824" : @1, // RC Revenge (Europe) (En,Fr,De,Es)
+      @"SLES-02529" : @1, // Resident Evil 3 - Nemesis (Europe)
+      @"SLES-02530" : @1, // Resident Evil 3 - Nemesis (France)
+      @"SLES-02531" : @1, // Resident Evil 3 - Nemesis (Germany)
+      @"SLES-02698" : @1, // Resident Evil 3 - Nemesis (Ireland)
+      @"SLES-02533" : @1, // Resident Evil 3 - Nemesis (Italy)
+      @"SLES-02532" : @1, // Resident Evil 3 - Nemesis (Spain)
+      @"SLES-00995" : @1, // Ronaldo V-Football (Europe) (En,Fr,Nl,Sv)
+      @"SLES-02681" : @1, // Ronaldo V-Football (Europe) (De,Es,It,Pt)
+      @"SLES-02112" : @1, // SaGa Frontier 2 (Europe)
+      @"SLES-02113" : @1, // SaGa Frontier 2 (France)
+      @"SLES-02118" : @1, // SaGa Frontier 2 (Germany)
+      @"SLES-02763" : @1, // SnoCross Championship Racing (Europe) (En,Fr,De,Es,It)
+      @"SCES-02290" : @1, // Space Debris (Europe)
+      @"SCES-02430" : @1, // Space Debris (France)
+      @"SCES-02431" : @1, // Space Debris (Germany)
+      @"SCES-02432" : @1, // Space Debris (Italy)
+      @"SCES-01763" : @1, // Speed Freaks (Europe)
+      @"SCES-02835" : @1, // Spyro - Year of the Dragon (Europe) (En,Fr,De,Es,It) (v1.0) / (v1.1)
+      @"SCES-02104" : @1, // Spyro 2 - Gateway to Glimmer (Europe) (En,Fr,De,Es,It)
+      @"SLES-02857" : @1, // Sydney 2000 (Europe)
+      @"SLES-02858" : @1, // Sydney 2000 (France)
+      @"SLES-02859" : @1, // Sydney 2000 (Germany)
+      @"SLES-02861" : @1, // Sydney 2000 (Spain)
+      @"SLES-03245" : @1, // TechnoMage - De Terugkeer der Eeuwigheid (Netherlands)
+      @"SLES-02831" : @1, // TechnoMage - Die Rückkehr der Ewigkeit (Germany)
+      @"SLES-03242" : @1, // TechnoMage - En Quête de L'Eternité (France)
+      @"SLES-03241" : @1, // TechnoMage - Return of Eternity (Europe)
+      @"SLES-02688" : @1, // Theme Park World (Europe) (En,Fr,De,Es,It,Nl,Sv)
+      @"SCES-01882" : @1, // This Is Football (Europe) (Fr,Nl)
+      @"SCES-01700" : @1, // This Is Football (Europe)
+      @"SCES-01703" : @1, // This Is Football (Italy)
+      @"SLES-02572" : @1, // TOCA World Touring Cars (Europe) (En,Fr,De)
+      @"SLES-02573" : @1, // TOCA World Touring Cars (Europe) (Es,It)
+      @"SLES-02704" : @1, // UEFA Euro 2000 (Europe)
+      @"SLES-02705" : @1, // UEFA Euro 2000 (France)
+      @"SLES-02706" : @1, // UEFA Euro 2000 (Germany)
+      @"SLES-02707" : @1, // UEFA Euro 2000 (Italy)
+      @"SLES-01733" : @1, // UEFA Striker (Europe) (En,Fr,De,Es,It,Nl)
+      @"SLES-02071" : @1, // Urban Chaos (Europe) (En,Es,It)
+      @"SLES-02355" : @1, // Urban Chaos (Germany)
+      @"SLES-01907" : @1, // V-Rally - Championship Edition 2 (Europe) (En,Fr,De)
+      @"SLES-02754" : @1, // Vagrant Story (Europe)
+      @"SLES-02755" : @1, // Vagrant Story (France)
+      @"SLES-02756" : @1, // Vagrant Story (Germany)
+      @"SLES-02733" : @1, // Walt Disney World Quest - Magical Racing Tour (Europe) (En,Fr,De,Es,It,Nl,Sv,No,Da)
+      @"SCES-01909" : @1, // Wip3out (Europe) (En,Fr,De,Es,It)
+      };
 
     // PlayStation Multitap supported games (incomplete list)
     NSDictionary *multiTapGames =
@@ -817,6 +1025,12 @@ static void mednafen_init()
       @"SLUS-01189", // Bomberman - Party Edition (USA)
       ];
 
+    // Check if SBI file is required
+    if (sbiRequiredGames[[current ROMSerial]])
+    {
+        current->isSBIRequired = YES;
+    }
+
     // Set multitap configuration if detected
     if (multiTapGames[[current ROMSerial]])
     {
@@ -840,6 +1054,7 @@ static void mednafen_init()
         _current = self;
 
         multiTapPlayerCount = 2;
+        allCueSheetFiles = [[NSMutableArray alloc] init];
 
         for(unsigned i = 0; i < 8; i++)
             inputBuffer[i] = (uint32_t *) calloc(9, sizeof(uint32_t));
@@ -904,6 +1119,32 @@ static void emulation_run()
 - (BOOL)loadFileAtPath:(NSString *)path error:(NSError **)error
 {
     [[NSFileManager defaultManager] createDirectoryAtPath:[self batterySavesDirectoryPath] withIntermediateDirectories:YES attributes:nil error:NULL];
+
+    // Parse number of discs in m3u
+    if([[[path pathExtension] lowercaseString] isEqualToString:@"m3u"])
+    {
+        NSString *m3uString = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@".*\\.cue|.*\\.ccd" options:NSRegularExpressionCaseInsensitive error:nil];
+        NSUInteger numberOfMatches = [regex numberOfMatchesInString:m3uString options:0 range:NSMakeRange(0, m3uString.length)];
+
+        NSLog(@"Loaded m3u containing %lu cue sheets or ccd", numberOfMatches);
+
+        maxDiscs = numberOfMatches;
+
+        // Keep track of cue sheets for use with SBI files
+        [regex enumerateMatchesInString:m3uString options:0 range:NSMakeRange(0, m3uString.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+            NSRange range = result.range;
+            NSString *match = [m3uString substringWithRange:range];
+
+            if([match containsString:@".cue"])
+                [allCueSheetFiles addObject:[m3uString substringWithRange:range]];
+        }];
+    }
+    else if([[[path pathExtension] lowercaseString] isEqualToString:@"cue"])
+    {
+        NSString *filename = [path lastPathComponent];
+        [allCueSheetFiles addObject:filename];
+    }
 
     if([[self systemIdentifier] isEqualToString:@"openemu.system.lynx"])
     {
@@ -1008,6 +1249,43 @@ static void emulation_run()
     {
         NSLog(@"PSX serial: %@ player count: %d", [_current ROMSerial], multiTapPlayerCount);
 
+        // Handle required SBI files for games
+        if(isSBIRequired && allCueSheetFiles.count && ([[[path pathExtension] lowercaseString] isEqualToString:@"cue"] || [[[path pathExtension] lowercaseString] isEqualToString:@"m3u"]))
+        {
+            NSURL *romPath = [NSURL fileURLWithPath:[path stringByDeletingLastPathComponent]];
+
+            BOOL missingFileStatus = NO;
+            NSUInteger missingFileCount = 0;
+            NSMutableString *missingFilesList = [[NSMutableString alloc] init];
+
+            // Build a path to SBI file and check if it exists
+            for(NSString *cueSheetFile in allCueSheetFiles)
+            {
+                NSString *extensionlessFilename = [cueSheetFile stringByDeletingPathExtension];
+                NSURL *sbiFile = [romPath URLByAppendingPathComponent:[extensionlessFilename stringByAppendingPathExtension:@"sbi"]];
+
+                // Check if the required SBI files exist
+                if(![sbiFile checkResourceIsReachableAndReturnError:nil])
+                {
+                    missingFileStatus = YES;
+                    missingFileCount++;
+                    [missingFilesList appendString:[NSString stringWithFormat:@"\"%@\"\n\n", extensionlessFilename]];
+                }
+            }
+            // Alert the user of missing SBI files that are required for the game
+            if(missingFileStatus)
+            {
+                NSError *outErr = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:@{
+                    NSLocalizedDescriptionKey : missingFileCount > 1 ? @"Required SBI files missing." : @"Required SBI file missing.",
+                    NSLocalizedRecoverySuggestionErrorKey : missingFileCount > 1 ? [NSString stringWithFormat:@"To run this game you need SBI files for the discs:\n\n%@Drag and drop the required files onto the game library window and try again.\n\nFor more information, visit:\nhttps://github.com/OpenEmu/OpenEmu/wiki/User-guide:-CD-based-games#q-i-have-a-sbi-file", missingFilesList] : [NSString stringWithFormat:@"To run this game you need a SBI file for the disc:\n\n%@Drag and drop the required file onto the game library window and try again.\n\nFor more information, visit:\nhttps://github.com/OpenEmu/OpenEmu/wiki/User-guide:-CD-based-games#q-i-have-a-sbi-file", missingFilesList],
+                    }];
+
+                *error = outErr;
+
+                return NO;
+            }
+        }
+
         for(unsigned i = 0; i < multiTapPlayerCount; i++)
             game->SetInput(i, "dualshock", (uint8_t *)inputBuffer[i]);
     }
@@ -1023,18 +1301,6 @@ static void emulation_run()
     }
 
     MDFNI_SetMedia(0, 2, 0, 0); // Disc selection API
-
-    // Parse number of discs in m3u
-    if([[[path pathExtension] lowercaseString] isEqualToString:@"m3u"])
-    {
-        NSString *m3uString = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\.cue|\\.ccd" options:NSRegularExpressionCaseInsensitive error:nil];
-        NSUInteger numberOfMatches = [regex numberOfMatchesInString:m3uString options:0 range:NSMakeRange(0, m3uString.length)];
-
-        NSLog(@"Loaded m3u containing %lu cue sheets or ccd",numberOfMatches);
-
-        maxDiscs = numberOfMatches;
-    }
 
     emulation_run();
 
