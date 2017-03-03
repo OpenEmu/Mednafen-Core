@@ -58,22 +58,22 @@ enum systemTypes{ lynx, ngp, pce, pcfx, psx, ss, vb, wswan };
 
 @interface MednafenGameCore () <OELynxSystemResponderClient, OENGPSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OESaturnSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
 {
-    uint32_t *inputBuffer[8];
-    int systemType;
-    int videoWidth, videoHeight;
-    int videoOffsetX, videoOffsetY;
-    int multiTapPlayerCount;
-    double sampleRate;
-    double masterClock;
+    uint32_t *_inputBuffer[8];
+    int _systemType;
+    int _videoWidth, _videoHeight;
+    int _videoOffsetX, _videoOffsetY;
+    int _multiTapPlayerCount;
+    double _sampleRate;
+    double _masterClock;
 
-    NSString *mednafenCoreModule;
-    NSTimeInterval mednafenCoreTiming;
-    OEIntSize mednafenCoreAspect;
-    NSUInteger maxDiscs;
-    NSUInteger multiDiscTotal;
-    BOOL isSBIRequired;
-    BOOL isMultiDiscGame;
-    NSMutableArray *allCueSheetFiles;
+    NSString *_mednafenCoreModule;
+    NSTimeInterval _mednafenCoreTiming;
+    OEIntSize _mednafenCoreAspect;
+    NSUInteger _maxDiscs;
+    NSUInteger _multiDiscTotal;
+    BOOL _isSBIRequired;
+    BOOL _isMultiDiscGame;
+    NSMutableArray *_allCueSheetFiles;
 }
 
 @end
@@ -2248,27 +2248,27 @@ static void mednafen_init()
     // Check if multiple discs required
     if (multiDiscGames[[current ROMSerial]])
     {
-        current->isMultiDiscGame = YES;
-        current->multiDiscTotal = [[multiDiscGames objectForKey:[current ROMSerial]] intValue];
+        current->_isMultiDiscGame = YES;
+        current->_multiDiscTotal = [[multiDiscGames objectForKey:[current ROMSerial]] intValue];
     }
 
     // Check if SBI file is required
     if (sbiRequiredGames[[current ROMSerial]])
     {
-        current->isSBIRequired = YES;
+        current->_isSBIRequired = YES;
     }
 
     // Set multitap configuration if detected
     if (multiTapGames[[current ROMSerial]])
     {
-        current->multiTapPlayerCount = [[multiTapGames objectForKey:[current ROMSerial]] intValue];
+        current->_multiTapPlayerCount = [[multiTapGames objectForKey:[current ROMSerial]] intValue];
 
         if([multiTap5PlayerPort2 containsObject:[current ROMSerial]])
             MDFNI_SetSetting("psx.input.pport2.multitap", "1"); // Enable multitap on PSX port 2
         else
         {
             MDFNI_SetSetting("psx.input.pport1.multitap", "1"); // Enable multitap on PSX port 1
-            if(current->multiTapPlayerCount > 5)
+            if(current->_multiTapPlayerCount > 5)
                 MDFNI_SetSetting("psx.input.pport2.multitap", "1"); // Enable multitap on PSX port 2
         }
     }
@@ -2280,11 +2280,11 @@ static void mednafen_init()
     {
         _current = self;
 
-        multiTapPlayerCount = 2;
-        allCueSheetFiles = [[NSMutableArray alloc] init];
+        _multiTapPlayerCount = 2;
+        _allCueSheetFiles = [[NSMutableArray alloc] init];
 
         for(unsigned i = 0; i < 8; i++)
-            inputBuffer[i] = (uint32_t *) calloc(9, sizeof(uint32_t));
+            _inputBuffer[i] = (uint32_t *) calloc(9, sizeof(uint32_t));
     }
 
     return self;
@@ -2293,7 +2293,7 @@ static void mednafen_init()
 - (void)dealloc
 {
     for(unsigned i = 0; i < 8; i++)
-        free(inputBuffer[i]);
+        free(_inputBuffer[i]);
 
     delete surf;
 }
@@ -2310,7 +2310,7 @@ static void emulation_run()
 
     EmulateSpecStruct spec = {0};
     spec.surface = surf;
-    spec.SoundRate = current->sampleRate;
+    spec.SoundRate = current->_sampleRate;
     spec.SoundBuf = sound_buf;
     spec.LineWidths = rects;
     spec.SoundBufMaxSize = sizeof(sound_buf) / 2;
@@ -2319,26 +2319,26 @@ static void emulation_run()
 
     MDFNI_Emulate(&spec);
 
-    current->mednafenCoreTiming = current->masterClock / spec.MasterCycles;
+    current->_mednafenCoreTiming = current->_masterClock / spec.MasterCycles;
 
-    if(current->systemType == psx)
+    if(current->_systemType == psx)
     {
-        current->videoWidth = rects[spec.DisplayRect.y];
-        current->videoOffsetX = spec.DisplayRect.x;
+        current->_videoWidth = rects[spec.DisplayRect.y];
+        current->_videoOffsetX = spec.DisplayRect.x;
     }
     else if(game->multires)
     {
-        current->videoWidth = rects[spec.DisplayRect.y];
-        current->videoOffsetX = spec.DisplayRect.x;
+        current->_videoWidth = rects[spec.DisplayRect.y];
+        current->_videoOffsetX = spec.DisplayRect.x;
     }
     else
     {
-        current->videoWidth = spec.DisplayRect.w;
-        current->videoOffsetX = spec.DisplayRect.x;
+        current->_videoWidth = spec.DisplayRect.w;
+        current->_videoOffsetX = spec.DisplayRect.x;
     }
 
-    current->videoHeight = spec.DisplayRect.h;
-    current->videoOffsetY = spec.DisplayRect.y;
+    current->_videoHeight = spec.DisplayRect.h;
+    current->_videoOffsetY = spec.DisplayRect.y;
 
     update_audio_batch(spec.SoundBuf, spec.SoundBufSize);
 }
@@ -2356,7 +2356,7 @@ static void emulation_run()
 
         NSLog(@"Loaded m3u containing %lu cue sheets or ccd", numberOfMatches);
 
-        maxDiscs = numberOfMatches;
+        _maxDiscs = numberOfMatches;
 
         // Keep track of cue sheets for use with SBI files
         [regex enumerateMatchesInString:m3uString options:0 range:NSMakeRange(0, m3uString.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
@@ -2364,91 +2364,91 @@ static void emulation_run()
             NSString *match = [m3uString substringWithRange:range];
 
             if([match containsString:@".cue"])
-                [allCueSheetFiles addObject:[m3uString substringWithRange:range]];
+                [_allCueSheetFiles addObject:[m3uString substringWithRange:range]];
         }];
     }
     else if([[[path pathExtension] lowercaseString] isEqualToString:@"cue"])
     {
         NSString *filename = [path lastPathComponent];
-        [allCueSheetFiles addObject:filename];
+        [_allCueSheetFiles addObject:filename];
     }
 
     if([[self systemIdentifier] isEqualToString:@"openemu.system.lynx"])
     {
-        systemType = lynx;
+        _systemType = lynx;
 
-        mednafenCoreModule = @"lynx";
-        mednafenCoreAspect = OEIntSizeMake(80, 51);
-        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
-        sampleRate         = 48000;
+        _mednafenCoreModule = @"lynx";
+        _mednafenCoreAspect = OEIntSizeMake(80, 51);
+        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        _sampleRate         = 48000;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.ngp"])
     {
-        systemType = ngp;
+        _systemType = ngp;
 
-        mednafenCoreModule = @"ngp";
-        mednafenCoreAspect = OEIntSizeMake(20, 19);
-        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
-        sampleRate         = 48000;
+        _mednafenCoreModule = @"ngp";
+        _mednafenCoreAspect = OEIntSizeMake(20, 19);
+        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        _sampleRate         = 48000;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.pce"] || [[self systemIdentifier] isEqualToString:@"openemu.system.pcecd"])
     {
-        systemType = pce;
+        _systemType = pce;
 
-        mednafenCoreModule = @"pce";
-        mednafenCoreAspect = OEIntSizeMake(256 * (8.0/7.0), 240);
-        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
-        sampleRate         = 48000;
+        _mednafenCoreModule = @"pce";
+        _mednafenCoreAspect = OEIntSizeMake(256 * (8.0/7.0), 240);
+        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        _sampleRate         = 48000;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.pcfx"])
     {
-        systemType = pcfx;
+        _systemType = pcfx;
 
-        mednafenCoreModule = @"pcfx";
-        mednafenCoreAspect = OEIntSizeMake(4, 3);
-        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
-        sampleRate         = 48000;
+        _mednafenCoreModule = @"pcfx";
+        _mednafenCoreAspect = OEIntSizeMake(4, 3);
+        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        _sampleRate         = 48000;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.psx"])
     {
-        systemType = psx;
+        _systemType = psx;
 
-        mednafenCoreModule = @"psx";
-        mednafenCoreAspect = OEIntSizeMake(4, 3);
-        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
-        sampleRate         = 44100;
+        _mednafenCoreModule = @"psx";
+        _mednafenCoreAspect = OEIntSizeMake(4, 3);
+        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        _sampleRate         = 44100;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.saturn"])
     {
-        systemType = ss;
+        _systemType = ss;
 
-        mednafenCoreModule = @"ss";
-        mednafenCoreAspect = OEIntSizeMake(4, 3);
-        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
-        sampleRate         = 44100;
+        _mednafenCoreModule = @"ss";
+        _mednafenCoreAspect = OEIntSizeMake(4, 3);
+        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        _sampleRate         = 44100;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.vb"])
     {
-        systemType = vb;
+        _systemType = vb;
 
-        mednafenCoreModule = @"vb";
-        mednafenCoreAspect = OEIntSizeMake(12, 7);
-        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
-        sampleRate         = 48000;
+        _mednafenCoreModule = @"vb";
+        _mednafenCoreAspect = OEIntSizeMake(12, 7);
+        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        _sampleRate         = 48000;
     }
     else if([[self systemIdentifier] isEqualToString:@"openemu.system.ws"])
     {
-        systemType = wswan;
+        _systemType = wswan;
 
-        mednafenCoreModule = @"wswan";
-        mednafenCoreAspect = OEIntSizeMake(14, 9);
-        //mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
-        sampleRate         = 48000;
+        _mednafenCoreModule = @"wswan";
+        _mednafenCoreAspect = OEIntSizeMake(14, 9);
+        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        _sampleRate         = 48000;
     }
 
     mednafen_init();
 
-    game = MDFNI_LoadGame([mednafenCoreModule UTF8String], [path UTF8String]);
+    game = MDFNI_LoadGame([_mednafenCoreModule UTF8String], [path UTF8String]);
 
     if(!game)
         return NO;
@@ -2457,31 +2457,31 @@ static void emulation_run()
     MDFN_PixelFormat pix_fmt(MDFN_COLORSPACE_RGB, 16, 8, 0, 24);
     surf = new MDFN_Surface(NULL, game->fb_width, game->fb_height, game->fb_width, pix_fmt);
 
-    masterClock = game->MasterClock >> 32;
+    _masterClock = game->MasterClock >> 32;
 
-    if (systemType == pce)
+    if (_systemType == pce)
     {
-        game->SetInput(0, "gamepad", (uint8_t *)inputBuffer[0]);
-        game->SetInput(1, "gamepad", (uint8_t *)inputBuffer[1]);
-        game->SetInput(2, "gamepad", (uint8_t *)inputBuffer[2]);
-        game->SetInput(3, "gamepad", (uint8_t *)inputBuffer[3]);
-        game->SetInput(4, "gamepad", (uint8_t *)inputBuffer[4]);
+        game->SetInput(0, "gamepad", (uint8_t *)_inputBuffer[0]);
+        game->SetInput(1, "gamepad", (uint8_t *)_inputBuffer[1]);
+        game->SetInput(2, "gamepad", (uint8_t *)_inputBuffer[2]);
+        game->SetInput(3, "gamepad", (uint8_t *)_inputBuffer[3]);
+        game->SetInput(4, "gamepad", (uint8_t *)_inputBuffer[4]);
     }
-    else if (systemType == pcfx)
+    else if (_systemType == pcfx)
     {
-        game->SetInput(0, "gamepad", (uint8_t *)inputBuffer[0]);
-        game->SetInput(1, "gamepad", (uint8_t *)inputBuffer[1]);
+        game->SetInput(0, "gamepad", (uint8_t *)_inputBuffer[0]);
+        game->SetInput(1, "gamepad", (uint8_t *)_inputBuffer[1]);
     }
-    else if (systemType == psx)
+    else if (_systemType == psx)
     {
-        NSLog(@"PSX serial: %@ player count: %d", [_current ROMSerial], multiTapPlayerCount);
+        NSLog(@"PSX serial: %@ player count: %d", [_current ROMSerial], _multiTapPlayerCount);
 
         // Check if loading a multi-disc game without m3u
-        if(isMultiDiscGame && ![[[path pathExtension] lowercaseString] isEqualToString:@"m3u"])
+        if(_isMultiDiscGame && ![[[path pathExtension] lowercaseString] isEqualToString:@"m3u"])
         {
             NSError *outErr = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:@{
                 NSLocalizedDescriptionKey : @"Required m3u file missing.",
-                NSLocalizedRecoverySuggestionErrorKey : [NSString stringWithFormat:@"This game requires multiple discs and must be loaded using a m3u file with all %lu discs.\n\nTo enable disc switching and ensure save files load across discs, it cannot be loaded as a single disc.\n\nFor more information, visit:\nhttps://github.com/OpenEmu/OpenEmu/wiki/User-guide:-CD-based-games#q-i-have-a-multi-disc-game", multiDiscTotal],
+                NSLocalizedRecoverySuggestionErrorKey : [NSString stringWithFormat:@"This game requires multiple discs and must be loaded using a m3u file with all %lu discs.\n\nTo enable disc switching and ensure save files load across discs, it cannot be loaded as a single disc.\n\nFor more information, visit:\nhttps://github.com/OpenEmu/OpenEmu/wiki/User-guide:-CD-based-games#q-i-have-a-multi-disc-game", _multiDiscTotal],
                 }];
 
             *error = outErr;
@@ -2490,7 +2490,7 @@ static void emulation_run()
         }
 
         // Handle required SBI files for games
-        if(isSBIRequired && allCueSheetFiles.count && ([[[path pathExtension] lowercaseString] isEqualToString:@"cue"] || [[[path pathExtension] lowercaseString] isEqualToString:@"m3u"]))
+        if(_isSBIRequired && _allCueSheetFiles.count && ([[[path pathExtension] lowercaseString] isEqualToString:@"cue"] || [[[path pathExtension] lowercaseString] isEqualToString:@"m3u"]))
         {
             NSURL *romPath = [NSURL fileURLWithPath:[path stringByDeletingLastPathComponent]];
 
@@ -2499,7 +2499,7 @@ static void emulation_run()
             NSMutableString *missingFilesList = [[NSMutableString alloc] init];
 
             // Build a path to SBI file and check if it exists
-            for(NSString *cueSheetFile in allCueSheetFiles)
+            for(NSString *cueSheetFile in _allCueSheetFiles)
             {
                 NSString *extensionlessFilename = [cueSheetFile stringByDeletingPathExtension];
                 NSURL *sbiFile = [romPath URLByAppendingPathComponent:[extensionlessFilename stringByAppendingPathExtension:@"sbi"]];
@@ -2526,18 +2526,18 @@ static void emulation_run()
             }
         }
 
-        for(unsigned i = 0; i < multiTapPlayerCount; i++)
-            game->SetInput(i, "dualshock", (uint8_t *)inputBuffer[i]);
+        for(unsigned i = 0; i < _multiTapPlayerCount; i++)
+            game->SetInput(i, "dualshock", (uint8_t *)_inputBuffer[i]);
     }
-    else if (systemType == ss)
+    else if (_systemType == ss)
     {
-        game->SetInput(0, "gamepad", (uint8_t *)inputBuffer[0]);
-        game->SetInput(1, "gamepad", (uint8_t *)inputBuffer[1]);
-        game->SetInput(12, "builtin", (uint8_t *)inputBuffer[7]); // reset button status
+        game->SetInput(0, "gamepad", (uint8_t *)_inputBuffer[0]);
+        game->SetInput(1, "gamepad", (uint8_t *)_inputBuffer[1]);
+        game->SetInput(12, "builtin", (uint8_t *)_inputBuffer[7]); // reset button status
     }
     else
     {
-        game->SetInput(0, "gamepad", (uint8_t *)inputBuffer[0]);
+        game->SetInput(0, "gamepad", (uint8_t *)_inputBuffer[0]);
     }
 
     MDFNI_SetMedia(0, 2, 0, 0); // Disc selection API
@@ -2554,11 +2554,11 @@ static void emulation_run()
 
 - (void)resetEmulation
 {
-    if (systemType == ss)
+    if (_systemType == ss)
     {
-        inputBuffer[7][0] = 1;
+        _inputBuffer[7][0] = 1;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            inputBuffer[7][0] = 0;
+            _inputBuffer[7][0] = 0;
         });
     }
 
@@ -2574,14 +2574,14 @@ static void emulation_run()
 
 - (NSTimeInterval)frameInterval
 {
-    return mednafenCoreTiming ?: 60;
+    return _mednafenCoreTiming ?: 60;
 }
 
 # pragma mark - Video
 
 - (OEIntRect)screenRect
 {
-    return OEIntRectMake(videoOffsetX, videoOffsetY, videoWidth, videoHeight);
+    return OEIntRectMake(_videoOffsetX, _videoOffsetY, _videoWidth, _videoHeight);
 }
 
 - (OEIntSize)bufferSize
@@ -2591,7 +2591,7 @@ static void emulation_run()
 
 - (OEIntSize)aspectSize
 {
-    return mednafenCoreAspect;
+    return _mednafenCoreAspect;
 }
 
 - (const void *)videoBuffer
@@ -2626,7 +2626,7 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 
 - (double)audioSampleRate
 {
-    return sampleRate ? sampleRate : 48000;
+    return _sampleRate ? _sampleRate : 48000;
 }
 
 - (NSUInteger)channelCount
@@ -2638,7 +2638,7 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 
 - (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-    if(systemType == ss)
+    if(_systemType == ss)
         block(NO, nil);
     else
         block(MDFNI_SaveState(fileName.fileSystemRepresentation, "", NULL, NULL, NULL), nil);
@@ -2646,7 +2646,7 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 
 - (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-    if(systemType == ss)
+    if(_systemType == ss)
         block(NO, nil);
     else
         block(MDFNI_LoadState(fileName.fileSystemRepresentation, ""), nil);
@@ -2721,100 +2721,100 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)didPushLynxButton:(OELynxButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] |= 1 << LynxMap[button];
+    _inputBuffer[player-1][0] |= 1 << LynxMap[button];
 }
 
 - (oneway void)didReleaseLynxButton:(OELynxButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] &= ~(1 << LynxMap[button]);
+    _inputBuffer[player-1][0] &= ~(1 << LynxMap[button]);
 }
 
 - (oneway void)didPushNGPButton:(OENGPButton)button;
 {
-    inputBuffer[0][0] |= 1 << NGPMap[button];
+    _inputBuffer[0][0] |= 1 << NGPMap[button];
 }
 
 - (oneway void)didReleaseNGPButton:(OENGPButton)button;
 {
-    inputBuffer[0][0] &= ~(1 << NGPMap[button]);
+    _inputBuffer[0][0] &= ~(1 << NGPMap[button]);
 }
 
 - (oneway void)didPushPCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player;
 {
     if (button != OEPCEButtonMode) // Check for six button mode toggle
-        inputBuffer[player-1][0] |= 1 << PCEMap[button];
+        _inputBuffer[player-1][0] |= 1 << PCEMap[button];
     else
-        inputBuffer[player-1][0] ^= 1 << PCEMap[button];
+        _inputBuffer[player-1][0] ^= 1 << PCEMap[button];
 }
 
 - (oneway void)didReleasePCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player;
 {
     if (button != OEPCEButtonMode)
-        inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
+        _inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
 }
 
 - (oneway void)didPushPCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player;
 {
     if (button != OEPCECDButtonMode) // Check for six button mode toggle
-        inputBuffer[player-1][0] |= 1 << PCEMap[button];
+        _inputBuffer[player-1][0] |= 1 << PCEMap[button];
     else
-        inputBuffer[player-1][0] ^= 1 << PCEMap[button];
+        _inputBuffer[player-1][0] ^= 1 << PCEMap[button];
 }
 
 - (oneway void)didReleasePCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player;
 {
     if (button != OEPCECDButtonMode)
-        inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
+        _inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
 }
 
 - (oneway void)didPushPCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] |= 1 << PCFXMap[button];
+    _inputBuffer[player-1][0] |= 1 << PCFXMap[button];
 }
 
 - (oneway void)didReleasePCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] &= ~(1 << PCFXMap[button]);
+    _inputBuffer[player-1][0] &= ~(1 << PCFXMap[button]);
 }
 
 - (oneway void)didPushSaturnButton:(OESaturnButton)button forPlayer:(NSUInteger)player
 {
-    inputBuffer[player-1][0] |= 1 << SSMap[button];
+    _inputBuffer[player-1][0] |= 1 << SSMap[button];
 }
 
 - (oneway void)didReleaseSaturnButton:(OESaturnButton)button forPlayer:(NSUInteger)player
 {
-    inputBuffer[player-1][0] &= ~(1 << SSMap[button]);
+    _inputBuffer[player-1][0] &= ~(1 << SSMap[button]);
 }
 
 - (oneway void)didPushVBButton:(OEVBButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] |= 1 << VBMap[button];
+    _inputBuffer[player-1][0] |= 1 << VBMap[button];
 }
 
 - (oneway void)didReleaseVBButton:(OEVBButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] &= ~(1 << VBMap[button]);
+    _inputBuffer[player-1][0] &= ~(1 << VBMap[button]);
 }
 
 - (oneway void)didPushWSButton:(OEWSButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] |= 1 << WSMap[button];
+    _inputBuffer[player-1][0] |= 1 << WSMap[button];
 }
 
 - (oneway void)didReleaseWSButton:(OEWSButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] &= ~(1 << WSMap[button]);
+    _inputBuffer[player-1][0] &= ~(1 << WSMap[button]);
 }
 
 - (oneway void)didPushPSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] |= 1 << PSXMap[button];
+    _inputBuffer[player-1][0] |= 1 << PSXMap[button];
 }
 
 - (oneway void)didReleasePSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
 {
-    inputBuffer[player-1][0] &= ~(1 << PSXMap[button]);
+    _inputBuffer[player-1][0] &= ~(1 << PSXMap[button]);
 }
 
 - (oneway void)didMovePSXJoystickDirection:(OEPSXButton)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
@@ -2826,13 +2826,13 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     double scaledValue = MIN(floor(0.5 + value * 1.33), 32767); // 30712 / cos(2*pi/8) / 32767 = 1.33
 
     int analogNumber = PSXMap[button] - 17;
-    uint8_t *buf = (uint8_t *)inputBuffer[player-1];
+    uint8_t *buf = (uint8_t *)_inputBuffer[player-1];
     *(uint16*)& buf[3 + analogNumber * 2] = scaledValue;
 }
 
 - (void)changeDisplayMode
 {
-    if (systemType == vb)
+    if (_systemType == vb)
     {
         switch (MDFN_IEN_VB::mednafenCurrentDisplayMode)
         {
@@ -2910,7 +2910,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (NSUInteger)discCount
 {
-    return maxDiscs ? maxDiscs : 1;
+    return _maxDiscs ? _maxDiscs : 1;
 }
 
 @end
