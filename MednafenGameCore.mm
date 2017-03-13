@@ -54,12 +54,9 @@ namespace MDFN_IEN_VB
     int mednafenCurrentDisplayMode = 1;
 }
 
-enum systemTypes{ lynx, ngp, pce, pcfx, psx, ss, vb, wswan };
-
 @interface MednafenGameCore () <OELynxSystemResponderClient, OENGPSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OESaturnSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
 {
     uint32_t *_inputBuffer[8];
-    int _systemType;
     int _videoWidth, _videoHeight;
     int _videoOffsetX, _videoOffsetY;
     int _multiTapPlayerCount;
@@ -2321,7 +2318,7 @@ static void emulation_run()
 
     current->_mednafenCoreTiming = current->_masterClock / spec.MasterCycles;
 
-    if(current->_systemType == psx)
+    if([current->_mednafenCoreModule isEqualToString:@"psx"])
     {
         current->_videoWidth = rects[spec.DisplayRect.y];
         current->_videoOffsetX = spec.DisplayRect.x;
@@ -2345,6 +2342,23 @@ static void emulation_run()
 
 - (BOOL)loadFileAtPath:(NSString *)path error:(NSError **)error
 {
+    // Set the current system
+    NSDictionary *mednafenCoreModules =
+    @{
+      @"openemu.system.lynx"   : @"lynx",
+      @"openemu.system.ngp"    : @"ngp",
+      @"openemu.system.pce"    : @"pce",
+      @"openemu.system.pcecd"  : @"pce",
+      @"openemu.system.pcfx"   : @"pcfx",
+      @"openemu.system.psx"    : @"psx",
+      @"openemu.system.saturn" : @"ss",
+      @"openemu.system.vb"     : @"vb",
+      @"openemu.system.ws"     : @"wswan",
+      };
+
+    _mednafenCoreModule = [mednafenCoreModules objectForKey:[self systemIdentifier]];
+
+    // Create battery save dir
     [[NSFileManager defaultManager] createDirectoryAtPath:[self batterySavesDirectoryPath] withIntermediateDirectories:YES attributes:nil error:NULL];
 
     // Parse number of discs in m3u
@@ -2373,74 +2387,50 @@ static void emulation_run()
         [_allCueSheetFiles addObject:filename];
     }
 
-    if([[self systemIdentifier] isEqualToString:@"openemu.system.lynx"])
+    if([_mednafenCoreModule isEqualToString:@"lynx"])
     {
-        _systemType = lynx;
-
-        _mednafenCoreModule = @"lynx";
         _mednafenCoreAspect = OEIntSizeMake(80, 51);
         //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 48000;
     }
-    else if([[self systemIdentifier] isEqualToString:@"openemu.system.ngp"])
+    else if([_mednafenCoreModule isEqualToString:@"ngp"])
     {
-        _systemType = ngp;
-
-        _mednafenCoreModule = @"ngp";
         _mednafenCoreAspect = OEIntSizeMake(20, 19);
         //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 48000;
     }
-    else if([[self systemIdentifier] isEqualToString:@"openemu.system.pce"] || [[self systemIdentifier] isEqualToString:@"openemu.system.pcecd"])
+    else if([_mednafenCoreModule isEqualToString:@"pce"])
     {
-        _systemType = pce;
-
-        _mednafenCoreModule = @"pce";
         _mednafenCoreAspect = OEIntSizeMake(256 * (8.0/7.0), 240);
         //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 48000;
     }
-    else if([[self systemIdentifier] isEqualToString:@"openemu.system.pcfx"])
+    else if([_mednafenCoreModule isEqualToString:@"pcfx"])
     {
-        _systemType = pcfx;
-
-        _mednafenCoreModule = @"pcfx";
         _mednafenCoreAspect = OEIntSizeMake(4, 3);
         //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 48000;
     }
-    else if([[self systemIdentifier] isEqualToString:@"openemu.system.psx"])
+    else if([_mednafenCoreModule isEqualToString:@"psx"])
     {
-        _systemType = psx;
-
-        _mednafenCoreModule = @"psx";
         _mednafenCoreAspect = OEIntSizeMake(4, 3);
         //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 44100;
     }
-    else if([[self systemIdentifier] isEqualToString:@"openemu.system.saturn"])
+    else if([_mednafenCoreModule isEqualToString:@"ss"])
     {
-        _systemType = ss;
-
-        _mednafenCoreModule = @"ss";
         _mednafenCoreAspect = OEIntSizeMake(4, 3);
         //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 44100;
     }
-    else if([[self systemIdentifier] isEqualToString:@"openemu.system.vb"])
+    else if([_mednafenCoreModule isEqualToString:@"vb"])
     {
-        _systemType = vb;
-
-        _mednafenCoreModule = @"vb";
         _mednafenCoreAspect = OEIntSizeMake(12, 7);
         //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 48000;
     }
-    else if([[self systemIdentifier] isEqualToString:@"openemu.system.ws"])
+    else if([_mednafenCoreModule isEqualToString:@"wswan"])
     {
-        _systemType = wswan;
-
-        _mednafenCoreModule = @"wswan";
         _mednafenCoreAspect = OEIntSizeMake(14, 9);
         //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 48000;
@@ -2459,7 +2449,7 @@ static void emulation_run()
 
     _masterClock = game->MasterClock >> 32;
 
-    if (_systemType == pce)
+    if ([_mednafenCoreModule isEqualToString:@"pce"])
     {
         game->SetInput(0, "gamepad", (uint8_t *)_inputBuffer[0]);
         game->SetInput(1, "gamepad", (uint8_t *)_inputBuffer[1]);
@@ -2467,12 +2457,12 @@ static void emulation_run()
         game->SetInput(3, "gamepad", (uint8_t *)_inputBuffer[3]);
         game->SetInput(4, "gamepad", (uint8_t *)_inputBuffer[4]);
     }
-    else if (_systemType == pcfx)
+    else if ([_mednafenCoreModule isEqualToString:@"pcfx"])
     {
         game->SetInput(0, "gamepad", (uint8_t *)_inputBuffer[0]);
         game->SetInput(1, "gamepad", (uint8_t *)_inputBuffer[1]);
     }
-    else if (_systemType == psx)
+    else if ([_mednafenCoreModule isEqualToString:@"psx"])
     {
         NSLog(@"PSX serial: %@ player count: %d", [_current ROMSerial], _multiTapPlayerCount);
 
@@ -2529,7 +2519,7 @@ static void emulation_run()
         for(unsigned i = 0; i < _multiTapPlayerCount; i++)
             game->SetInput(i, "dualshock", (uint8_t *)_inputBuffer[i]);
     }
-    else if (_systemType == ss)
+    else if ([_mednafenCoreModule isEqualToString:@"ss"])
     {
         game->SetInput(0, "gamepad", (uint8_t *)_inputBuffer[0]);
         game->SetInput(1, "gamepad", (uint8_t *)_inputBuffer[1]);
@@ -2554,7 +2544,7 @@ static void emulation_run()
 
 - (void)resetEmulation
 {
-    if (_systemType == ss)
+    if ([_mednafenCoreModule isEqualToString:@"ss"])
     {
         _inputBuffer[7][0] = 1;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
@@ -2638,7 +2628,7 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 
 - (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-    if(_systemType == ss)
+    if([_mednafenCoreModule isEqualToString:@"ss"])
         block(NO, nil);
     else
         block(MDFNI_SaveState(fileName.fileSystemRepresentation, "", NULL, NULL, NULL), nil);
@@ -2646,7 +2636,7 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 
 - (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-    if(_systemType == ss)
+    if([_mednafenCoreModule isEqualToString:@"ss"])
         block(NO, nil);
     else
         block(MDFNI_LoadState(fileName.fileSystemRepresentation, ""), nil);
@@ -2832,7 +2822,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (void)changeDisplayMode
 {
-    if (_systemType == vb)
+    if ([_mednafenCoreModule isEqualToString:@"vb"])
     {
         switch (MDFN_IEN_VB::mednafenCurrentDisplayMode)
         {
