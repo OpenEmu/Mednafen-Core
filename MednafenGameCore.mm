@@ -2387,6 +2387,13 @@ static void emulation_run()
         [_allCueSheetFiles addObject:filename];
     }
 
+    mednafen_init();
+
+    game = MDFNI_LoadGame([_mednafenCoreModule UTF8String], [path UTF8String]);
+
+    if(!game)
+        return NO;
+
     if([_mednafenCoreModule isEqualToString:@"lynx"])
     {
         _mednafenCoreAspect = OEIntSizeMake(80, 51);
@@ -2407,20 +2414,17 @@ static void emulation_run()
     }
     else if([_mednafenCoreModule isEqualToString:@"pcfx"])
     {
-        _mednafenCoreAspect = OEIntSizeMake(4, 3);
-        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        _mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 48000;
     }
     else if([_mednafenCoreModule isEqualToString:@"psx"])
     {
-        _mednafenCoreAspect = OEIntSizeMake(4, 3);
-        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        _mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 44100;
     }
     else if([_mednafenCoreModule isEqualToString:@"ss"])
     {
-        _mednafenCoreAspect = OEIntSizeMake(4, 3);
-        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        _mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 44100;
     }
     else if([_mednafenCoreModule isEqualToString:@"vb"])
@@ -2435,13 +2439,6 @@ static void emulation_run()
         //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 48000;
     }
-
-    mednafen_init();
-
-    game = MDFNI_LoadGame([_mednafenCoreModule UTF8String], [path UTF8String]);
-
-    if(!game)
-        return NO;
 
     // BGRA pixel format
     MDFN_PixelFormat pix_fmt(MDFN_COLORSPACE_RGB, 16, 8, 0, 24);
