@@ -1,8 +1,8 @@
 /******************************************************************************/
 /* Mednafen Sega Saturn Emulation Module                                      */
 /******************************************************************************/
-/* mouse.h:
-**  Copyright (C) 2016-2017 Mednafen Team
+/* wheel.h:
+**  Copyright (C) 2017 Mednafen Team
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -19,17 +19,17 @@
 ** 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef __MDFN_SS_INPUT_MOUSE_H
-#define __MDFN_SS_INPUT_MOUSE_H
+#ifndef __MDFN_SS_INPUT_WHEEL_H
+#define __MDFN_SS_INPUT_WHEEL_H
 
 namespace MDFN_IEN_SS
 {
 
-class IODevice_Mouse final : public IODevice
+class IODevice_Wheel final : public IODevice
 {
  public:
- IODevice_Mouse();
- virtual ~IODevice_Mouse() override;
+ IODevice_Wheel();
+ virtual ~IODevice_Wheel() override;
 
  virtual void Power(void) override;
  virtual void UpdateInput(const uint8* data, const int32 time_elapsed) override;
@@ -38,10 +38,9 @@ class IODevice_Mouse final : public IODevice
  virtual uint8 UpdateBus(const uint8 smpc_out, const uint8 smpc_out_asserted) override;
 
  private:
- int32 accum_xdelta;
- int32 accum_ydelta;
+ uint16 dbuttons;
+ uint8 wheel;
 
- uint8 buttons;
  uint8 buffer[0x10];
  uint8 data_out;
  bool tl;
@@ -49,7 +48,7 @@ class IODevice_Mouse final : public IODevice
 };
 
 
-extern IDIISG IODevice_Mouse_IDII;
+extern IDIISG IODevice_Wheel_IDII;
 
 }
 

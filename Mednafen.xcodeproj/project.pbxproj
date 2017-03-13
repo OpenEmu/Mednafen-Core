@@ -52,6 +52,10 @@
 		8715A97C1D6E54E3003ADE26 /* 3dpad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A9381D6E5273003ADE26 /* 3dpad.cpp */; };
 		8715A97D1D6E54E3003ADE26 /* gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A93B1D6E5273003ADE26 /* gamepad.cpp */; };
 		8715A97E1D6E54E3003ADE26 /* mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A93D1D6E5273003ADE26 /* mouse.cpp */; };
+		877661671E772FC1009252B0 /* keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 877661631E772FC1009252B0 /* keyboard.cpp */; };
+		877661681E772FC1009252B0 /* mission.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 877661651E772FC1009252B0 /* mission.cpp */; };
+		8776616D1E772FD0009252B0 /* multitap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 877661691E772FCF009252B0 /* multitap.cpp */; };
+		8776616E1E772FD0009252B0 /* wheel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8776616B1E772FCF009252B0 /* wheel.cpp */; };
 		87A30A421E57A44500114B03 /* Time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87A30A401E57A44500114B03 /* Time.cpp */; };
 		87A30A471E57CBF700114B03 /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87A30A451E57CBF700114B03 /* string.cpp */; };
 		87D380E91D962E8800FC657D /* bios.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7C717F1DE5B0090372A /* bios.cpp */; };
@@ -400,6 +404,15 @@
 		8715A96A1D6E534F003ADE26 /* vdp2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vdp2.cpp; path = ss/vdp2.cpp; sourceTree = "<group>"; };
 		8715A96B1D6E534F003ADE26 /* vdp2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = vdp2.h; path = ss/vdp2.h; sourceTree = "<group>"; };
 		8715A97F1D6E557F003ADE26 /* OESaturnSystemResponderClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OESaturnSystemResponderClient.h; path = ../OpenEmu/Saturn/OESaturnSystemResponderClient.h; sourceTree = "<group>"; };
+		877661631E772FC1009252B0 /* keyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = keyboard.cpp; path = ss/input/keyboard.cpp; sourceTree = "<group>"; };
+		877661641E772FC1009252B0 /* keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = keyboard.h; path = ss/input/keyboard.h; sourceTree = "<group>"; };
+		877661651E772FC1009252B0 /* mission.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mission.cpp; path = ss/input/mission.cpp; sourceTree = "<group>"; };
+		877661661E772FC1009252B0 /* mission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mission.h; path = ss/input/mission.h; sourceTree = "<group>"; };
+		877661691E772FCF009252B0 /* multitap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = multitap.cpp; path = ss/input/multitap.cpp; sourceTree = "<group>"; };
+		8776616A1E772FCF009252B0 /* multitap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = multitap.h; path = ss/input/multitap.h; sourceTree = "<group>"; };
+		8776616B1E772FCF009252B0 /* wheel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wheel.cpp; path = ss/input/wheel.cpp; sourceTree = "<group>"; };
+		8776616C1E772FD0009252B0 /* wheel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wheel.h; path = ss/input/wheel.h; sourceTree = "<group>"; };
+		8776616F1E77391C009252B0 /* AtomicFIFO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AtomicFIFO.h; sourceTree = "<group>"; };
 		87A30A391E57A41300114B03 /* Makefile.am.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; path = Makefile.am.inc; sourceTree = "<group>"; };
 		87A30A3A1E57A41300114B03 /* Net.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Net.cpp; sourceTree = "<group>"; };
 		87A30A3B1E57A41300114B03 /* Net.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Net.h; sourceTree = "<group>"; };
@@ -1884,8 +1897,16 @@
 				8715A93A1D6E5273003ADE26 /* common.h */,
 				8715A93B1D6E5273003ADE26 /* gamepad.cpp */,
 				8715A93C1D6E5273003ADE26 /* gamepad.h */,
+				877661631E772FC1009252B0 /* keyboard.cpp */,
+				877661641E772FC1009252B0 /* keyboard.h */,
+				877661651E772FC1009252B0 /* mission.cpp */,
+				877661661E772FC1009252B0 /* mission.h */,
 				8715A93D1D6E5273003ADE26 /* mouse.cpp */,
 				8715A93E1D6E5273003ADE26 /* mouse.h */,
+				877661691E772FCF009252B0 /* multitap.cpp */,
+				8776616A1E772FCF009252B0 /* multitap.h */,
+				8776616B1E772FCF009252B0 /* wheel.cpp */,
+				8776616C1E772FD0009252B0 /* wheel.h */,
 			);
 			name = input;
 			sourceTree = "<group>";
@@ -2157,6 +2178,7 @@
 				8CB3D56917F1DE5A0090372A /* 2xSaI.h */,
 				8CB3D56A17F1DE5A0090372A /* args.cpp */,
 				8CB3D56B17F1DE5A0090372A /* args.h */,
+				8776616F1E77391C009252B0 /* AtomicFIFO.h */,
 				8CB3D56C17F1DE5A0090372A /* cheat.cpp */,
 				8CB3D56D17F1DE5A0090372A /* cheat.h */,
 				8CB3D56E17F1DE5A0090372A /* console.cpp */,
@@ -4326,6 +4348,7 @@
 				8CB3E0C217F210640090372A /* endian.cpp in Sources */,
 				8CB3E0C517F210760090372A /* FileStream.cpp in Sources */,
 				8CB3DE8F17F1DE5E0090372A /* gpu.cpp in Sources */,
+				877661671E772FC1009252B0 /* keyboard.cpp in Sources */,
 				8CB3E0E217F212BC0090372A /* synth_filter.c in Sources */,
 				94CFB6331A75D740001F174F /* sha1.cpp in Sources */,
 				8CB3E0D617F2124E0090372A /* MemoryStream.cpp in Sources */,
@@ -4374,6 +4397,7 @@
 				8CB3E0FE17F2162F0090372A /* codebook.c in Sources */,
 				8CB3E0AB17F1FAD00090372A /* stubs.cpp in Sources */,
 				8CB3E0E917F213FE0090372A /* player.cpp in Sources */,
+				8776616D1E772FD0009252B0 /* multitap.cpp in Sources */,
 				8CB3E0B917F20F670090372A /* l-ec.cpp in Sources */,
 				8CB3E0ED17F214190090372A /* settings.cpp in Sources */,
 				8CB3E10117F216500090372A /* trionan.c in Sources */,
@@ -4445,12 +4469,14 @@
 				8CB3E0CD17F2116D0090372A /* v810_cpu.cpp in Sources */,
 				8CB3E0F017F215B70090372A /* WAVRecord.cpp in Sources */,
 				8CB3E0F917F2160D0090372A /* block.c in Sources */,
+				8776616E1E772FD0009252B0 /* wheel.cpp in Sources */,
 				8CB3DE9B17F1DE5E0090372A /* memcard.cpp in Sources */,
 				8CB3DE7617F1DE5E0090372A /* gamepad.cpp in Sources */,
 				8CB3E0D217F211C60090372A /* pce_psg.cpp in Sources */,
 				8CB3E03517F1DE5E0090372A /* state.cpp in Sources */,
 				8CB3DE8617F1DE5E0090372A /* timer.cpp in Sources */,
 				94B0824F1A8697EF00D3C0BC /* CDAFReader_Vorbis.cpp in Sources */,
+				877661681E772FC1009252B0 /* mission.cpp in Sources */,
 				8CB3E0FA17F216160090372A /* floor0.c in Sources */,
 				8CB3E0C017F20FB60090372A /* ioapi.c in Sources */,
 				8CB3E10017F216440090372A /* mdct.c in Sources */,
@@ -4567,9 +4593,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"0.9.42\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.43\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00094200",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00094300",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
@@ -4630,9 +4656,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"0.9.42\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.43\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00094200",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00094300",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",

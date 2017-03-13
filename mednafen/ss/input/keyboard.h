@@ -1,8 +1,8 @@
 /******************************************************************************/
 /* Mednafen Sega Saturn Emulation Module                                      */
 /******************************************************************************/
-/* mouse.h:
-**  Copyright (C) 2016-2017 Mednafen Team
+/* keyboard.h:
+**  Copyright (C) 2017 Mednafen Team
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -19,38 +19,56 @@
 ** 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef __MDFN_SS_INPUT_MOUSE_H
-#define __MDFN_SS_INPUT_MOUSE_H
+#ifndef __MDFN_SS_INPUT_KEYBOARD_H
+#define __MDFN_SS_INPUT_KEYBOARD_H
 
 namespace MDFN_IEN_SS
 {
 
-class IODevice_Mouse final : public IODevice
+class IODevice_Keyboard final : public IODevice
 {
  public:
- IODevice_Mouse();
- virtual ~IODevice_Mouse() override;
+ IODevice_Keyboard();
+ virtual ~IODevice_Keyboard() override;
 
  virtual void Power(void) override;
  virtual void UpdateInput(const uint8* data, const int32 time_elapsed) override;
+ virtual void UpdateOutput(uint8* data) override;
  virtual void StateAction(StateMem* sm, const unsigned load, const bool data_only, const char* sname_prefix) override;
 
  virtual uint8 UpdateBus(const uint8 smpc_out, const uint8 smpc_out_asserted) override;
 
  private:
- int32 accum_xdelta;
- int32 accum_ydelta;
 
- uint8 buttons;
- uint8 buffer[0x10];
+ uint64 phys[4];
+ uint64 processed[4];
+ uint8 lock;
+ uint8 lock_pend;
+ uint16 simbutt;
+ uint16 simbutt_pend;
+ enum { fifo_size = 16 };
+ uint16 fifo[fifo_size];
+ uint8 fifo_rdp;
+ uint8 fifo_wrp;
+ uint8 fifo_cnt;
+ enum
+ {
+  LOCK_SCROLL = 0x01,
+  LOCK_NUM = 0x02,
+  LOCK_CAPS = 0x04
+ };
+
+ int16 rep_sc;
+ int32 rep_dcnt;
+
+ int16 mkbrk_pend;
+ uint8 buffer[12];
  uint8 data_out;
  bool tl;
  int8 phase;
 };
 
-
-extern IDIISG IODevice_Mouse_IDII;
-
+extern const IDIISG IODevice_Keyboard_US101_IDII;
 }
 
 #endif
