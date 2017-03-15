@@ -2242,6 +2242,192 @@ static void mednafen_init()
       @"SLPS-02269" : @4, // Zoku Mikagura Shoujo Tanteidan - Kanketsuhen (Japan) (Disc 4)
       };
 
+    // Saturn multi-disc games
+    NSDictionary *ssMultiDiscGames =
+    @{
+      @"T-21301G"   : @3, // 3x3 Eyes - Kyuusei Koushu S (Japan) (Disc 1 - 3)
+      //@"T-21301G"   : @3, // 3x3 Eyes - Kyuusei Koushu S (Japan) (Disc 3) (Special CD-ROM)
+      @"MK-8109150" : @2, // Atlantis - The Lost Tales (Europe) (En,De,Es) (Disc 1 - 2)
+      @"MK-8109109" : @2, // Atlantis - The Lost Tales (France) (Disc 1 - 2)
+      @"T-21512G"   : @2, // Ayakashi Ninden Kunoichiban Plus (Japan) (Disc 1 - 2)
+      @"GS-9076"    : @4, // Azel - Panzer Dragoon RPG (Japan) (Disc 1 - 4)
+      @"T-19907G"   : @2, // BackGuiner - Yomigaeru Yuusha-tachi - Hishou-hen - Uragiri no Senjou (Japan) (Disc 1 - 2)
+      @"T-19906G"   : @2, // BackGuiner - Yomigaeru Yuusha-tachi - Kakusei-hen - Guiner Tensei (Japan) (Disc 1 - 2)
+      //@"T-22402G"   : @2, // Bakuretsu Hunter (Japan) (Disc 1)
+      //@"T-22402G"   : @2, // Bakuretsu Hunter (Japan) (Disc 2) (Omake CD)
+      //@"T-19703G"   : @1, // Can Can Bunny Premiere 2 (Japan) (Disc 1)
+      //@"T-19703G"   : @1, // Can Can Bunny Premiere 2 (Japan) (Disc 2) (Can Bani Himekuri Calendar)
+      @"GS-9172"    : @2, // Chisato Moritaka - Watarase Bashi & Lala Sunshine (Japan) (Disc 1 - 2)
+      @"T-23403G"   : @2, // Chou Jikuu Yousai Macross - Ai Oboete Imasu ka (Japan) (Disc 1 - 2)
+      //@"T-7028H-18" : @1, // Command & Conquer - Teil 1 - Der Tiberiumkonflikt (Germany) (Disc 1) (GDI)
+      //@"T-7028H-18" : @1, // Command & Conquer - Teil 1 - Der Tiberiumkonflikt (Germany) (Disc 2) (NOD)
+      //@"T-7028H-50" : @1, // Command & Conquer (Europe) (En,Fr,De) (Disc 1) (GDI)
+      //@"T-7028H-50" : @1, // Command & Conquer (Europe) (En,Fr,De) (Disc 2) (NOD)
+      //@"T-7028H-09" : @1, // Command & Conquer (France) (Disc 1) (GDI Disc)
+      //@"T-7028H-09" : @1, // Command & Conquer (France) (Disc 2) (NOD Disc)
+      //@"GS-9131"    : @1, // Command & Conquer (Japan) (Disc 1) (GDI Disc)
+      //@"GS-9131"    : @1, // Command & Conquer (Japan) (Disc 2) (NOD Disc)
+      //@"T-7028H"    : @1, // Command & Conquer (USA) (Disc 1) (GDI Disc)
+      //@"T-7028H"    : @1, // Command & Conquer (USA) (Disc 2) (NOD Disc)
+      @"T-16201H"   : @2, // Corpse Killer - Graveyard Edition (USA) (Disc 1 - 2)
+      @"T-1303G"    : @2, // Creature Shock (Japan) (Disc 1 - 2)
+      @"T-01304H"   : @2, // Creature Shock - Special Edition (USA) (Disc 1 - 2)
+      @"T-36401G"   : @2, // Cross Tantei Monogatari - Motsureta Nanatsu no Labyrinth (Japan) (Disc 1 - 2)
+      @"T-8106H-50" : @2, // D (Europe) / (France) / (Germany) (Disc 1 - 2)
+      @"T-8101G"    : @2, // D no Shokutaku (Japan) (Disc 1 - 2)
+      @"T-8106H"    : @2, // D (USA) (Disc 1 - 2)
+      @"T-18510G"   : @2, // Daisuki (Japan) (Disc 1 - 2)
+      @"T-22701G"   : @3, // DeathMask (Japan) (Disc 1 - 3)
+      @"MK-81804"   : @2, // Deep Fear (Europe) (Disc 1 - 2)
+      @"GS-9189"    : @2, // Deep Fear (Japan) (Disc 1 - 2)
+      @"T-15031G"   : @2, // Desire (Japan) (Disc 1 - 2)
+      @"T-14420G"   : @2, // Devil Summoner - Soul Hackers (Japan) (Disc 1 - 2)
+      @"T-16207H"   : @2, // Double Switch (USA) (Disc 1 - 2)
+      @"T-20104G"   : @2, // Doukyuusei 2 (Japan) (Disc A - B)
+      //@"T-1245G"    : @1, // Dungeons & Dragons Collection (Japan) (Disc 1) (Tower of Doom)
+      //@"T-1245G"    : @1, // Dungeons & Dragons Collection (Japan) (Disc 2) (Shadow over Mystara)
+      @"T-10309G"   : @2, // Eberouge (Japan) (Disc 1 - 2)
+      //@"T-16605G"   : @2, // Elf o Karu Monotachi (Japan) (Disc 1)
+      //@"T-16605G"   : @2, // Elf o Karu Monotachi (Japan) (Disc 2) (Omake Disc)
+      //@"T-16610G"   : @2, // Elf o Karu Monotachi II (Japan) (Disc 1)
+      //@"T-16610G"   : @2, // Elf o Karu Monotachi II (Japan) (Disc 2) (Omake Disc)
+      //@"MK-81076"   : @4, // Enemy Zero (Europe) (Disc 0) (Opening Disc)
+      @"MK-81076"   : @3, // Enemy Zero (Europe) / (USA) (Disc 1 - 3) (Game Disc)
+      //@"T-30001G"   : @4, // Enemy Zero (Japan) (Disc 0) (Opening Disc)
+      @"T-30001G"   : @3, // Enemy Zero (Japan) (Disc 1 - 3) (Game Disc)
+      //@"T-30004G"   : @4, // Enemy Zero (Japan) (Disc 0) (Opening Disc) (Satakore)
+      @"T-30004G"   : @3, // Enemy Zero (Japan) (Disc 1 - 3) (Game Disc) (Satakore)
+      @"T-15022G"   : @4, // Eve - Burst Error (Japan) (Disc 1 - 4) (Kojiroh Disc)
+      //@"T-15022G"   : @1, // Eve - Burst Error (Japan) (Disc 2) (Marina Disc)
+      //@"T-15022G"   : @1, // Eve - Burst Error (Japan) (Disc 3) (Terror Disc)
+      //@"T-15022G"   : @1, // Eve - Burst Error (Japan) (Disc 4) (Making Disc)
+      @"T-15035G"   : @4, // Eve - The Lost One (Japan) (Disc 1 - 4) (Kyoko Disc)
+      //@"T-15035G"   : @1, // Eve - The Lost One (Japan) (Disc 2) (Snake Disc)
+      //@"T-15035G"   : @1, // Eve - The Lost One (Japan) (Disc 3) (Lost One Disc)
+      //@"T-15035G"   : @1, // Eve - The Lost One (Japan) (Disc 4) (Extra Disc)
+      //@"T-31503G"   : @1, // Falcom Classics (Japan) (Disc 1) (Game Disc)
+      //@"T-31503G"   : @1, // Falcom Classics (Japan) (Disc 2) (Special CD)
+      @"T-34605G"   : @2, // Find Love 2 - Rhapsody (Japan) (Disc 1 - 2)
+      @"T-20109G"   : @2, // Friends - Seishun no Kagayaki (Japan) (Disc 1 - 2)
+      @"T-17005G"   : @2, // Game-Ware Vol. 4 (Japan) (Disc A - B)
+      @"T-17006G"   : @2, // Game-Ware Vol. 5 (Japan) (Disc A - B)
+      @"GS-9056"    : @2, // Gekka Mugentan Torico (Japan) (Disc A - B) (Kyouchou-hen)
+      //@"GS-9056"    : @1, // Gekka Mugentan Torico (Japan) (Disc B) (Houkai-hen)
+      @"T-4507G"    : @2, // Grandia (Japan) (Disc 1 - 2)
+      @"T-19904G"   : @3, // Harukaze Sentai V-Force (Japan) (Disc 1 - 3)
+      @"T-21902G"   : @3, // Haunted Casino (Japan) (Disc A - C)
+      //@"T-21902G"   : @1, // Haunted Casino (Japan) (Disc B)
+      //@"T-21902G"   : @1, // Haunted Casino (Japan) (Disc C)
+      @"T-19714G"   : @2, // Houkago Ren'ai Club - Koi no Etude (Japan) (Disc 1 - 2)
+      @"T-2001G"    : @2, // Houma Hunter Lime Perfect Collection (Japan) (Disc 1 - 2)
+      @"T-5705G"    : @2, // Idol Janshi Suchie-Pai II (Japan) (Disc 1 - 2)
+      @"T-5716G"    : @3, // Idol Janshi Suchie-Pai Mecha Genteiban - Hatsubai 5 Shuunen Toku Package (Japan) (Disc 1 - 3)
+      //@"T-20701G"   : @1, // Interactive Movie Action - Thunder Storm & Road Blaster (Japan) (Disc 1) (Thunder Storm)
+      //@"T-20701G"   : @1, // Interactive Movie Action - Thunder Storm & Road Blaster (Japan) (Disc 2) (Road Blaster)
+      @"T-5302G"    : @2, // J.B. Harold - Blue Chicago Blues (Japan) (Disc 1 - 2)
+      //@"T-34601G"   : @1, // Jantei Battle Cos-Player (Japan) (Disc 1)
+      //@"T-34601G"   : @1, // Jantei Battle Cos-Player (Japan) (Disc 2) (Making Disc)
+      @"T-2103G"    : @2, // Jikuu Tantei DD (Dracula Detective) - Maboroshi no Lorelei (Japan) (Disc A - B)
+      //@"T-2103G"    : @1, // Jikuu Tantei DD (Dracula Detective) - Maboroshi no Lorelei (Japan) (Disc B)
+      @"T-28002G"   : @3, // Kakyuusei (Japan) (Disc 1 - 3)
+      @"GS-9195"    : @2, // Kidou Senkan Nadesico - The Blank of 3 Years (Japan) (Disc 1 - 2)
+      @"T-14312G"   : @2, // Koden Koureijutsu - Hyaku Monogatari - Honto ni Atta Kowai Hanashi (Japan) (Disc 1 - 2) (Joukan)
+      //@"T-14312G"   : @1, // Koden Koureijutsu - Hyaku Monogatari - Honto ni Atta Kowai Hanashi (Japan) (Disc 2) (Gekan)
+      @"T-14303G"   : @2, // Kuusou Kagaku Sekai Gulliver Boy (Japan) (Disc 1 - 2)
+      //@"GS-9152"    : @1, // Last Bronx (Japan) (Disc 1) (Arcade Disc)
+      //@"GS-9152"    : @1, // Last Bronx (Japan) (Disc 2) (Special Disc)
+      @"T-26405G"   : @2, // Lifescape - Seimei 40 Okunen Haruka na Tabi (Japan) (Disc 1 - 2) (Aquasphere)
+      //@"T-26405G"   : @1, // Lifescape - Seimei 40 Okunen Haruka na Tabi (Japan) (Disc 2) (Landsphere)
+      @"T-14403H"   : @2, // Lunacy (USA) (Disc 1 - 2)
+      @"T-27906G"   : @2, // Lunar 2 - Eternal Blue (Japan) (Disc 1 - 2)
+      @"T-18804G"   : @2, // Lupin the 3rd Chronicles (Japan) (Disc 1 - 2)
+      //@"T-25302G1"  : @1, // Mahjong Doukyuusei Special (Japan) (Disc 1) (Genteiban)
+      //@"T-25302G2"  : @1, // Mahjong Doukyuusei Special (Japan) (Disc 2) (Genteiban) (Portrait CD)
+      //@"T-25305G1"  : @1, // Mahjong Gakuensai (Japan) (Disc 1) (Genteiban)
+      //@"T-25305G2"  : @1, // Mahjong Gakuensai (Japan) (Disc 2) (Seiyuu Interview Hi CD) (Genteiban)
+      //@"T-2204G"    : @1, // Mahjong-kyou Jidai Cebu Island '96 (Japan) (Disc 1)
+      //@"T-2204G"    : @1, // Mahjong-kyou Jidai Cebu Island '96 (Japan) (Disc 2) (Omake Disk)
+      @"T-36302G"   : @2, // Maria - Kimi-tachi ga Umareta Wake (Japan) (Disc 1 - 2)
+      @"T-15038G"   : @3, // MeltyLancer Re-inforce (Japan) (Disc 1 - 3)
+      @"T-14414G"   : @2, // Minakata Hakudou Toujou (Japan) (Disc 1 - 2)
+      @"T-9109G"    : @3, // Moon Cradle (Japan) (Disc 1 - 3)
+      @"MK-81016"   : @2, // Mr. Bones (Europe) / (USA) (Disc 1 - 2)
+      @"GS-9127"    : @2, // Mr. Bones (Japan) (Disc 1 - 2)
+      @"T-21303G"   : @2, // My Dream - On Air ga Matenakute (Japan) (Disc 1 - 2)
+      //@"T-35501G"   : @1, // Nanatsu Kaze no Shima Monogatari (Japan) (Disc 1)
+      //@"T-35501G"   : @1, // Nanatsu Kaze no Shima Monogatari (Japan) (Disc 2) (Premium CD)
+      @"T-7616G"    : @3, // Nanatsu no Hikan (Japan) (Disc 1 - 3)
+      @"GS-9194"    : @2, // Neon Genesis - Evangelion - Koutetsu no Girlfriend (Japan) (Disc 1 - 2)
+      @"T-22205G"   : @3, // Noel 3 (Japan) (Disc 1 - 3)
+      @"T-27803G"   : @2, // Ojousama Express (Japan) (Disc 1 - 2)
+      //@"T-21904G"   : @1, // Ousama Game (Japan) (Disc 1) (Ichigo Disc)
+      //@"T-21904G"   : @1, // Ousama Game (Japan) (Disc 2) (Momo Disc)
+      @"MK-81307"   : @4, // Panzer Dragoon Saga (Europe) / (USA) (Disc 1 - 4)
+      @"T-36001G"   : @8, // PhantasM (Japan) (Disc 1 - 8)
+      //@"T-20114G"   : @1, // Pia Carrot e Youkoso!! 2 (Japan) (Disc 1) (Game Disc)
+      //@"T-20114G"   : @1, // Pia Carrot e Youkoso!! 2 (Japan) (Disc 2) (Special Disc)
+      @"T-9510G"    : @3, // Policenauts (Japan) (Disc 1 - 3)
+      @"T-17402G"   : @2, // QuoVadis 2 - Wakusei Kyoushuu Ovan Rei (Japan) (Disc 1 - 2)
+      @"GS-9011"    : @2, // Rampo (Japan) (Disc 1 - 2)
+      @"T-30002G"   : @4, // Real Sound - Kaze no Regret (Japan) (Disc 1 - 4)
+      @"T-5308G"    : @2, // Refrain Love - Anata ni Aitai (Japan) (Disc 1 - 2)
+      @"MK-8180145" : @4, // Riven - A Sequencia de Myst (Brazil) (Disc 1 - 4)
+      @"MK-81801"   : @4, // Riven - The Sequel to Myst (Europe) (Disc 1 - 4)
+      @"T-35503G"   : @4, // Riven - The Sequel to Myst (Japan) (Disc 1 - 4)
+      @"T-14415G"   : @2, // Ronde (Japan) (Disc 1 - 2)
+      @"T-19508G"   : @2, // Roommate W - Futari (Japan) (Disc 1 - 2)
+      @"T-32602G"   : @2, // Sakura Taisen - Teigeki Graph (Japan) (Disc 1 - 2)
+      @"GS-9037"    : @2, // Sakura Taisen (Japan) (Disc 1 - 2)
+      @"GS-9169"    : @3, // Sakura Taisen 2 - Kimi, Shinitamou Koto Nakare (Japan) (Disc 1 - 3)
+      @"GS-9160"    : @2, // Sakura Taisen Jouki Radio Show (Japan) (Disc 1 - 2)
+      //@"T-14410G"   : @1, // Sengoku Blade - Sengoku Ace Episode II (Japan) (Disc 1)
+      //@"T-14410G"   : @1, // Sengoku Blade - Sengoku Ace Episode II (Japan) (Disc 2) (Sengoku Kawaraban)
+      //@"T-30902G"   : @1, // Senkutsu Katsuryu Taisen - Chaos Seed (Japan) (Disc 1)
+      //@"T-30902G"   : @1, // Senkutsu Katsuryu Taisen - Chaos Seed (Japan) (Disc 2) (Omake CD)
+      //@"T-20106G"   : @1, // Sentimental Graffiti (Japan) (Disc 1) (Game Disc)
+      //@"T-20106G"   : @1, // Sentimental Graffiti (Japan) (Disc 2) (Second Window)
+      @"T-14322G"   : @2, // Shiroki Majo - Mou Hitotsu no Eiyuu Densetsu (Japan) (Disc 1 - 2)
+      @"GS-9182"    : @2, // Shoujo Kakumei Utena - Itsuka Kakumei Sareru Monogatari (Japan) (Disc 1 - 2)
+      @"T-2205G"    : @2, // Soukuu no Tsubasa - Gotha World (Japan) (Disc 1 - 2)
+      @"T-34001G"   : @2, // Sound Novel Machi (Japan) (Disc 1 - 2)
+      @"T-21804G"   : @2, // Star Bowling, The (Japan) (Disc 1 - 2)
+      @"T-21805G"   : @2, // Star Bowling Vol. 2, The (Japan) (Disc 1 - 2)
+      //@"T-7033H-50" : @1, // Street Fighter Collection (Europe) (Disc 1)
+      //@"T-7033H-50" : @1, // Street Fighter Collection (Europe) (Disc 2)
+      //@"T-1223G"    : @1, // Street Fighter Collection (Japan) (Disc 1)
+      //@"T-1223G"    : @1, // Street Fighter Collection (Japan) (Disc 2)
+      //@"T-1222H"    : @1, // Street Fighter Collection (USA) (Disc 1)
+      //@"T-1222H"    : @1, // Street Fighter Collection (USA) (Disc 2)
+      @"T-1204G"    : @2, // Street Fighter II Movie (Japan) (Disc 1 - 2)
+      @"T-5713G"    : @2, // Suchie-Pai Adventure - Doki Doki Nightmare (Japan) (Disc 1 - 2)
+      @"T-1225G"    : @3, // Super Adventure Rockman (Japan) (Disc 1 - 3)
+      @"T-21802G"   : @2, // Tenchi Muyou! Mimiri Onsen - Yukemuri no Tabi (Japan) (Disc 1 - 2)
+      @"T-26103G"   : @2, // Tenchi Muyou! Toukou Muyou - Aniraji Collection (Japan) (Disc 1 - 2)
+      @"T-14301G"   : @2, // Tengai Makyou - Daiyon no Mokushiroku - The Apocalypse IV (Japan) (Disc 1 - 2)
+      //@"T-20702G"   : @1, // Time Gal & Ninja Hayate (Time Gal) (Japan) (Disc 1)
+      //@"T-20702G"   : @1, // Time Gal & Ninja Hayate (Ninja Hayate) (Japan) (Disc 1)
+      @"T-9529G"    : @2, // Tokimeki Memorial Drama Series Vol. 2 - Irodori no Love Song (Japan) (Disc 1 - 2)
+      @"T-9532G"    : @2, // Tokimeki Memorial Drama Series Vol. 3 - Tabidachi no Uta (Japan) (Disc 1 - 2)
+      @"T-1110G"    : @3, // Tokyo Shadow (Japan) (Disc 1 - 3)
+      @"MK-81053"   : @2, // Torico (Europe) (Disc 1 - 2)
+      @"T-35601G"   : @2, // Tutankhamen no Nazo - A.N.K.H (Japan) (Disc 1 - 2)
+      //@"T-37301G"   : @1, // Twinkle Star Sprites (Japan) (Disc 1)
+      //@"T-37301G"   : @1, // Twinkle Star Sprites (Japan) (Disc 2) (Omake CD)
+      @"T-7017G"    : @3, // Unsolved, The (Japan) (Disc 1 - 3)
+      //@"T-19718G"   : @1, // Virtuacall S (Japan) (Disc 1) (Game Honpen)
+      //@"T-19718G"   : @1, // Virtuacall S (Japan) (Disc 2) (Shokai Gentei Yobikake-kun)
+      @"T-14304G"   : @3, // Virus (Japan) (Disc 1 - 3)
+      //@"T-16706G"   : @1, // Voice Fantasia S - Ushinawareta Voice Power (Japan) (Disc 1)
+      //@"T-16706G"   : @1, // Voice Fantasia S - Ushinawareta Voice Power (Japan) (Disc 2) (Premium CD-ROM)
+      @"T-1312G"    : @2, // Voice Idol Maniacs - Pool Bar Story (Japan) (Disc 1 - 2)
+      @"GS-9007"    : @2, // WanChai Connection (Japan) (Disc 1 - 2)
+      //@"T-9103G"    : @1, // Wangan Dead Heat + Real Arrange (Japan) (Disc 1)
+      //@"T-9103G"    : @1, // Wangan Dead Heat + Real Arrange (Japan) (Disc 2) (Addition)
+      @"T-20117G"   : @2, // With You - Mitsumeteitai (Japan) (Disc 1 - 2)
+      @"T-37001G"   : @2, // Wizardry Nemesis - The Wizardry Adventure (Japan) (Disc 1 - 2)
+      @"T-33005G"   : @4, // Zoku Hatsukoi Monogatari - Shuugaku Ryokou (Japan) (Disc 1 - 4)
+      };
+
     if ([current->_mednafenCoreModule isEqualToString:@"psx"])
     {
         // PSX: Check if multiple discs required
@@ -2270,6 +2456,37 @@ static void mednafen_init()
                 if(current->_multiTapPlayerCount > 5)
                     MDFNI_SetSetting("psx.input.pport2.multitap", "1"); // Enable multitap on PSX port 2
             }
+        }
+    }
+
+    if ([current->_mednafenCoreModule isEqualToString:@"ss"])
+    {
+        NSString *hex = [current ROMHeader];
+        NSUInteger len = hex.length;
+
+        // Ensure valid hex string
+        if ((len % 2) != 0)
+            return;
+
+        // Convert header hex to ascii
+        NSMutableString *ascii = [[NSMutableString alloc] init];
+        for(int i=0; i< len; i+=2)
+        {
+            NSString *byte = [hex substringWithRange:NSMakeRange(i, 2)];
+            unsigned char chr = strtol([byte UTF8String], nil, 16);
+            [ascii appendFormat:@"%c", chr];
+        }
+
+        // Extract serial from header
+        NSString *serial = [ascii substringWithRange:NSMakeRange(32, 10)];
+        serial = [serial stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        _current.ROMSerial = serial;
+
+        // Check if multiple discs required
+        if (ssMultiDiscGames[[current ROMSerial]])
+        {
+            current->_isMultiDiscGame = YES;
+            current->_multiDiscTotal = [[ssMultiDiscGames objectForKey:[current ROMSerial]] intValue];
         }
     }
 }
@@ -2521,6 +2738,21 @@ static void emulation_run()
     }
     else if ([_mednafenCoreModule isEqualToString:@"ss"])
     {
+        NSLog(@"SS serial: %@ player count: %d", [_current ROMSerial], _multiTapPlayerCount);
+
+        // Check if loading a multi-disc game without m3u
+        if(_isMultiDiscGame && ![[[path pathExtension] lowercaseString] isEqualToString:@"m3u"])
+        {
+            NSError *outErr = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:@{
+                NSLocalizedDescriptionKey : @"Required m3u file missing.",
+                NSLocalizedRecoverySuggestionErrorKey : [NSString stringWithFormat:@"This game requires multiple discs and must be loaded using a m3u file with all %lu discs.\n\nTo enable disc switching and ensure save files load across discs, it cannot be loaded as a single disc.\n\nFor more information, visit:\nhttps://github.com/OpenEmu/OpenEmu/wiki/User-guide:-CD-based-games#q-i-have-a-multi-disc-game", _multiDiscTotal],
+                }];
+
+            *error = outErr;
+
+            return NO;
+        }
+
         game->SetInput(0, "gamepad", (uint8_t *)_inputBuffer[0]);
         game->SetInput(1, "gamepad", (uint8_t *)_inputBuffer[1]);
         game->SetInput(12, "builtin", (uint8_t *)_inputBuffer[7]); // reset button status
