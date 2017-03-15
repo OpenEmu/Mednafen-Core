@@ -323,7 +323,7 @@ static void mednafen_init()
       };
 
     // PlayStation Multitap supported games (incomplete list)
-    NSDictionary *multiTapGames =
+    NSDictionary *psxMultiTapGames =
     @{
       @"SLES-02339" : @3, // Arcade Party Pak (Europe, Australia)
       @"SLUS-00952" : @3, // Arcade Party Pak (USA)
@@ -1017,7 +1017,7 @@ static void mednafen_init()
       };
 
     // 5-player games requiring Multitap on port 2 instead of port 1
-    NSArray *multiTap5PlayerPort2 =
+    NSArray *psxMultiTap5PlayerPort2 =
     @[
       @"SLES-01893", // Bomberman (Europe)
       @"SLPS-01717", // Bomberman (Japan)
@@ -1025,7 +1025,7 @@ static void mednafen_init()
       ];
 
     // PlayStation multi-disc games (mostly complete, few missing obscure undumped/unverified JP releases)
-    NSDictionary *multiDiscGames =
+    NSDictionary *psxMultiDiscGames =
     @{
       @"SLPS-00071" : @2, // 3x3 Eyes - Kyuusei Koushu (Japan) (Disc 1)
       @"SLPS-00072" : @2, // 3x3 Eyes - Kyuusei Koushu (Japan) (Disc 2)
@@ -2242,31 +2242,34 @@ static void mednafen_init()
       @"SLPS-02269" : @4, // Zoku Mikagura Shoujo Tanteidan - Kanketsuhen (Japan) (Disc 4)
       };
 
-    // Check if multiple discs required
-    if (multiDiscGames[[current ROMSerial]])
+    if ([current->_mednafenCoreModule isEqualToString:@"psx"])
     {
-        current->_isMultiDiscGame = YES;
-        current->_multiDiscTotal = [[multiDiscGames objectForKey:[current ROMSerial]] intValue];
-    }
-
-    // Check if SBI file is required
-    if (sbiRequiredGames[[current ROMSerial]])
-    {
-        current->_isSBIRequired = YES;
-    }
-
-    // Set multitap configuration if detected
-    if (multiTapGames[[current ROMSerial]])
-    {
-        current->_multiTapPlayerCount = [[multiTapGames objectForKey:[current ROMSerial]] intValue];
-
-        if([multiTap5PlayerPort2 containsObject:[current ROMSerial]])
-            MDFNI_SetSetting("psx.input.pport2.multitap", "1"); // Enable multitap on PSX port 2
-        else
+        // PSX: Check if multiple discs required
+        if (psxMultiDiscGames[[current ROMSerial]])
         {
-            MDFNI_SetSetting("psx.input.pport1.multitap", "1"); // Enable multitap on PSX port 1
-            if(current->_multiTapPlayerCount > 5)
+            current->_isMultiDiscGame = YES;
+            current->_multiDiscTotal = [[psxMultiDiscGames objectForKey:[current ROMSerial]] intValue];
+        }
+
+        // PSX: Check if SBI file is required
+        if (sbiRequiredGames[[current ROMSerial]])
+        {
+            current->_isSBIRequired = YES;
+        }
+
+        // PSX: Set multitap configuration if detected
+        if (psxMultiTapGames[[current ROMSerial]])
+        {
+            current->_multiTapPlayerCount = [[psxMultiTapGames objectForKey:[current ROMSerial]] intValue];
+
+            if([psxMultiTap5PlayerPort2 containsObject:[current ROMSerial]])
                 MDFNI_SetSetting("psx.input.pport2.multitap", "1"); // Enable multitap on PSX port 2
+            else
+            {
+                MDFNI_SetSetting("psx.input.pport1.multitap", "1"); // Enable multitap on PSX port 1
+                if(current->_multiTapPlayerCount > 5)
+                    MDFNI_SetSetting("psx.input.pport2.multitap", "1"); // Enable multitap on PSX port 2
+            }
         }
     }
 }
