@@ -56,7 +56,7 @@ namespace MDFN_IEN_VB
 
 @interface MednafenGameCore () <OELynxSystemResponderClient, OENGPSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OESaturnSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
 {
-    uint32_t *_inputBuffer[8];
+    uint32_t *_inputBuffer[13];
     int _videoWidth, _videoHeight;
     int _videoOffsetX, _videoOffsetY;
     int _multiTapPlayerCount;
@@ -2428,6 +2428,131 @@ static void mednafen_init()
       @"T-33005G"   : @4, // Zoku Hatsukoi Monogatari - Shuugaku Ryokou (Japan) (Disc 1 - 4)
       };
 
+    // Saturn Multitap supported games
+    NSDictionary *ssMultiTapGames =
+    @{
+      @"T-6004G"    : @4, // America Oudan Ultra Quiz (Japan)
+      @"T-20001G"   : @4, // Bakushou!! All Yoshimoto Quiz Ou Ketteisen DX (Japan)
+      @"T-13003H50" : @4, // Blast Chamber (Europe)
+      @"T-13003H"   : @4, // Blast Chamber (USA)
+      @"T-16408H"   : @4, // Break Point (Europe)
+      @"T-9107G"    : @4, // Break Point (Japan)
+      @"T-8145H"    : @4, // Break Point Tennis (USA)
+      @"T-1235G"    : @3, // Capcom Generation - Dai-4-shuu Kokou no Eiyuu (Japan)
+      @"T-8111H"    : @4, // College Slam (USA)
+      @"T-14316G"   : @7, // Denpa Shounenteki Game (Japan)
+      @"T-14318G"   : @7, // Denpa Shounenteki Game (Japan) (Reprint)
+      @"MK-81071"   : @7, // Duke Nukem 3D (Europe) / (USA) (Death Tank Zwei mini-game has 7-player support)
+      @"T-10302G"   : @4, // DX Jinsei Game (Japan)
+      @"T-10310G"   : @4, // DX Jinsei Game II (Japan)
+      @"T-10306G"   : @5, // DX Nippon Tokkyuu Ryokou Game (Japan)
+      @"T-5025H-50" : @8, // FIFA - Road to World Cup 98 (Europe) ** warning: broken multitap code **
+      @"T-5025H"    : @8, // FIFA - Road to World Cup 98 (USA) ** warning: broken multitap code **
+      @"T-5003H"    : @6, // FIFA Soccer 96 (Europe) / (USA)
+      @"T-10606G"   : @6, // FIFA Soccer 96 (Japan)
+      @"T-5017H"    : @8, // FIFA Soccer 97 (Europe) / (USA)
+      @"T-4308G"    : @6, // Fire Prowrestling S - 6Men Scramble (Japan)
+      @"T-14411G"   : @4, // Gouketsuji Ichizoku 3: Groove on Fight (Japan)
+      @"MK-81035"   : @6, // Guardian Heroes (Europe) / (USA)
+      @"GS-9031"    : @6, // Guardian Heroes (Japan)
+      @"T-20902G"   : @4, // Hansha de Spark! (Japan)
+      @"T-1102G"    : @4, // HatTrick Hero S (Japan)
+      @"T-7015H"    : @4, // Hyper 3-D Pinball (USA) / Tilt! (Europe)
+      @"T-7007G"    : @4, // Hyper 3D Pinball (Japan)
+      @"T-3602G"    : @4, // J. League Go Go Goal! (Japan)
+      @"T-9528G"    : @4, // J. League Jikkyou Honoo no Striker (Japan)
+      @"GS-9034"    : @8, // J. League Pro Soccer Club o Tsukurou! (Japan)
+      @"GS-9168"    : @8, // J. League Pro Soccer Club o Tsukurou! 2 (Japan)
+      @"GS-9048"    : @4, // J. League Victory Goal '96 (Japan)
+      @"GS-9140"    : @4, // J. League Victory Goal '97 (Japan)
+      @"T-12003H50" : @4, // Jonah Lomu Rugby (Europe)
+      @"T-12003H09" : @4, // Jonah Lomu Rugby (Europe)
+      @"T-30306G"   : @4, // Keriotosse! (Japan)
+      @"T-5010H"    : @8, // Madden NFL 97 (Europe) / (USA)
+      @"T-5024H"    : @8, // Madden NFL 98 (Europe) / (USA)
+      //@"T-11401G"   : @4, // Masters - Harukanaru Augusta 3 (Japan)
+      @"MK81103-50" : @10, // NBA Action (Europe)
+      @"MK-81103"   : @10, // NBA Action (USA)
+      @"MK-81124"   : @10, // NBA Action 98 (Europe) / (USA)
+      @"T-8120H-50" : @4, // NBA Jam Extreme (Europe)
+      @"T-8122G"    : @4, // NBA Jam Extreme (Japan)
+      @"T-8120H"    : @4, // NBA Jam Extreme (USA)
+      @"T-8102H-50" : @4, // NBA Jam Tournament Edition (Europe)
+      @"T-8102G"    : @4, // NBA Jam Tournament Edition (Japan)
+      @"T-8102H"    : @4, // NBA Jam Tournament Edition (USA)
+      @"T-5015H"    : @10, // NBA Live 97 (Europe) / (USA)
+      @"T-5027H"    : @8, // NBA Live 98 (Europe) / (USA)
+      @"MK-81111"   : @8, // NFL '97 (USA)
+      @"T-8109H-50" : @12, // NFL Quarterback Club 96 (Europe)
+      @"T-8105G"    : @12, // NFL Quarterback Club 96 (Japan)
+      @"T-8109H"    : @12, // NFL Quarterback Club 96 (USA)
+      @"T-8136H-50" : @12, // NFL Quarterback Club 97 (Europe)
+      @"T-8116G"    : @12, // NFL Quarterback Club 97 (Japan)
+      @"T-8136H"    : @12, // NFL Quarterback Club 97 (USA)
+      @"T-5016H"    : @8, // NHL 97 (Europe) / (USA)
+      @"T-10620G"   : @8, // NHL 97 (Japan)
+      @"T-5026H-50" : @12, // NHL 98 (Europe)
+      @"T-5026H"    : @12, // NHL 98 (USA)
+      @"MK-8100250" : @12, // NHL All-Star Hockey (Europe)
+      @"MK-81002"   : @12, // NHL All-Star Hockey (USA)
+      @"MK-81122"   : @8, // NHL All-Star Hockey 98 (Europe) / (USA)
+      @"T-7013H-50" : @6, // NHL Powerplay (Europe)
+      @"T-7012G"    : @6, // NHL Powerplay '96 (Japan)
+      @"T-07013H"   : @6, // NHL Powerplay '96 (USA)
+      @"T-5206G"    : @4, // Noon (Japan)
+      @"T-07904H50" : @4, // Olympic Soccer (Europe)
+      @"T-07904H18" : @4, // Olympic Soccer (Germany)
+      @"T-7304G"    : @4, // Olympic Soccer (Japan)
+      @"T-07904H"   : @4, // Olympic Soccer (USA)
+      //@"MK-81101"   : @4, // Pebble Beach Golf Links (Europe) / (USA)
+      //@"GS-9006"    : @4, // Pebble Beach Golf Links - Stadler ni Chousen (Japan)
+      //@"T-5011H"    : @4, // PGA Tour 97 (Europe) / (USA)
+      //@"T-10619G"   : @4, // PGA Tour 97 (Japan)
+      @"MK-81084"   : @6, // Exhumed (Europe) (Death Tank mini-game has 6-player support)
+      @"T-13205H"   : @6, // Powerslave (USA) (Death Tank mini-game has 6-player support)
+      @"T-18001G"   : @6, // Seireki 1999 - Pharaoh no Fukkatsu (Japan) (Death Tank mini-game has 6-player support)
+      @"MK-81070"   : @10, // Saturn Bomberman (Europe) / (USA)
+      @"T-14302G"   : @10, // Saturn Bomberman (Japan)
+      @"T-14321G"   : @4, // Saturn Bomberman Fight!! (Japan)
+      @"GS-9043"    : @4, // Sega Ages - Rouka ni Ichidanto R (Japan)
+      @"MK-81105"   : @4, // Sega International Victory Goal (Europe) / Worldwide Soccer - Sega International Victory Goal Edition (USA)
+      @"GS-9044"    : @4, // Sega International Victory Goal (Japan)
+      @"MK-81112"   : @4, // Sega Worldwide Soccer 97 (Europe) / (USA)
+      @"MK-81123"   : @4, // Sega Worldwide Soccer 98 - Club Edition (Europe) / Worldwide Soccer 98 (USA)
+      @"GS-9187"    : @4, // Sega Worldwide Soccer 98 (Japan)
+      @"T-15902H50" : @4, // Slam 'n Jam '96 featuring Magic & Kareem - Signature Edition (Europe)
+      @"T-159056"   : @4, // Slam 'n Jam '96 featuring Magic & Kareem (Japan)
+      @"T-159028H"  : @4, // Slam 'n Jam '96 featuring Magic & Kareem - Signature Edition (USA)
+      @"T-8125H-50" : @6, // Space Jam (Europe)
+      @"T-8119G"    : @6, // Space Jam (Japan)
+      @"T-8125H"    : @6, // Space Jam (USA)
+      @"T-17702H"   : @8, // Street Racer (Europe)
+      @"T-17702G"   : @8, // Street Racer Extra (Japan)
+      @"T-8133H-50" : @4, // Striker '96 (Europe)
+      @"T-8114G"    : @4, // Striker '96 (Japan)
+      @"T-8133H"    : @4, // Striker '96 (USA)
+      @"T-5713G"    : @4, // Suchie-Pai Adventure - Doki Doki Nightmare (Japan) (Disc 1 - 2)
+      @"MK-81033"   : @3, // Three Dirty Dwarves (Europe)
+      @"GS-9137"    : @3, // Three Dirty Dwarves (Japan)
+      @"T-30401H"   : @3, // Three Dirty Dwarves (USA)
+      @"T-25411450" : @4, // Trash It (Europe)
+      @"MK-81180"   : @4, // UEFA Euro 96 England (Europe)
+      @"T-31501G"   : @6, // Vatlva (Japan)
+      @"GS-9002"    : @4, // Victory Goal (Japan)
+      @"GS-9112"    : @4, // Victory Goal Worldwide Edition (Japan)
+      @"T-8129H-50" : @4, // Virtual Open Tennis (Europe)
+      @"T-15007G"   : @4, // Virtual Open Tennis (Japan)
+      @"T-8129H"    : @4, // Virtual Open Tennis (USA)
+      @"MK-81129"   : @4, // Winter Heat (Europe) / (USA)
+      @"GS-9177"    : @4, // Winter Heat (Japan)
+      @"T-2002G"    : @4, // World Evolution Soccer (Japan)
+      @"MK-81181"   : @4, // World League Soccer '98 (Europe)
+      @"GS-9196"    : @4, // World Cup '98 France - Road to Win (Japan)
+      @"T-8126H-50" : @4, // WWF In Your House (Europe)
+      @"T-8120G"    : @4, // WWF In Your House (Japan)
+      @"T-8126H"    : @4, // WWF In Your House (USA)
+      };
+
     if ([current->_mednafenCoreModule isEqualToString:@"psx"])
     {
         // PSX: Check if multiple discs required
@@ -2482,12 +2607,30 @@ static void mednafen_init()
         serial = [serial stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         _current.ROMSerial = serial;
 
-        // Check if multiple discs required
+        // SS: Check if multiple discs required
         if (ssMultiDiscGames[[current ROMSerial]])
         {
             current->_isMultiDiscGame = YES;
             current->_multiDiscTotal = [[ssMultiDiscGames objectForKey:[current ROMSerial]] intValue];
         }
+
+        // SS: Set multitap configuration if detected
+        if (ssMultiTapGames[[current ROMSerial]])
+        {
+            current->_multiTapPlayerCount = [[ssMultiTapGames objectForKey:[current ROMSerial]] intValue];
+
+            if(current->_multiTapPlayerCount < 8)
+                // From the Sega Saturn 6 Player Multi-Player Adaptor manual:
+                // 3-7 Player games
+                MDFNI_SetSetting("ss.input.sport2.multitap", "1"); // Enable multitap on SS port 2
+            else
+            {
+                // 8-12 Player games
+                MDFNI_SetSetting("ss.input.sport1.multitap", "1"); // Enable multitap on SS port 1
+                MDFNI_SetSetting("ss.input.sport2.multitap", "1"); // Enable multitap on SS port 2
+            }
+        }
+
     }
 }
 
@@ -2500,7 +2643,7 @@ static void mednafen_init()
         _multiTapPlayerCount = 2;
         _allCueSheetFiles = [[NSMutableArray alloc] init];
 
-        for(unsigned i = 0; i < 8; i++)
+        for(unsigned i = 0; i < 13; i++)
             _inputBuffer[i] = (uint32_t *) calloc(9, sizeof(uint32_t));
     }
 
@@ -2509,7 +2652,7 @@ static void mednafen_init()
 
 - (void)dealloc
 {
-    for(unsigned i = 0; i < 8; i++)
+    for(unsigned i = 0; i < 13; i++)
         free(_inputBuffer[i]);
 
     delete surf;
@@ -2753,9 +2896,10 @@ static void emulation_run()
             return NO;
         }
 
-        game->SetInput(0, "gamepad", (uint8_t *)_inputBuffer[0]);
-        game->SetInput(1, "gamepad", (uint8_t *)_inputBuffer[1]);
-        game->SetInput(12, "builtin", (uint8_t *)_inputBuffer[7]); // reset button status
+        for(unsigned i = 0; i < _multiTapPlayerCount; i++)
+            game->SetInput(i, "gamepad", (uint8_t *)_inputBuffer[i]);
+
+        game->SetInput(12, "builtin", (uint8_t *)_inputBuffer[12]); // reset button status
     }
     else
     {
@@ -2778,9 +2922,9 @@ static void emulation_run()
 {
     if ([_mednafenCoreModule isEqualToString:@"ss"])
     {
-        _inputBuffer[7][0] = 1;
+        _inputBuffer[12][0] = 1;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            _inputBuffer[7][0] = 0;
+            _inputBuffer[12][0] = 0;
         });
     }
 
