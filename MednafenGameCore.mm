@@ -70,6 +70,7 @@ namespace MDFN_IEN_VB
     NSUInteger _multiDiscTotal;
     BOOL _isSBIRequired;
     BOOL _isMultiDiscGame;
+    BOOL _isSS3DControlPadSupportedGame;
     NSMutableArray *_allCueSheetFiles;
 }
 
@@ -2553,6 +2554,140 @@ static void mednafen_init()
       @"T-8126H"    : @4, // WWF In Your House (USA)
       };
 
+    // Saturn 3D Control Pad supported games (including some Arcade Racer and Mission Stick)
+    NSArray *ss3DControlPadGames =
+    @[
+      @"GS-9087",    // Advanced World War Sennen Teikoku no Koubou - Last of the Millennium (Japan)
+      @"GS-9076",    // Azel - Panzer Dragoon RPG (Japan) (Disc 1 - 4)
+      @"T-33901G",   // Baroque (Japan)
+      @"T-10627G",   // Battle Garegga (Japan)
+      @"T-7011H-50", // Black Fire (Europe)
+      @"T-7003G",    // Black Fire (Japan)
+      @"MK-81003",   // Black Fire (USA)
+      @"MK-81803",   // Burning Rangers (Europe) / (USA)
+      @"GS-9174",    // Burning Rangers (Japan)
+      @"T-19706G",   // Can Can Bunny Extra (Japan)
+      @"T-19703G",   // Can Can Bunny Premiere 2 (Japan) (Disc 1 - 2)
+      @"T-10314G",   // Choro Q Park (Japan)
+      @"T-23502G",   // Code R (Japan)
+      @"T-9507H",    // Contra - Legacy of War (USA)
+      @"610-6483",   // Christmas NiGHTS into Dreams... (Europe)
+      @"610-6431",   // Christmas NiGHTS into Dreams... (Japan)
+      @"MK-81067",   // Christmas NiGHTS into Dreams... (USA)
+      @"T-5029H-50", // Croc - Legend of the Gobbos (Europe) / (USA)
+      @"T-26410G",   // Croc! - Pau-Pau Island (Japan)
+      @"T-9509H-50", // Crypt Killer (Europe)
+      @"T-9518G",    // Henry Explorers (Japan)
+      @"T-9509H",    // Crypt Killer (USA)
+      @"MK-81205",   // Cyber Speedway (Europe)
+      @"MK-81204",   // Cyber Speedway (USA)
+      @"GS-9022",    // Gran Chaser (Japan)
+      @"T-18510G",   // Daisuki (Japan) (Disc 1 - 2)
+      @"MK-81304",   // Dark Savior (Europe) / (USA)
+      @"T-22101G",   // Dark Savior (Japan)
+      @"MK-81213",   // Daytona USA Championship Circuit Edition (Europe) / (Korea) / (USA)
+      @"GS-9100",    // Daytona USA Circuit Edition (Japan)
+      @"MK-81218",   // Daytona USA C.C.E. Net Link Edition (USA)
+      @"MK-81804",   // Deep Fear (Europe) (Disc 1 - 2)
+      @"GS-9189",    // Deep Fear (Japan) (Disc 1 - 2)
+      @"T-15019G",   // Drift King Shutokou Battle '97 - Tsuchiya Keiichi & Bandou Masaaki (Japan)
+      @"MK-81071",   // Duke Nukem 3D (Europe) / (USA)
+      @"T-9111G",    // Dungeon Master Nexus (Japan)
+      @"MK-81076",   // Enemy Zero (Europe) / (USA) (Disc 1 - 3) (Game Disc)
+      @"T-30001G",   // Enemy Zero (Japan) (Disc 1 - 3) (Game Disc)
+      @"T-30004G",   // Enemy Zero (Japan) (Disc 1 - 3) (Game Disc) (Satakore)
+      @"MK-81084",   // Exhumed (Europe)
+      @"T-13205H",   // Powerslave (USA)
+      @"T-5710G",    // Fantastep (Japan)
+      @"MK-81073",   // Fighters Megamix (Europe) / (USA)
+      @"GS-9126",    // Fighters Megamix (Japan)
+      @"MK-81282",   // Formula Karts - Special Edition (Europe) (En,Fr,De,Es)
+      @"T-21701G",   // Fuusui Sensei - Feng-Shui Master (Japan)
+      //@"T-30603G",   // G Vector (Japan)
+      @"GS-9003",    // Gale Racer (Japan) (En,Ja)
+      @"GS-9086",    // Greatest Nine '96 (Japan)
+      @"T-5714G",    // GT24 (Japan)
+      @"MK-81202",   // Hang On GP '96 (Europe) / Hang-On GP (USA)
+      @"GS-9032",    // Hang On GP '95 (Japan)
+      @"T-12303H",   // Hardcore 4X4 (Europe)
+      @"T-13703H",   // TNN Motor Sports Hardcore 4X4 (USA)
+      @"T-4313G",    // Deka Yonku - Tough The Truck (Japan)
+      @"MK-81802",   // House of the Dead, The (Europe) / (USA)
+      @"GS-9173",    // House of the Dead, The (Japan)
+      @"T-25503G",   // Initial D - Koudou Saisoku Densetsu (Japan)
+      @"T-18008G",   // Jungle Park - Saturn Shima (Japan)
+      @"T-19723G",   // Kiss yori... (Japan)
+      @"MK-81065",   // Lost World - Jurassic Park, The (Europe) / (USA)
+      @"GS-9162",    // Lost World - Jurassic Park, The (Japan)
+      @"T-10611G",   // Magic Carpet (Japan)
+      @"MK-81210",   // Manx TT Super Bike (Europe) / (USA)
+      @"GS-9102",    // Manx TT Super Bike (Japan)
+      @"T-13004H",   // MechWarrior 2 - 31st Century Combat (Europe) / (USA)
+      @"T-23406G",   // MechWarrior 2 (Japan)
+      @"MK-81300",   // Mystaria - The Realms of Lore (Europe) / (USA)
+      @"MK-81303",   // Blazing Heroes (USA)
+      @"GS-9021",    // Riglordsaga (Japan)
+      @"MK-81020",   // NiGHTS into Dreams... (Europe) / (USA)
+      @"GS-9046",    // NiGHTS into Dreams... (Japan)
+      @"T-10613G",   // Nissan Presents - Over Drivin' GT-R (Japan)
+      @"T-9108G",    // Ochigee Designer Tsukutte Pon! (Japan)
+      @"T-9104G",    // Ooedo Renaissance (Japan)
+      //@"MK-81009",   // Panzer Dragoon (Europe) / (Korea) / (USA)
+      //@"GS-9015",    // Panzer Dragoon (Japan)
+      @"MK-81022",   // Panzer Dragoon Zwei (Europe) / (USA)
+      @"GS-9049",    // Panzer Dragoon Zwei (Japan)
+      @"MK-81307",   // Panzer Dragoon Saga (Europe) / (USA) (Disc 1 - 4)
+      @"T-19708G",   // Pia Carrot e Youkoso!! We've Been Waiting for You (Japan)
+      @"T-18711G",   // Planet Joker (Japan)
+      @"MK-081066",  // Quake (Europe) / (USA)
+      @"GS-9084",    // Riglordsaga 2 (Japan)
+      @"MK-81604",   // Sega Ages Volume 1 (Europe)
+      @"T-12707H",   // Sega Ages (USA)
+      @"GS-9109",    // Sega Ages - After Burner II (Japan)
+      @"GS-9197",    // Sega Ages - Galaxy Force II (Japan)
+      @"GS-9110",    // Sega Ages - OutRun (Japan)
+      @"GS-9181",    // Sega Ages - Power Drift (Japan)
+      //@"GS-9108",    // Sega Ages - Space Harrier (Japan)
+      @"GS-9116",    // Sega Rally Championship Plus (Japan)
+      @"MK-81215",   // Sega Rally Championship Plus Net Link Edition (USA)
+      @"MK-81216",   // Sega Touring Car Championship (Europe) / (USA)
+      @"GS-9164",    // Sega Touring Car Championship (Japan)
+      @"MK-81383",   // Shining Force III (Europe) / (USA)
+      @"GS-9175",    // Shining Force III - Scenario 1 - Outo no Kyoshin (Japan)
+      @"GS-9188",    // Shining Force III - Scenario 2 - Nerawareta Miko (Japan)
+      @"GS-9203",    // Shining Force III - Scenario 3 - Hyouheki no Jashinguu (Japan)
+      @"6106979",    // Shining Force III Premium Disc (Japan)
+      @"MK-81051",   // Sky Target (Europe) / (USA)
+      @"GS-9103",    // Sky Target (Japan)
+      @"MK-8106250", // Sonic 3D - Flickies' Island (Europe)
+      @"GS-9143",    // Sonic 3D - Flickies' Island (Japan)
+      @"MK-81062",   // Sonic 3D Blast (USA)
+      @"MK-81800",   // Sonic R (Europe) / (USA)
+      @"GS-9170",    // Sonic R (Japan)
+      @"MK-81079",   // Sonic Jam (Europe) / (USA)
+      @"GS-9147",    // Sonic Jam (Japan)
+      @"T-10616G",   // Soukyuu Gurentai (Japan)
+      @"T-10626G",   // Soukyuu Gurentai Otokuyou (Japan)
+      @"T-5013H",    // Soviet Strike (Europe) / (USA)
+      @"T-10621G",   // Soviet Strike (Japan)
+      @"T-1105G",    // Taito Chase H.Q. + S.C.I. (Japan)
+      @"T-14412G",   // Touge King the Spirits 2 (Japan)
+      @"MK-81043",   // Virtua Cop 2 (Europe) / (Korea) / (USA)
+      @"GS-9097",    // Virtua Cop 2 (Japan)
+      @"T-19718G",   // Virtuacall S (Japan) (Disc 1) (Game Honpen)
+      @"T-7104G",    // Virtual Kyoutei 2 (Japan)
+      @"MK-81024",   // Wing Arms (Europe) / (USA)
+      @"GS-9038",    // Wing Arms (Japan)
+      @"MK-81129",   // Winter Heat (Europe) / (USA)
+      @"GS-9177",    // Winter Heat (Japan)
+      @"T-11308H-50",// WipEout 2097 (Europe)
+      @"T-18619G",   // WipEout XL (Japan)
+      @"GS-9196",    // World Cup France '98 - Road to Win (Japan)
+      @"MK-81181",   // World League Soccer '98 (Europe)
+      @"MK-81113",   // World Series Baseball II (Europe) / (USA)
+      @"GS-9120",    // World Series Baseball II (Japan)
+      ];
+
     if ([current->_mednafenCoreModule isEqualToString:@"psx"])
     {
         // PSX: Check if multiple discs required
@@ -2629,6 +2764,14 @@ static void mednafen_init()
                 MDFNI_SetSetting("ss.input.sport1.multitap", "1"); // Enable multitap on SS port 1
                 MDFNI_SetSetting("ss.input.sport2.multitap", "1"); // Enable multitap on SS port 2
             }
+        }
+
+        // SS: Check if 3D Control Pad is supported
+        // Some games e.g. 3D Lemmings (Europe) / (Japan) and Chaos Control (Japan) have compat issues,
+        // even when in digital mode, so enable on a per-game basis.
+        if ([ss3DControlPadGames containsObject:[current ROMSerial]])
+        {
+            current->_isSS3DControlPadSupportedGame = YES;
         }
 
     }
@@ -2897,7 +3040,12 @@ static void emulation_run()
         }
 
         for(unsigned i = 0; i < _multiTapPlayerCount; i++)
-            game->SetInput(i, "gamepad", (uint8_t *)_inputBuffer[i]);
+        {
+            if(_isSS3DControlPadSupportedGame)
+                game->SetInput(i, "3dpad", (uint8_t *)_inputBuffer[i]);
+            else
+                game->SetInput(i, "gamepad", (uint8_t *)_inputBuffer[i]);
+        }
 
         game->SetInput(12, "builtin", (uint8_t *)_inputBuffer[12]); // reset button status
     }
@@ -3082,6 +3230,7 @@ const int PCEMap[]  = { 4, 6, 7, 5, 0, 1, 8, 9, 10, 11, 3, 2, 12 };
 const int PCFXMap[] = { 8, 10, 11, 9, 0, 1, 2, 3, 4, 5, 7, 6 };
 const int PSXMap[]  = { 4, 6, 7, 5, 12, 13, 14, 15, 10, 8, 1, 11, 9, 2, 3, 0, 16, 24, 23, 22, 21, 20, 19, 18, 17 };
 const int SSMap[]   = { 4, 5, 6, 7, 10, 8, 9, 2, 1, 0, 15, 3, 11 };
+const int SS3DMap[] = { 0, 1, 2, 3, 6, 4, 5, 10, 9, 8, 18, 17, 7, 12, 15, 16, 13, 14, 18, 17};
 const int VBMap[]   = { 9, 8, 7, 6, 4, 13, 12, 5, 3, 2, 0, 1, 10, 11 };
 const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
@@ -3145,12 +3294,34 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)didPushSaturnButton:(OESaturnButton)button forPlayer:(NSUInteger)player
 {
-    _inputBuffer[player-1][0] |= 1 << SSMap[button];
+    if(_isSS3DControlPadSupportedGame)
+    {
+        // Handle L and R when in digital mode
+        if (button == OESaturnButtonL) [self didMoveSaturnJoystickDirection:OESaturnAnalogL withValue:1.0 forPlayer:player];
+        if (button == OESaturnButtonR) [self didMoveSaturnJoystickDirection:OESaturnAnalogR withValue:1.0 forPlayer:player];
+
+        if (button != OESaturnButtonAnalogMode) // Check for mode toggle
+            _inputBuffer[player-1][0] |= 1 << SS3DMap[button];
+        else
+            _inputBuffer[player-1][0] ^= 1 << SS3DMap[button];
+    }
+    else
+        _inputBuffer[player-1][0] |= 1 << SSMap[button];
+
 }
 
 - (oneway void)didReleaseSaturnButton:(OESaturnButton)button forPlayer:(NSUInteger)player
 {
-    _inputBuffer[player-1][0] &= ~(1 << SSMap[button]);
+    if(_isSS3DControlPadSupportedGame)
+    {
+        if (button == OESaturnButtonL) [self didMoveSaturnJoystickDirection:OESaturnAnalogL withValue:0.0 forPlayer:player];
+        if (button == OESaturnButtonR) [self didMoveSaturnJoystickDirection:OESaturnAnalogR withValue:0.0 forPlayer:player];
+
+        if (button != OESaturnButtonAnalogMode)
+            _inputBuffer[player-1][0] &= ~(1 << SS3DMap[button]);
+    }
+    else
+        _inputBuffer[player-1][0] &= ~(1 << SSMap[button]);
 }
 
 - (oneway void)didPushVBButton:(OEVBButton)button forPlayer:(NSUInteger)player;
@@ -3194,6 +3365,14 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     int analogNumber = PSXMap[button] - 17;
     uint8_t *buf = (uint8_t *)_inputBuffer[player-1];
     *(uint16*)& buf[3 + analogNumber * 2] = scaledValue;
+}
+
+- (oneway void)didMoveSaturnJoystickDirection:(OESaturnButton)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
+{
+    int analogNumber = SS3DMap[button] - 13;
+
+    uint8_t *buf = (uint8_t *)_inputBuffer[player-1];
+    *(uint16*)& buf[2 + analogNumber * 2] = 32767 * value;
 }
 
 - (void)changeDisplayMode
