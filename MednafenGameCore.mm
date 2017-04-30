@@ -110,6 +110,7 @@ static void mednafen_init()
     MDFNI_SetSetting("vb.anaglyph.rcolor", "0x000000"); // Anaglyph r color
     //MDFNI_SetSetting("vb.allow_draw_skip", "1");      // Allow draw skipping
     //MDFNI_SetSetting("vb.instant_display_hack", "1"); // Display latency reduction hack
+    //MDFNI_SetSetting("vb.ledonscale", "1.9921875"); // Old brightness level before 0.9.44 update
 
     MDFNI_SetSetting("pce.slstart", "0"); // PCE: First rendered scanline
     MDFNI_SetSetting("pce.slend", "239"); // PCE: Last rendered scanline

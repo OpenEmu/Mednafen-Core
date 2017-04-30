@@ -38,6 +38,11 @@ class AtomicFIFO
   return ret;
  }
 
+ INLINE T Peek(void)
+ {
+  return data[read_pos];
+ }
+
  INLINE void Write(T v)
  {
   data[write_pos] = v;
