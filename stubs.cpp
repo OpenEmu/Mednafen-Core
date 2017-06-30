@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sys/time.h>
 #include <unistd.h>
+#include <dispatch/dispatch.h>
 
 void MDFND_Sleep(unsigned int time)
 {
@@ -104,11 +105,43 @@ int MDFND_WaitCond(MDFN_Cond* cond, MDFN_Mutex* mutex)
     return 0;
 }
 
+MDFN_Sem* MDFND_CreateSem(void)
+{
+    dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+    return (MDFN_Sem*)sem;
+}
+
+void MDFND_DestroySem(MDFN_Sem* sem)
+{
+    dispatch_release((dispatch_object_t)sem);
+}
+
+int MDFND_PostSem(MDFN_Sem* sem)
+{
+    dispatch_semaphore_signal((dispatch_semaphore_t)sem);
+    return 0;
+}
+
+int MDFND_WaitSem(MDFN_Sem* sem)
+{
+    dispatch_semaphore_wait((dispatch_semaphore_t)sem, DISPATCH_TIME_FOREVER);
+    return 0;
+}
+
+int MDFND_WaitSemTimeout(MDFN_Sem* sem, unsigned ms)
+{
+    dispatch_time_t waitTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ms * NSEC_PER_MSEC));
+    dispatch_semaphore_wait((dispatch_semaphore_t)sem, waitTime);
+    return 0;
+}
+
 void MDFND_SendData(const void*, uint32) {}
 void MDFND_RecvData(void *, uint32) {}
 void MDFND_NetplayText(const uint8*, bool) {}
 void MDFND_NetworkClose() {}
+void MDFND_NetplaySetHints(bool active, bool behind) {}
 int MDFND_NetworkConnect() { return 0; }
+bool MDFND_CheckNeedExit(void) { return false; }
 
 uint32 MDFND_GetTime()
 {

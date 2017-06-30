@@ -22,8 +22,6 @@
 #ifndef __MDFN_VIDEO_TEXT_H
 #define __MDFN_VIDEO_TEXT_H
 
-#include <string>
-
 enum
 {
  // If the order of these constants is changed, you must also update the array of FontDescriptor

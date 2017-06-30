@@ -56,6 +56,7 @@
 		877661681E772FC1009252B0 /* mission.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 877661651E772FC1009252B0 /* mission.cpp */; };
 		8776616D1E772FD0009252B0 /* multitap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 877661691E772FCF009252B0 /* multitap.cpp */; };
 		8776616E1E772FD0009252B0 /* wheel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8776616B1E772FCF009252B0 /* wheel.cpp */; };
+		879153E51F0334C3006C4182 /* gun.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 879153E31F0334C3006C4182 /* gun.cpp */; };
 		8795543C1EB66E2E00A08C56 /* backup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 879554311EB66E2E00A08C56 /* backup.cpp */; };
 		8795543D1EB66E2E00A08C56 /* cs1ram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 879554341EB66E2E00A08C56 /* cs1ram.cpp */; };
 		8795543F1EB66E2E00A08C56 /* extram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 879554381EB66E2E00A08C56 /* extram.cpp */; };
@@ -416,6 +417,11 @@
 		8776616A1E772FCF009252B0 /* multitap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = multitap.h; path = ss/input/multitap.h; sourceTree = "<group>"; };
 		8776616B1E772FCF009252B0 /* wheel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wheel.cpp; path = ss/input/wheel.cpp; sourceTree = "<group>"; };
 		8776616C1E772FD0009252B0 /* wheel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wheel.h; path = ss/input/wheel.h; sourceTree = "<group>"; };
+		879153E01F033417006C4182 /* bbattler2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bbattler2.cpp; sourceTree = "<group>"; };
+		879153E11F033464006C4182 /* openbsd.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = openbsd.cpp; sourceTree = "<group>"; };
+		879153E21F03349A006C4182 /* smpc_iodevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = smpc_iodevice.h; path = ss/smpc_iodevice.h; sourceTree = "<group>"; };
+		879153E31F0334C3006C4182 /* gun.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gun.cpp; path = ss/input/gun.cpp; sourceTree = "<group>"; };
+		879153E41F0334C3006C4182 /* gun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gun.h; path = ss/input/gun.h; sourceTree = "<group>"; };
 		8795542F1EB66C1B00A08C56 /* AtomicFIFO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AtomicFIFO.h; sourceTree = "<group>"; };
 		879554311EB66E2E00A08C56 /* backup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = backup.cpp; sourceTree = "<group>"; };
 		879554321EB66E2E00A08C56 /* backup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = backup.h; sourceTree = "<group>"; };
@@ -939,7 +945,6 @@
 		8CB3D78017F1DE5B0090372A /* ines.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ines.cpp; sourceTree = "<group>"; };
 		8CB3D78117F1DE5B0090372A /* ines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ines.h; sourceTree = "<group>"; };
 		8CB3D78317F1DE5B0090372A /* arkanoid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = arkanoid.cpp; sourceTree = "<group>"; };
-		8CB3D78417F1DE5B0090372A /* bworld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bworld.cpp; sourceTree = "<group>"; };
 		8CB3D78517F1DE5B0090372A /* cursor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cursor.cpp; sourceTree = "<group>"; };
 		8CB3D78617F1DE5B0090372A /* fkb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fkb.cpp; sourceTree = "<group>"; };
 		8CB3D78717F1DE5B0090372A /* fkb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fkb.h; sourceTree = "<group>"; };
@@ -1881,6 +1886,7 @@
 				8715A9571D6E534F003ADE26 /* sh7095_opdefs.inc */,
 				8715A9581D6E534F003ADE26 /* sh7095.h */,
 				8715A9591D6E534F003ADE26 /* sh7095.inc */,
+				879153E21F03349A006C4182 /* smpc_iodevice.h */,
 				8715A95A1D6E534F003ADE26 /* smpc.cpp */,
 				8715A95B1D6E534F003ADE26 /* smpc.h */,
 				8715A95C1D6E534F003ADE26 /* sound.cpp */,
@@ -1911,6 +1917,8 @@
 				8715A93A1D6E5273003ADE26 /* common.h */,
 				8715A93B1D6E5273003ADE26 /* gamepad.cpp */,
 				8715A93C1D6E5273003ADE26 /* gamepad.h */,
+				879153E31F0334C3006C4182 /* gun.cpp */,
+				879153E41F0334C3006C4182 /* gun.h */,
 				877661631E772FC1009252B0 /* keyboard.cpp */,
 				877661641E772FC1009252B0 /* keyboard.h */,
 				877661651E772FC1009252B0 /* mission.cpp */,
@@ -2840,7 +2848,7 @@
 			isa = PBXGroup;
 			children = (
 				8CB3D78317F1DE5B0090372A /* arkanoid.cpp */,
-				8CB3D78417F1DE5B0090372A /* bworld.cpp */,
+				879153E01F033417006C4182 /* bbattler2.cpp */,
 				8CB3D78517F1DE5B0090372A /* cursor.cpp */,
 				8CB3D78617F1DE5B0090372A /* fkb.cpp */,
 				8CB3D78717F1DE5B0090372A /* fkb.h */,
@@ -3212,6 +3220,7 @@
 				8CB3D8BE17F1DE5C0090372A /* dsound.cpp */,
 				8CB3D8BF17F1DE5C0090372A /* dummy.cpp */,
 				8CB3D8C017F1DE5C0090372A /* jack.cpp */,
+				879153E11F033464006C4182 /* openbsd.cpp */,
 				8CB3D8C117F1DE5C0090372A /* oss.cpp */,
 				8CB3D8C217F1DE5C0090372A /* sdl.cpp */,
 				8CB3D8C317F1DE5C0090372A /* wasapi.cpp */,
@@ -4455,6 +4464,7 @@
 				8CB3DD6617F1DE5E0090372A /* ram.cpp in Sources */,
 				8CB3DD6517F1DE5E0090372A /* mikie.cpp in Sources */,
 				8CB3E07C17F1DE5E0090372A /* interrupt.cpp in Sources */,
+				879153E51F0334C3006C4182 /* gun.cpp in Sources */,
 				8CB3E07917F1DE5E0090372A /* syntax.cpp in Sources */,
 				8CB3DE9C17F1DE5E0090372A /* mouse.cpp in Sources */,
 				8CB3E0BB17F20F750090372A /* lec.cpp in Sources */,
@@ -4628,9 +4638,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"0.9.44.1\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.45\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00094401",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00094500",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
@@ -4691,9 +4701,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"0.9.44.1\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.45\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00094401",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00094500",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
