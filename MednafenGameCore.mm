@@ -2860,7 +2860,8 @@ static void emulation_run()
 
     static int16_t sound_buf[0x10000];
     int32 rects[game->fb_height];
-    rects[0] = ~0;
+
+    memset(rects, 0, game->fb_height*sizeof(int32));
 
     EmulateSpecStruct spec = {0};
     spec.surface = surf;
@@ -2875,24 +2876,10 @@ static void emulation_run()
 
     current->_mednafenCoreTiming = current->_masterClock / spec.MasterCycles;
 
-    if([current->_mednafenCoreModule isEqualToString:@"psx"])
-    {
-        current->_videoWidth = rects[spec.DisplayRect.y];
-        current->_videoOffsetX = spec.DisplayRect.x;
-    }
-    else if(game->multires)
-    {
-        current->_videoWidth = rects[spec.DisplayRect.y];
-        current->_videoOffsetX = spec.DisplayRect.x;
-    }
-    else
-    {
-        current->_videoWidth = spec.DisplayRect.w;
-        current->_videoOffsetX = spec.DisplayRect.x;
-    }
-
-    current->_videoHeight = spec.DisplayRect.h;
+    current->_videoOffsetX = spec.DisplayRect.x;
     current->_videoOffsetY = spec.DisplayRect.y;
+    current->_videoWidth   = spec.DisplayRect.w ?: rects[spec.DisplayRect.y];
+    current->_videoHeight  = spec.DisplayRect.h;
 
     update_audio_batch(spec.SoundBuf, spec.SoundBufSize);
 }
@@ -2996,10 +2983,6 @@ static void emulation_run()
         //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 48000;
     }
-
-    // BGRA pixel format
-    MDFN_PixelFormat pix_fmt(MDFN_COLORSPACE_RGB, 16, 8, 0, 24);
-    surf = new MDFN_Surface(NULL, game->fb_width, game->fb_height, game->fb_width, pix_fmt);
 
     _masterClock = game->MasterClock >> 32;
 
@@ -3107,8 +3090,6 @@ static void emulation_run()
 
     MDFNI_SetMedia(0, 2, 0, 0); // Disc selection API
 
-    emulation_run();
-
     return YES;
 }
 
@@ -3159,8 +3140,14 @@ static void emulation_run()
     return _mednafenCoreAspect;
 }
 
-- (const void *)videoBuffer
+- (const void *)getVideoBufferWithHint:(void *)hint
 {
+    if (!surf) {
+        // BGRA pixel format
+        MDFN_PixelFormat pix_fmt(MDFN_COLORSPACE_RGB, 16, 8, 0, 24);
+        surf = new MDFN_Surface(hint, game->fb_width, game->fb_height, game->fb_width, pix_fmt);
+    }
+
     return surf->pixels;
 }
 
@@ -3172,11 +3159,6 @@ static void emulation_run()
 - (GLenum)pixelType
 {
     return GL_UNSIGNED_INT_8_8_8_8_REV;
-}
-
-- (GLenum)internalPixelFormat
-{
-    return GL_RGB8;
 }
 
 # pragma mark - Audio
