@@ -195,8 +195,8 @@ DIST_COMMON = $(srcdir)/cdplay/Makefile.am.inc \
 @WANT_NES_EMU_TRUE@	nes/boards/38.cpp nes/boards/240.cpp \
 @WANT_NES_EMU_TRUE@	nes/boards/241.cpp nes/boards/163.cpp \
 @WANT_NES_EMU_TRUE@	nes/boards/30.cpp nes/boards/190.cpp \
-@WANT_NES_EMU_TRUE@	nes/input/cursor.cpp nes/input/zapper.cpp \
-@WANT_NES_EMU_TRUE@	nes/input/powerpad.cpp \
+@WANT_NES_EMU_TRUE@	nes/boards/40.cpp nes/input/cursor.cpp \
+@WANT_NES_EMU_TRUE@	nes/input/zapper.cpp nes/input/powerpad.cpp \
 @WANT_NES_EMU_TRUE@	nes/input/arkanoid.cpp nes/input/shadow.cpp \
 @WANT_NES_EMU_TRUE@	nes/input/fkb.cpp nes/input/fkb.h \
 @WANT_NES_EMU_TRUE@	nes/input/hypershot.cpp \
@@ -367,10 +367,11 @@ am__mednafen_SOURCES_DIST = debug.cpp error.cpp mempatcher.cpp \
 	nes/boards/87.cpp nes/boards/34.cpp nes/boards/222.cpp \
 	nes/boards/codemasters.cpp nes/boards/38.cpp \
 	nes/boards/240.cpp nes/boards/241.cpp nes/boards/163.cpp \
-	nes/boards/30.cpp nes/boards/190.cpp nes/input/cursor.cpp \
-	nes/input/zapper.cpp nes/input/powerpad.cpp \
-	nes/input/arkanoid.cpp nes/input/shadow.cpp nes/input/fkb.cpp \
-	nes/input/fkb.h nes/input/hypershot.cpp nes/input/mahjong.cpp \
+	nes/boards/30.cpp nes/boards/190.cpp nes/boards/40.cpp \
+	nes/input/cursor.cpp nes/input/zapper.cpp \
+	nes/input/powerpad.cpp nes/input/arkanoid.cpp \
+	nes/input/shadow.cpp nes/input/fkb.cpp nes/input/fkb.h \
+	nes/input/hypershot.cpp nes/input/mahjong.cpp \
 	nes/input/oekakids.cpp nes/input/ftrainer.cpp \
 	nes/input/partytap.cpp nes/input/toprider.cpp \
 	nes/input/bbattler2.cpp nes/input/suborkb.cpp \
@@ -585,6 +586,7 @@ am__dirstamp = $(am__leading_dot)dirstamp
 @WANT_NES_EMU_TRUE@	nes/boards/163.$(OBJEXT) \
 @WANT_NES_EMU_TRUE@	nes/boards/30.$(OBJEXT) \
 @WANT_NES_EMU_TRUE@	nes/boards/190.$(OBJEXT) \
+@WANT_NES_EMU_TRUE@	nes/boards/40.$(OBJEXT) \
 @WANT_NES_EMU_TRUE@	nes/input/cursor.$(OBJEXT) \
 @WANT_NES_EMU_TRUE@	nes/input/zapper.$(OBJEXT) \
 @WANT_NES_EMU_TRUE@	nes/input/powerpad.$(OBJEXT) \
@@ -957,6 +959,7 @@ MSGFMT = @MSGFMT@
 MSGFMT_015 = @MSGFMT_015@
 MSGMERGE = @MSGMERGE@
 NO_STACK_PROTECTOR_FLAGS = @NO_STACK_PROTECTOR_FLAGS@
+NO_STRICT_ALIASING_FLAGS = @NO_STRICT_ALIASING_FLAGS@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -1568,6 +1571,8 @@ nes/boards/163.$(OBJEXT): nes/boards/$(am__dirstamp) \
 nes/boards/30.$(OBJEXT): nes/boards/$(am__dirstamp) \
 	nes/boards/$(DEPDIR)/$(am__dirstamp)
 nes/boards/190.$(OBJEXT): nes/boards/$(am__dirstamp) \
+	nes/boards/$(DEPDIR)/$(am__dirstamp)
+nes/boards/40.$(OBJEXT): nes/boards/$(am__dirstamp) \
 	nes/boards/$(DEPDIR)/$(am__dirstamp)
 nes/input/$(am__dirstamp):
 	@$(MKDIR_P) nes/input
@@ -2352,6 +2357,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@nes/boards/$(DEPDIR)/33.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@nes/boards/$(DEPDIR)/34.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@nes/boards/$(DEPDIR)/38.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@nes/boards/$(DEPDIR)/40.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@nes/boards/$(DEPDIR)/41.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@nes/boards/$(DEPDIR)/42.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@nes/boards/$(DEPDIR)/46.Po@am__quote@

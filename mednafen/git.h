@@ -76,13 +76,21 @@ enum InputDeviceInputType : uint8
 };
 
 
-#define IDIT_BUTTON_ANALOG_FLAG_SQLR	0x00000001	// Denotes analog data that may need to be scaled to ensure a more squareish logical range(for emulated
-							// analog sticks).
+#define IDIT_BUTTON_ANALOG_FLAG_SQLR	0x01	// Denotes analog data that may need to be scaled to ensure a more squareish logical range(for emulated analog sticks).
+#define IDIT_FLAG_AUX_SETTINGS_UNDOC	0x80
+
 struct IDIIS_StatusState
 {
 	const char* ShortName;
 	const char* Name;
 	int32 Color;	// (msb)0RGB(lsb), -1 for unused.
+};
+
+struct IDIIS_SwitchPos
+{
+	const char* SettingName;
+	const char* Name;
+	const char* Description;
 };
 
 struct InputDeviceInputInfoStruct
@@ -101,7 +109,7 @@ struct InputDeviceInputInfoStruct
 	{
          struct
          {
-	  const char*const* SwitchPosName;	//
+	  const IDIIS_SwitchPos* SwitchPos;
 	  uint32 SwitchNumPos;
          };
 
@@ -140,7 +148,7 @@ struct IDIIS_Button : public InputDeviceInputInfoStruct
 
 struct IDIIS_Switch : public InputDeviceInputInfoStruct
 {
-	IDIIS_Switch(const char* sname, const char* name, int co, const char*const* spn, const uint32 spn_num)
+	IDIIS_Switch(const char* sname, const char* name, int co, const IDIIS_SwitchPos* spn, const uint32 spn_num, bool undoc_defpos = true)
 	{
 	 SettingName = sname;
 	 Name = name;
@@ -148,8 +156,8 @@ struct IDIIS_Switch : public InputDeviceInputInfoStruct
 	 Type = IDIT_SWITCH;
 
 	 ExcludeName = NULL;
-	 Flags = 0;
-	 SwitchPosName = spn;
+	 Flags = undoc_defpos ? IDIT_FLAG_AUX_SETTINGS_UNDOC : 0;
+	 SwitchPos = spn;
 	 SwitchNumPos = spn_num;
 	}
 };

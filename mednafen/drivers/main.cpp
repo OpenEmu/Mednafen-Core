@@ -632,8 +632,8 @@ static void DeleteInternalArgs(void)
 
 static void MakeMednafenArgsStruct(void)
 {
- const std::multimap <uint32, MDFNCS> *settings;
- std::multimap <uint32, MDFNCS>::const_iterator sit;
+ const std::vector<MDFNCS>* settings;
+ std::vector<MDFNCS>::const_iterator sit;
 
  settings = MDFNI_GetSettings();
 
@@ -643,8 +643,8 @@ static void MakeMednafenArgsStruct(void)
 
  for(sit = settings->begin(); sit != settings->end(); sit++)
  {
-  MDFN_Internal_Args[x].name = strdup(sit->second.name);
-  MDFN_Internal_Args[x].description = sit->second.desc->description ? _(sit->second.desc->description) : NULL;
+  MDFN_Internal_Args[x].name = strdup(sit->name);
+  MDFN_Internal_Args[x].description = sit->desc->description ? _(sit->desc->description) : NULL;
   MDFN_Internal_Args[x].var = NULL;
   MDFN_Internal_Args[x].subs = (void *)HokeyPokeyFallDown;
   MDFN_Internal_Args[x].substype = SUBSTYPE_FUNCTION;
@@ -973,7 +973,7 @@ int GameLoop(void *arg)
 	{
          int16 *sound;
          int32 ssize;
-         int fskip;
+         bool fskip;
         
 	 /* If we requested a new video mode, wait until it's set before calling the emulation code again.
 	 */
@@ -988,20 +988,18 @@ int GameLoop(void *arg)
 
 	 if(MDFNDnetplay && !(NoWaiting & 0x2))	// TODO: Hacky, clean up.
 	  ers.SetETtoRT();
-
+	 //
+	 //
 	 fskip = ers.NeedFrameSkip();
-	
-	 if(!MDFN_GetSettingB("video.frameskip"))
-	  fskip = 0;
+	 fskip &= MDFN_GetSettingB("video.frameskip");
+	 fskip &= !(pending_ssnapshot || pending_snapshot || pending_save_state || pending_save_movie || NeedFrameAdvance);
+	 fskip |= (bool)NoWaiting;
 
-	 if(pending_ssnapshot || pending_snapshot || pending_save_state || pending_save_movie || NeedFrameAdvance)
-	  fskip = 0;
+	 //printf("fskip %d; NeedFrameAdvance=%d\n", fskip, NeedFrameAdvance);
 
- 	 NeedFrameAdvance = 0;
-
-         if(NoWaiting)
-	  fskip = 1;
-
+	 NeedFrameAdvance = false;
+	 //
+	 //
 	 SoftFB[SoftFB_BackBuffer].lw[0] = ~0;
 
 	 //
@@ -1068,12 +1066,12 @@ int GameLoop(void *arg)
 
 	  do
 	  {
- 	   if(fskip && GameLoopPaused)
+ 	   if(fskip && ((InFrameAdvance && !NeedFrameAdvance) || GameLoopPaused))
 	   {
-	    // If this frame was skipped, and the game loop is paused(IE cheat interface is active), just blit the previous "successful" frame so the cheat
-	    // interface actually gets drawn.
+	    // If this frame was skipped, and the game loop is paused(IE cheat interface is active) or we're in frame advance, just blit the last
+	    // drawn, non-skipped frame so the OSD elements actually get drawn.
 	    //
-	    // Needless to say, do not do "SoftFB_BackBuffer ^= 1;" here.
+	    // Needless to say, do not allow do_flip to be set to true here.
 	    //
 	    // Possible problems with this kludgery:
 	    //	Will fail spectacularly if there is no previous successful frame.  BOOOOOOM.  (But there always should be, especially since we initialize some
@@ -1872,7 +1870,7 @@ for(int zgi = 1; zgi < argc; zgi++)// start game load test loop
 	  SoftFB[i].surface->Fill(0, 0, 0, 0);
 
 	  //
-	  // Debugger step mode, and cheat interface, rely on the previous backbuffer being valid in certain situations.  Initialize some stuff here so that
+	  // Debugger step mode, cheat interface, and frame advance mode rely on the previous backbuffer being valid in certain situations.  Initialize some stuff here so that
 	  // reliance will still work even immediately after startup.
 	  SoftFB[i].rect.w = std::min<int32>(16, SoftFB[i].surface->w);
 	  SoftFB[i].rect.h = std::min<int32>(16, SoftFB[i].surface->h);

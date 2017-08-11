@@ -26,6 +26,8 @@
 	DMA timing is very rough.  DMA burst mode probably isn't handled totally correctly, especially in
 	relation to the other CPU and the SCU(is DMA burst mode even legal on the Saturn?).
 
+	DMA channel bus priority handling is not correct(at least not for non-burst mode transfers).
+
 	Misaligned memory accesses(that cause address errors) aren't emulated correctly(for
 	future reference, there's a difference between how cache versus external bus is accessed
 	for misaligned addresses, and perhaps a difference between 32-bit and 16-bit spaces as
@@ -1863,6 +1865,14 @@ INLINE T SH7095::MemReadRT(uint32 A)
 	  else
 	   timestamp = SH7095_mem_timestamp;
 	 }
+
+#if 0
+	 if((SH7095_FastMap[A >> SH7095_EXT_MAP_GRAN_BITS] + (A & ((1U << SH7095_EXT_MAP_GRAN_BITS) - 1))) == (uintptr_t)fmap_dummy)
+	  SS_DBG(SS_DBG_WARNING | SS_DBG_SH2, "[%s] Cacheable %zu-byte read from non-RAM address 0x%08x!\n", cpu_name, sizeof(T), A);
+	 else if(ne16_rbo_be<T>((uint16*)(SH7095_FastMap[A >> SH7095_EXT_MAP_GRAN_BITS] + (A & ~0x3)), A & 0x3) != MDFN_densb<T, true>(&cent->Data[way_match][NE32ASU8_IDX_ADJ(T, A & 0x0F)]))
+	  SS_DBG(SS_DBG_WARNING | SS_DBG_SH2, "[%s] Cache incoherency for %zu-byte read from address 0x%08x!\n", cpu_name, sizeof(T), A);
+#endif
+
 	 cent->LRU = (cent->LRU & LRU_Update_Tab[way_match].AND) | LRU_Update_Tab[way_match].OR;
   	 return MDFN_densb<T, true>(&cent->Data[way_match][NE32ASU8_IDX_ADJ(T, A & 0x0F)]);
 	}

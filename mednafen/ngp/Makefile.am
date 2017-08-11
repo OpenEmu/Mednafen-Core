@@ -1,5 +1,6 @@
 AUTOMAKE_OPTIONS = subdir-objects
-DEFS = @DEFS@ -fno-strict-aliasing
+AM_CFLAGS = @AM_CFLAGS@ @NO_STRICT_ALIASING_FLAGS@
+AM_CXXFLAGS = @AM_CXXFLAGS@ @NO_STRICT_ALIASING_FLAGS@
 DEFAULT_INCLUDES = -I$(top_builddir)/include -I$(top_srcdir)/include -I$(top_builddir)/intl
 
 noinst_LIBRARIES	=	libngp.a

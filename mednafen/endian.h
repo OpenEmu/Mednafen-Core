@@ -82,17 +82,29 @@ static INLINE void BitsIntract(uint8* ptr, const size_t bit_offset, const size_t
 
 static INLINE uint16 MDFN_bswap16(uint16 v)
 {
+#if defined(_MSC_VER)
+ return _byteswap_ushort(v);
+#else
  return (v << 8) | (v >> 8);
+#endif
 }
 
 static INLINE uint32 MDFN_bswap32(uint32 v)
 {
+#if defined(_MSC_VER)
+ return _byteswap_ulong(v);
+#else
  return (v << 24) | ((v & 0xFF00) << 8) | ((v >> 8) & 0xFF00) | (v >> 24);
+#endif
 }
 
 static INLINE uint64 MDFN_bswap64(uint64 v)
 {
+#if defined(_MSC_VER)
+ return _byteswap_uint64(v);
+#else
  return (v << 56) | (v >> 56) | ((v & 0xFF00) << 40) | ((v >> 40) & 0xFF00) | ((uint64)MDFN_bswap32(v >> 16) << 16);
+#endif
 }
 
 //

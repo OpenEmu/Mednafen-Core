@@ -714,6 +714,42 @@ void NO_INLINE NO_CLONE TestGCC70941(void)
  assert(tmp == -1);
 }
 
+void NO_INLINE NO_CLONE TestGCC71488_Sub(long long* p, int v)
+{
+ for(unsigned i = 0; i < 4; i++)
+  p[i] = ((!p[4]) > (unsigned)!v) + !p[4];
+}
+
+void NO_INLINE NO_CLONE TestGCC71488(void)
+{
+ long long p[5] = { 0, 0, 0, 0, 0 };
+
+ TestGCC71488_Sub(p, 1);
+
+ assert(p[0] == 2 && p[1] == 2 && p[2] == 2 && p[3] == 2 && p[4] == 0);
+}
+
+int NO_INLINE NO_CLONE TestGCC80631_Sub(int* p)
+{
+ int ret = -1;
+
+ for(int i = 0; i < 8; i++)
+  if(p[i])
+   ret = i;
+
+ return ret;
+}
+
+void NO_INLINE NO_CLONE TestGCC80631(void)
+{
+ int p[32];
+
+ for(int i = 0; i < 32; i++)
+  p[i] = (i == 0 || i >= 8);
+
+ assert(TestGCC80631_Sub(p) == 0);
+}
+
 template<typename A, typename B>
 void NO_INLINE NO_CLONE TestSUCompare_Sub(A a, B b)
 {
@@ -1884,6 +1920,8 @@ bool MDFN_RunMathTests(void)
  TestGCC60196();
  TestGCC69606();
  TestGCC70941();
+ TestGCC71488();
+ TestGCC80631();
 
  TestModTern();
  TestBWNotMask31GTZ();

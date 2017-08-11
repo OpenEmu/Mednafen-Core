@@ -290,6 +290,9 @@ static void KillPortInfo(unsigned int port)
  PIDC[port].RIC.clear();
 }
 
+//
+// Only call on init, or when the device on a port changes.
+//
 static void BuildPortInfo(MDFNGI *gi, const unsigned int port)
 {
  const InputDeviceInfoStruct *zedevice = NULL;
@@ -458,6 +461,20 @@ static void BuildPortInfo(MDFNGI *gi, const unsigned int port)
   }
 
  PIDC[port].Data = MDFNI_SetInput(port, device);
+
+ //
+ // Set default switch positions.
+ //
+ for(auto& bic : PIDC[port].BIC)
+ {
+  if(bic.Type == IDIT_SWITCH)
+  {
+   char tmpsn[512];
+   trio_snprintf(tmpsn, sizeof(tmpsn), "%s.defpos", bic.SettingName);
+   bic.SwitchLastPos = MDFN_GetSettingUI(tmpsn);
+   BitsIntract(PIDC[port].Data, bic.BitOffset, bic.SwitchBitSize, bic.SwitchLastPos);
+  }
+ }
 }
 
 static void IncSelectedDevice(unsigned int port)
@@ -1561,7 +1578,7 @@ void MDFND_UpdateInput(bool VirtualDevicesOnly, bool UpdateRapidFire)
      fprintf(stderr, "[BUG] cv(%u) >= bic.SwitchNumPos(%u)\n", cv, bic.SwitchNumPos);
     else if(MDFN_UNLIKELY(cv != bic.SwitchLastPos))
     {
-     MDFN_DispMessage(_("%s %u: %s: %s selected."), PIDC[x].Device->FullName, x + 1, bic.IDII->Name, bic.IDII->SwitchPosName[cv]);
+     MDFN_DispMessage(_("%s %u: %s: %s selected."), PIDC[x].Device->FullName, x + 1, bic.IDII->Name, bic.IDII->SwitchPos[cv].Name);
      bic.SwitchLastPos = cv;
     }
 
@@ -1865,7 +1882,7 @@ static void MakeSettingsForDevice(std::vector <MDFNSetting> &settings, const MDF
     memset(&tmp_setting, 0, sizeof(tmp_setting));
 
     PendingGarbage.push_back((void *)( tmp_setting.name = CleanSettingName(trio_aprintf("%s.input.%s.%s.axis_scale", system->shortname, system->PortInfo[w].ShortName, info->ShortName)) ));
-    PendingGarbage.push_back((void *)( tmp_setting.description = trio_aprintf("Analog axis scale coefficient for %s on %s.", info->FullName, system->PortInfo[w].FullName) ));
+    PendingGarbage.push_back((void *)( tmp_setting.description = trio_aprintf(gettext_noop("Analog axis scale coefficient for %s on %s."), info->FullName, system->PortInfo[w].FullName) ));
     tmp_setting.description_extra = NULL;
 
     tmp_setting.type = MDFNST_FLOAT;
@@ -1876,6 +1893,38 @@ static void MakeSettingsForDevice(std::vector <MDFNSetting> &settings, const MDF
     settings.push_back(tmp_setting);
     analog_scale_made = true;
    }
+  }
+  else if(info->IDII[x].Type == IDIT_SWITCH)
+  {
+   memset(&tmp_setting, 0, sizeof(tmp_setting));
+
+   PendingGarbage.push_back((void *)( tmp_setting.name = CleanSettingName(trio_aprintf("%s.input.%s.%s.%s.defpos", system->shortname, system->PortInfo[w].ShortName, info->ShortName, info->IDII[x].SettingName)) ));
+   PendingGarbage.push_back((void *)( tmp_setting.description = trio_aprintf(gettext_noop("Default position for switch \"%s\"."), info->IDII[x].Name) ));
+   tmp_setting.description_extra = gettext_noop("Sets the position for the switch to the value specified upon startup and virtual input device change.");
+
+   tmp_setting.flags = (info->IDII[x].Flags & IDIT_FLAG_AUX_SETTINGS_UNDOC) ? MDFNSF_SUPPRESS_DOC : 0;
+   {
+    MDFNSetting_EnumList* el = (MDFNSetting_EnumList*)calloc(info->IDII[x].SwitchNumPos + 1, sizeof(MDFNSetting_EnumList));
+    const uint32 snp = info->IDII[x].SwitchNumPos;
+
+    for(uint32 i = 0; i < snp; i++)
+    {
+     el[i].string = info->IDII[x].SwitchPos[i].SettingName;
+     el[i].number = i;
+     el[i].description = info->IDII[x].SwitchPos[i].Name;
+     el[i].description_extra = info->IDII[x].SwitchPos[i].Description;
+    }
+    el[snp].string = NULL;
+    el[snp].number = 0;
+    el[snp].description = NULL;
+    el[snp].description_extra = NULL;
+
+    PendingGarbage.push_back((void *)( tmp_setting.enum_list = el ));
+    tmp_setting.type = MDFNST_ENUM;
+    tmp_setting.default_value = el[0].string;
+   }
+
+   settings.push_back(tmp_setting);
   }
   butti++;
  }

@@ -108,12 +108,28 @@ static void Draw(EmulateSpecStruct* espec, const uint8* weak, const uint8* stron
 
  if(!espec->skip)
  {
-  if(cur_test_mode == 2 || cur_test_mode == 3 || cur_test_mode == 4)
+  if(cur_test_mode == 5)
+   espec->surface->Fill(0xFF, 0xFF, 0xFF, 0);
+  else if(cur_test_mode == 2 || cur_test_mode == 3 || cur_test_mode == 4)
    espec->surface->Fill(0, 0, 0, 0);
   else
    espec->surface->Fill(DemoRandU32() & 0xFF, DemoRandU32() & 0xFF, DemoRandU32() & 0xFF, 0);
 
-  if(cur_test_mode == 4)
+  if(cur_test_mode == 5)
+  {
+   espec->DisplayRect.x = 0;
+   espec->DisplayRect.y = 0;
+   espec->DisplayRect.h = 300 << Interlace;
+   espec->DisplayRect.w = 0;
+
+   espec->LineWidths[0] = 0;
+
+   static const int wtab[4] = { 330, 352, 660, 704 };
+
+   for(int y = espec->DisplayRect.y; y < (espec->DisplayRect.y + espec->DisplayRect.h); y++)
+    espec->LineWidths[y] = wtab[DemoRandU32() & 0x3];
+  }
+  else if(cur_test_mode == 4)
   {
    espec->DisplayRect.x = 0;
    espec->DisplayRect.y = 0;
@@ -278,11 +294,16 @@ static void Emulate(EmulateSpecStruct* espec)
   {
    uint8 cur_cstate = *controller_ptr[i];
 
-   if((cur_cstate ^ last_cstate[i]) & cur_cstate & 1)
+   if(cur_test_mode == 5)
+   {
+    if(cur_cstate & 1)
+     Interlace = DemoRandU32() & 1;
+   }
+   else if((cur_cstate ^ last_cstate[i]) & cur_cstate & 1)
     Interlace = !Interlace;
 
    if((cur_cstate ^ last_cstate[i]) & cur_cstate & 2)
-    cur_test_mode = (cur_test_mode + 1) % 5;
+    cur_test_mode = (cur_test_mode + 1) % 6;
 
    last_cstate[i] = cur_cstate;
   }
@@ -474,13 +495,13 @@ static const MDFNSetting DEMOSettings[] =
  { NULL }
 };
 
-static const char* const SwitchPositions[] =
+static const IDIIS_SwitchPos SwitchPositions[] =
 {
- gettext_noop("Waffles 0"),
- gettext_noop("Oranges 1"),
- gettext_noop("Monkeys 2"),
- gettext_noop("Zebra-Z 3"),
- gettext_noop("Snorkle 4")
+ { "waffles", gettext_noop("Waffles 0"), gettext_noop("With extra churned ungulate squeezings and concentrated tree blood.") },
+ { "oranges", gettext_noop("Oranges 1"), gettext_noop("Blood oranges, of course.") },
+ { "monkeys", gettext_noop("Monkeys 2"), gettext_noop("Quiet, well-behaved monkeys that don't try to eat your face.") },
+ { "zebraz", gettext_noop("Zebra-Z 3"), gettext_noop("Zebras wearing sunglasses.") },
+ { "snorkle", gettext_noop("Snorkle 4"), gettext_noop("? ? ?") },
 };
 
 static const IDIISG IDII =

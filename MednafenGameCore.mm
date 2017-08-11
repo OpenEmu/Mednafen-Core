@@ -2882,7 +2882,7 @@ static void emulation_run()
         current->_videoWidth = rects[spec.DisplayRect.y];
     }
     else {
-    current->_videoWidth   = spec.DisplayRect.w ?: rects[spec.DisplayRect.y];
+        current->_videoWidth = spec.DisplayRect.w ?: rects[spec.DisplayRect.y];
     }
     current->_videoHeight  = spec.DisplayRect.h;
 

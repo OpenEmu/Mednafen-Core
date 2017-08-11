@@ -1667,7 +1667,9 @@ static MDFN_COLD void StateAction(StateMem* sm, const unsigned load, const bool 
  CPU[0].StateAction(sm, load, data_only, "SH2-M");
  CPU[1].StateAction(sm, load, data_only, "SH2-S");
  SCU_StateAction(sm, load, data_only);
+*/
  SMPC_StateAction(sm, load, data_only);
+/*
  CDB_StateAction(sm, load, data_only);
  VDP1::StateAction(sm, load, data_only);
  VDP2_StateAction(sm, load, data_only);
