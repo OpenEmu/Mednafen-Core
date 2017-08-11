@@ -563,9 +563,9 @@ INLINE int32 VCE::SyncReal(const int32 timestamp)
   cd_event = PCECD_Run(timestamp);
 
  if(sgfx)
-  SyncSub<true, true>(clocks);
+  SyncSub<true, false>(clocks);
  else
-  SyncSub<false, true>(clocks);
+  SyncSub<false, false>(clocks);
 
  //
  //
