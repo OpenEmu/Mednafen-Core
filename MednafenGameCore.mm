@@ -2878,7 +2878,12 @@ static void emulation_run()
 
     current->_videoOffsetX = spec.DisplayRect.x;
     current->_videoOffsetY = spec.DisplayRect.y;
+    if(game->multires) {
+        current->_videoWidth = rects[spec.DisplayRect.y];
+    }
+    else {
     current->_videoWidth   = spec.DisplayRect.w ?: rects[spec.DisplayRect.y];
+    }
     current->_videoHeight  = spec.DisplayRect.h;
 
     update_audio_batch(spec.SoundBuf, spec.SoundBufSize);
