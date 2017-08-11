@@ -91,17 +91,17 @@ static void mednafen_init()
     NSString *batterySavesDirectory = current.batterySavesDirectoryPath;
     NSString *biosPath = current.biosDirectoryPath;
 
-    MDFNI_Initialize([biosPath UTF8String], settings);
+    MDFNI_Initialize(biosPath.fileSystemRepresentation, settings);
 
     // Set bios/system file and memcard save paths
-    MDFNI_SetSetting("pce.cdbios", [[[biosPath stringByAppendingPathComponent:@"syscard3"] stringByAppendingPathExtension:@"pce"] UTF8String]); // PCE CD BIOS
-    MDFNI_SetSetting("pcfx.bios", [[[biosPath stringByAppendingPathComponent:@"pcfx"] stringByAppendingPathExtension:@"rom"] UTF8String]); // PCFX BIOS
-    MDFNI_SetSetting("psx.bios_jp", [[[biosPath stringByAppendingPathComponent:@"scph5500"] stringByAppendingPathExtension:@"bin"] UTF8String]); // JP SCPH-5500 BIOS
-    MDFNI_SetSetting("psx.bios_na", [[[biosPath stringByAppendingPathComponent:@"scph5501"] stringByAppendingPathExtension:@"bin"] UTF8String]); // NA SCPH-5501 BIOS
-    MDFNI_SetSetting("psx.bios_eu", [[[biosPath stringByAppendingPathComponent:@"scph5502"] stringByAppendingPathExtension:@"bin"] UTF8String]); // EU SCPH-5502 BIOS
-    MDFNI_SetSetting("ss.bios_jp", [[[biosPath stringByAppendingPathComponent:@"sega_101"] stringByAppendingPathExtension:@"bin"] UTF8String]); // JP SS BIOS
-    MDFNI_SetSetting("ss.bios_na_eu", [[[biosPath stringByAppendingPathComponent:@"mpr-17933"] stringByAppendingPathExtension:@"bin"] UTF8String]); // NA/EU SS BIOS
-    MDFNI_SetSetting("filesys.path_sav", [batterySavesDirectory UTF8String]); // Memcards
+    MDFNI_SetSetting("pce.cdbios", [[[biosPath stringByAppendingPathComponent:@"syscard3"] stringByAppendingPathExtension:@"pce"] fileSystemRepresentation]); // PCE CD BIOS
+    MDFNI_SetSetting("pcfx.bios", [[[biosPath stringByAppendingPathComponent:@"pcfx"] stringByAppendingPathExtension:@"rom"] fileSystemRepresentation]); // PCFX BIOS
+    MDFNI_SetSetting("psx.bios_jp", [[[biosPath stringByAppendingPathComponent:@"scph5500"] stringByAppendingPathExtension:@"bin"] fileSystemRepresentation]); // JP SCPH-5500 BIOS
+    MDFNI_SetSetting("psx.bios_na", [[[biosPath stringByAppendingPathComponent:@"scph5501"] stringByAppendingPathExtension:@"bin"] fileSystemRepresentation]); // NA SCPH-5501 BIOS
+    MDFNI_SetSetting("psx.bios_eu", [[[biosPath stringByAppendingPathComponent:@"scph5502"] stringByAppendingPathExtension:@"bin"] fileSystemRepresentation]); // EU SCPH-5502 BIOS
+    MDFNI_SetSetting("ss.bios_jp", [[[biosPath stringByAppendingPathComponent:@"sega_101"] stringByAppendingPathExtension:@"bin"] fileSystemRepresentation]); // JP SS BIOS
+    MDFNI_SetSetting("ss.bios_na_eu", [[[biosPath stringByAppendingPathComponent:@"mpr-17933"] stringByAppendingPathExtension:@"bin"] fileSystemRepresentation]); // NA/EU SS BIOS
+    MDFNI_SetSetting("filesys.path_sav", batterySavesDirectory.fileSystemRepresentation); // Memcards
 
     // VB defaults. dox http://mednafen.sourceforge.net/documentation/09x/vb.html
     MDFNI_SetSetting("vb.disable_parallax", "1");       // Disable parallax for BG and OBJ rendering
@@ -2938,7 +2938,7 @@ static void emulation_run()
 
     mednafen_init();
 
-    game = MDFNI_LoadGame([_mednafenCoreModule UTF8String], [path UTF8String]);
+    game = MDFNI_LoadGame([_mednafenCoreModule UTF8String], path.fileSystemRepresentation);
 
     if(!game)
         return NO;
