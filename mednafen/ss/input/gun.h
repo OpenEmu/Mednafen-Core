@@ -59,8 +59,6 @@ class IODevice_Gun final : public IODevice
 
  bool chair_draw;
  int chair_r, chair_g, chair_b;
- //
- float x_scale, x_offs;
 };
 
 

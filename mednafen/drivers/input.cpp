@@ -369,7 +369,7 @@ static void BuildPortInfo(MDFNGI *gi, const unsigned int port)
 
      if(idii.Type == IDIT_SWITCH)
      {
-      bic.SwitchNumPos = idii.SwitchNumPos;
+      bic.SwitchNumPos = idii.Switch.NumPos;
       bic.SwitchLastPos = 0;
       bic.SwitchBitSize = idii.BitSize;
       bic.SwitchLastPress = false;
@@ -395,7 +395,7 @@ static void BuildPortInfo(MDFNGI *gi, const unsigned int port)
     sic.IDII = &idii;
     sic.StatusLastState = 0;
 
-    sic.StatusNumStates = idii.StatusNumStates;
+    sic.StatusNumStates = idii.Status.NumStates;
     sic.StatusBitSize = idii.BitSize;
     sic.BitOffset = idii.BitOffset;
 
@@ -1578,7 +1578,7 @@ void MDFND_UpdateInput(bool VirtualDevicesOnly, bool UpdateRapidFire)
      fprintf(stderr, "[BUG] cv(%u) >= bic.SwitchNumPos(%u)\n", cv, bic.SwitchNumPos);
     else if(MDFN_UNLIKELY(cv != bic.SwitchLastPos))
     {
-     MDFN_DispMessage(_("%s %u: %s: %s selected."), PIDC[x].Device->FullName, x + 1, bic.IDII->Name, bic.IDII->SwitchPos[cv].Name);
+     MDFN_DispMessage(_("%s %u: %s: %s selected."), PIDC[x].Device->FullName, x + 1, bic.IDII->Name, bic.IDII->Switch.Pos[cv].Name);
      bic.SwitchLastPos = cv;
     }
 
@@ -1633,7 +1633,7 @@ void MDFND_UpdateInput(bool VirtualDevicesOnly, bool UpdateRapidFire)
     fprintf(stderr, "[BUG] cv(%u) >= sic.StatusNumStates(%u)\n", cv,sic.StatusNumStates);
    else if(MDFN_UNLIKELY(cv != sic.StatusLastState))
    {
-    MDFN_DispMessage(_("%s %u: %s: %s"), PIDC[x].Device->FullName, x + 1, sic.IDII->Name, sic.IDII->StatusStates[cv].Name);
+    MDFN_DispMessage(_("%s %u: %s: %s"), PIDC[x].Device->FullName, x + 1, sic.IDII->Name, sic.IDII->Status.States[cv].Name);
     sic.StatusLastState = cv;
    }
   }
@@ -1904,15 +1904,15 @@ static void MakeSettingsForDevice(std::vector <MDFNSetting> &settings, const MDF
 
    tmp_setting.flags = (info->IDII[x].Flags & IDIT_FLAG_AUX_SETTINGS_UNDOC) ? MDFNSF_SUPPRESS_DOC : 0;
    {
-    MDFNSetting_EnumList* el = (MDFNSetting_EnumList*)calloc(info->IDII[x].SwitchNumPos + 1, sizeof(MDFNSetting_EnumList));
-    const uint32 snp = info->IDII[x].SwitchNumPos;
+    MDFNSetting_EnumList* el = (MDFNSetting_EnumList*)calloc(info->IDII[x].Switch.NumPos + 1, sizeof(MDFNSetting_EnumList));
+    const uint32 snp = info->IDII[x].Switch.NumPos;
 
     for(uint32 i = 0; i < snp; i++)
     {
-     el[i].string = info->IDII[x].SwitchPos[i].SettingName;
+     el[i].string = info->IDII[x].Switch.Pos[i].SettingName;
      el[i].number = i;
-     el[i].description = info->IDII[x].SwitchPos[i].Name;
-     el[i].description_extra = info->IDII[x].SwitchPos[i].Description;
+     el[i].description = info->IDII[x].Switch.Pos[i].Name;
+     el[i].description_extra = info->IDII[x].Switch.Pos[i].Description;
     }
     el[snp].string = NULL;
     el[snp].number = 0;

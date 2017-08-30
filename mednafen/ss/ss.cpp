@@ -657,6 +657,7 @@ static int32 NO_INLINE MDFN_HOT RunLoop(EmulateSpecStruct* espec)
     DBG_CPUHandler<0>(eff_ts);
 
    CPU[0].Step<0, DebugMode>();
+   CPU[0].DMA_BusTimingKludge();
 
    while(MDFN_LIKELY(CPU[0].timestamp > CPU[1].timestamp))
    {
@@ -1583,9 +1584,10 @@ static MDFN_COLD void BackupCartNV(void)
 {
  const char* ext = nullptr;
  void* nv_ptr = nullptr;
+ bool nv16 = false;
  uint64 nv_size = 0;
 
- CART_GetNVInfo(&ext, &nv_ptr, &nv_size);
+ CART_GetNVInfo(&ext, &nv_ptr, &nv16, &nv_size);
 
  if(ext)
   MDFN_BackupSavFile(10, ext);
@@ -1595,9 +1597,10 @@ static MDFN_COLD void LoadCartNV(void)
 {
  const char* ext = nullptr;
  void* nv_ptr = nullptr;
+ bool nv16 = false;
  uint64 nv_size = 0;
 
- CART_GetNVInfo(&ext, &nv_ptr, &nv_size);
+ CART_GetNVInfo(&ext, &nv_ptr, &nv16, &nv_size);
 
  if(ext)
  {
@@ -1605,6 +1608,16 @@ static MDFN_COLD void LoadCartNV(void)
   GZFileStream nvs(MDFN_MakeFName(MDFNMKF_SAV, 0, ext), GZFileStream::MODE::READ);
 
   nvs.read(nv_ptr, nv_size);
+
+  if(nv16)
+  {  
+   for(uint64 i = 0; i < nv_size; i += 2)
+   {
+    void* p = (uint8*)nv_ptr + i;
+
+    MDFN_ennsb<uint16>(p, MDFN_de16msb(p));
+   }
+  }
  }
 }
 
@@ -1612,16 +1625,24 @@ static MDFN_COLD void SaveCartNV(void)
 {
  const char* ext = nullptr;
  void* nv_ptr = nullptr;
+ bool nv16 = false;
  uint64 nv_size = 0;
 
- CART_GetNVInfo(&ext, &nv_ptr, &nv_size);
+ CART_GetNVInfo(&ext, &nv_ptr, &nv16, &nv_size);
 
  if(ext)
  {
   //FileStream nvs(MDFN_MakeFName(MDFNMKF_SAV, 0, ext), FileStream::MODE_WRITE_INPLACE);
   GZFileStream nvs(MDFN_MakeFName(MDFNMKF_SAV, 0, ext), GZFileStream::MODE::WRITE);
 
-  nvs.write(nv_ptr, nv_size);
+  if(nv16)
+  {
+   // Slow...
+   for(uint64 i = 0; i < nv_size; i += 2)
+    nvs.put_BE<uint16>(MDFN_densb<uint16>((uint8*)nv_ptr + i));
+  }
+  else
+   nvs.write(nv_ptr, nv_size);
 
   nvs.close();
  }
@@ -1643,11 +1664,126 @@ static MDFN_COLD void LoadRTC(void)
  SMPC_LoadNV(&sds);
 }
 
+struct EventsPacker
+{
+ enum : size_t { eventcopy_first = SS_EVENT__SYNFIRST + 1 };
+ enum : size_t { eventcopy_bound = SS_EVENT__SYNLAST };
+
+ bool Restore(void);
+ void Save(void);
+
+ int32 event_times[eventcopy_bound - eventcopy_first];
+ uint8 event_order[eventcopy_bound - eventcopy_first];
+};
+
+INLINE void EventsPacker::Save(void)
+{
+ event_list_entry* evt = events[SS_EVENT__SYNFIRST].next;
+
+ for(size_t i = eventcopy_first; i < eventcopy_bound; i++)
+ {
+  event_times[i - eventcopy_first] = events[i].event_time;
+  event_order[i - eventcopy_first] = evt - events;
+  assert(event_order[i - eventcopy_first] >= eventcopy_first && event_order[i - eventcopy_first] < eventcopy_bound);
+  evt = evt->next;
+ }
+}
+
+INLINE bool EventsPacker::Restore(void)
+{
+ bool used[SS_EVENT__COUNT] = { 0 };
+ event_list_entry* evt = &events[SS_EVENT__SYNFIRST];
+ for(size_t i = eventcopy_first; i < eventcopy_bound; i++)
+ {
+  int32 et = event_times[i - eventcopy_first];
+  uint8 eo = event_order[i - eventcopy_first];
+
+  if(eo < eventcopy_first || eo >= eventcopy_bound)
+   return false;
+
+  if(used[eo])
+   return false;
+
+  used[eo] = true;
+
+  if(et < events[SS_EVENT__SYNFIRST].event_time)
+   return false;
+
+  events[i].event_time = et;
+
+  evt->next = &events[eo];
+  evt->next->prev = evt;
+  evt = evt->next;
+ }
+ evt->next = &events[SS_EVENT__SYNLAST];
+ evt->next->prev = evt;
+
+ for(size_t i = 0; i < SS_EVENT__COUNT; i++)
+ {
+  if(i == SS_EVENT__SYNLAST)
+  {
+   if(events[i].next != NULL)
+    return false;
+  }
+  else
+  {
+   if(events[i].next->prev != &events[i])
+    return false;
+
+   if(events[i].next->event_time < events[i].event_time)
+    return false;
+  }
+
+  if(i == SS_EVENT__SYNFIRST)
+  {
+   if(events[i].prev != NULL)
+    return false;
+  }
+  else
+  {
+   if(events[i].prev->next != &events[i])
+    return false;
+
+   if(events[i].prev->event_time > events[i].event_time)
+    return false;
+  }
+ }
+
+ return true;
+}
+
 static MDFN_COLD void StateAction(StateMem* sm, const unsigned load, const bool data_only)
 {
+ if(!data_only)
+ {
+  sha256_digest sr_dig = BIOS_SHA256;
+
+  SFORMAT SRDStateRegs[] = 
+  {
+   SFARRAY(sr_dig.data(), sr_dig.size()),
+   SFEND
+  };
+
+  MDFNSS_StateAction(sm, load, data_only, SRDStateRegs, "BIOS_HASH", true);
+
+  if(load && sr_dig != BIOS_SHA256)
+   throw MDFN_Error(0, _("BIOS hash mismatch(save state created under a different BIOS)!"));
+ }
+
+ EventsPacker ep;
+ ep.Save();
+
  SFORMAT StateRegs[] = 
  {
-  // TODO: Events, or recalc?
+  // cur_clock_div
+  SFVAR(UpdateInputLastBigTS),
+
+  SFVAR(next_event_ts),
+  SFARRAY32N(ep.event_times, sizeof(ep.event_times) / sizeof(ep.event_times[0]), "event_times"),
+  SFARRAYN(ep.event_order, sizeof(ep.event_order) / sizeof(ep.event_order[0]), "event_order"),
+
+  SFVAR(SH7095_mem_timestamp),
+  SFVAR(SH7095_BusLock),
 
   SFARRAY16(WorkRAML, sizeof(WorkRAML) / sizeof(WorkRAML[0])),
   SFARRAY16(WorkRAMH, sizeof(WorkRAMH) / sizeof(WorkRAMH[0])),
@@ -1656,27 +1792,30 @@ static MDFN_COLD void StateAction(StateMem* sm, const unsigned load, const bool 
   SFEND
  };
 
+ CPU[0].StateAction(sm, load, data_only, "SH2-M");
+ CPU[1].StateAction(sm, load, data_only, "SH2-S");
+ SCU_StateAction(sm, load, data_only);
+ SMPC_StateAction(sm, load, data_only);
+
+ CDB_StateAction(sm, load, data_only);
+ VDP1::StateAction(sm, load, data_only);
+ VDP2::StateAction(sm, load, data_only);
+
+ SOUND_StateAction(sm, load, data_only);
+ CART_StateAction(sm, load, data_only);
+ //
  MDFNSS_StateAction(sm, load, data_only, StateRegs, "MAIN");
 
  if(load)
  {
   BackupRAM_Dirty = true;
+
+  if(!ep.Restore())
+  {
+   printf("Bad state events data.");
+   InitEvents();
+  }
  }
-
-/*
- CPU[0].StateAction(sm, load, data_only, "SH2-M");
- CPU[1].StateAction(sm, load, data_only, "SH2-S");
- SCU_StateAction(sm, load, data_only);
-*/
- SMPC_StateAction(sm, load, data_only);
-/*
- CDB_StateAction(sm, load, data_only);
- VDP1::StateAction(sm, load, data_only);
- VDP2_StateAction(sm, load, data_only);
-*/
-
- SOUND_StateAction(sm, load, data_only);
- CART_StateAction(sm, load, data_only);
 }
 
 static MDFN_COLD bool SetMedia(uint32 drive_idx, uint32 state_idx, uint32 media_idx, uint32 orientation_idx)
@@ -1753,6 +1892,7 @@ static const MDFNSetting_EnumList Cart_List[] =
  { "extram1", CART_EXTRAM_1M, gettext_noop("1MiB Extended RAM") },
  { "extram4", CART_EXTRAM_4M, gettext_noop("4MiB Extended RAM") },
  { "cs1ram16", CART_CS1RAM_16M, gettext_noop("16MiB RAM mapped in A-bus CS1") },
+ { "ar4mp", CART_AR4MP, NULL }, // Undocumented, unfinished. gettext_noop("Action Replay 4M Plus") },
 // { "nlmodem", CART_NLMODEM, gettext_noop("NetLink Modem") },
 
  { NULL, 0 },
@@ -1792,7 +1932,7 @@ static const MDFNSetting SSSettings[] =
  { "ss.cart", MDFNSF_EMU_STATE | MDFNSF_UNTRUSTED_SAFE, gettext_noop("Expansion cart."), NULL, MDFNST_ENUM, "auto", NULL, NULL, NULL, NULL, Cart_List },
  { "ss.cart.kof95_path", MDFNSF_EMU_STATE, gettext_noop("Path to KoF 95 ROM image."), NULL, MDFNST_STRING, "mpr-18811-mx.ic1" },
  { "ss.cart.ultraman_path", MDFNSF_EMU_STATE, gettext_noop("Path to Ultraman ROM image."), NULL, MDFNST_STRING, "mpr-19367-mx.ic1" },
-
+ { "ss.cart.satar4mp_path", MDFNSF_EMU_STATE | MDFNSF_SUPPRESS_DOC | MDFNSF_NONPERSISTENT, gettext_noop("Path to Action Replay 4M Plus firmware image."), NULL, MDFNST_STRING, "satar4mp.bin" },
 // { "ss.cart.modem_port", MDFNSF_NOFLAGS, gettext_noop("TCP/IP port to use for modem emulation."), gettext_noop("A value of \"0\" disables network access."), MDFNST_UINT, "4920", "0", "65535" },
  
  { "ss.bios_sanity", MDFNSF_NOFLAGS, gettext_noop("Enable BIOS ROM image sanity checks."), NULL, MDFNST_BOOL, "1" },
@@ -1873,7 +2013,7 @@ MDFNGI EmulatedSS =
  CheatInfo,
 
  false,
- NULL, //StateAction,
+ StateAction,
  Emulate,
  SMPC_TransformInput,
  SMPC_SetInput,

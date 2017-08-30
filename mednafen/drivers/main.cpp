@@ -60,6 +60,7 @@
 #include <mednafen/file.h>
 
 static int StateSLSTest = false;
+static int StateRCTest = false;	// Rewind consistency
 
 JoystickManager *joy_manager = NULL;
 bool MDFNDHaveFocus;
@@ -701,6 +702,7 @@ static int DoArgs(int argc, char *argv[], char **filename)
 	 { "mtetest", NULL, &mtetest, 0, 0 },
 
 	 { "stateslstest", NULL, &StateSLSTest, 0, 0 },
+	 { "staterctest", NULL, &StateRCTest, 0, 0 },
 
 	 { 0, 0, 0, 0 }
         };
@@ -1019,12 +1021,45 @@ int GameLoop(void *arg)
 	 espec.SoundBuf = Sound_GetEmuModBuffer(&espec.SoundBufMaxSize);
  	 espec.SoundVolume = (double)MDFN_GetSettingUI("sound.volume") / 100;
 
-         MDFNI_Emulate(&espec);
+	 if(MDFN_UNLIKELY(StateRCTest))
+	 {
+	  // Note: Won't work correctly with modules that do mid-sync.
+	  EmulateSpecStruct estmp = espec;
+
+	  MemoryStream state0(524288);
+	  MemoryStream state1(524288);
+	  MemoryStream state2(524288);
+
+	  MDFNSS_SaveSM(&state0);
+	  MDFNI_Emulate(&espec);
+	  espec = estmp;
+
+	  MDFNSS_SaveSM(&state1);
+	  state0.rewind();
+	  MDFNSS_LoadSM(&state0);
+	  MDFNI_Emulate(&espec);
+	  MDFNSS_SaveSM(&state2);
+
+	  if(!(state1.map_size() == state2.map_size() && !memcmp(state1.map() + 32, state2.map() + 32, state1.map_size() - 32)))
+	  {
+	   FileStream sd0("/tmp/sdump0", FileStream::MODE_WRITE);
+	   FileStream sd1("/tmp/sdump1", FileStream::MODE_WRITE);
+
+	   sd0.write(state1.map(), state1.map_size());
+	   sd1.write(state2.map(), state2.map_size());
+	   sd0.close();
+	   sd1.close();
+	   //assert(orig_state.map_size() == new_state.map_size() && !memcmp(orig_state.map() + 32, new_state.map() + 32, orig_state.map_size() - 32));
+	   abort();
+	  }
+	 }
+	 else
+          MDFNI_Emulate(&espec);
 
 	 if(MDFN_UNLIKELY(StateSLSTest))
 	 {
-	  MemoryStream orig_state(65536);
-	  MemoryStream new_state(65536);
+	  MemoryStream orig_state(524288);
+	  MemoryStream new_state(524288);
 
 	  MDFNSS_SaveSM(&orig_state);
 	  orig_state.rewind();

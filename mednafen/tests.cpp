@@ -750,6 +750,33 @@ void NO_INLINE NO_CLONE TestGCC80631(void)
  assert(TestGCC80631_Sub(p) == 0);
 }
 
+NO_INLINE NO_CLONE void TestGCC81740_Sub(int* p, unsigned count)
+{
+ static const int good[20] = { 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 10, 5, 6, 7, 8, 15, 10, 11, 12, 13 };
+
+ assert(count == 20);
+
+ for(unsigned i = 0; i < count; i++)
+  assert(good[i] == p[i]);
+}
+
+int TestGCC81740_b;
+
+NO_INLINE NO_CLONE void TestGCC81740(void)
+{
+ int v[4][5] = { 0 };
+
+ for(unsigned i = 0; i < sizeof(v) / sizeof(int); i++)
+  (&v[0][0])[i] = i;
+
+ for(int a = 3; a >= 0; a--)
+  for(TestGCC81740_b = 0; TestGCC81740_b < 3; TestGCC81740_b++)
+   v[TestGCC81740_b + 1][a + 1] = v[TestGCC81740_b][a];
+
+ TestGCC81740_Sub(&v[0][0], sizeof(v) / sizeof(int));
+}
+
+
 template<typename A, typename B>
 void NO_INLINE NO_CLONE TestSUCompare_Sub(A a, B b)
 {
@@ -1922,6 +1949,7 @@ bool MDFN_RunMathTests(void)
  TestGCC70941();
  TestGCC71488();
  TestGCC80631();
+ TestGCC81740();
 
  TestModTern();
  TestBWNotMask31GTZ();

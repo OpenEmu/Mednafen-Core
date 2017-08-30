@@ -134,9 +134,9 @@ static int32 DMCSize;
 static uint8 DMCShift; 
 static uint8 SIRQStat=0;
 
-static char DMCHaveDMA;
+static int8 DMCHaveDMA;
 static uint8 DMCDMABuf=0;  
-static char DMCHaveSample;
+static int8 DMCHaveSample;
 
 static uint32 ChannelBC[5];
 

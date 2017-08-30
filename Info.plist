@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.9.46</string>
+	<string>0.9.47</string>
 	<key>NSPrincipalClass</key>
 	<string>OEGameCoreController</string>
 	<key>OEGameCoreClass</key>
@@ -154,11 +154,7 @@
 		</dict>
 		<key>openemu.system.saturn</key>
 		<dict>
-			<key>OEGameCoreHasGlitches</key>
-			<true/>
 			<key>OEGameCoreRequiresFiles</key>
-			<true/>
-			<key>OEGameCoreSaveStatesNotSupported</key>
 			<true/>
 			<key>OEGameCoreSupportsMultipleDiscs</key>
 			<true/>

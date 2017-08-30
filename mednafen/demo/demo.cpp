@@ -414,10 +414,151 @@ static void CloseGame(void)
  Cleanup();
 }
 
+struct DemoStateTest
+{
+ uint8 a;
+ int8 b;
+ uint16 c;
+ int16 d;
+ uint32 e;
+ int32 f;
+ uint64 g;
+ int64 h;
+ bool i;
+ float j;
+ double k;
+
+ uint8 arr_a[7];
+ int8 arr_b[7];
+ uint16 arr_c[7];
+ int16 arr_d[7];
+ uint32 arr_e[7];
+ int32 arr_f[7];
+ uint64 arr_g[7];
+ int64 arr_h[7];
+ bool arr_i[7];
+ float arr_j[7];
+ double arr_k[7];
+
+ struct
+ {
+  uint8 a;
+  int8 b;
+  uint16 c;
+  int16 d;
+  uint32 e;
+  int32 f;
+  uint64 g;
+  int64 h;
+  bool i;
+  float j;
+  double k;
+
+  uint8 arr_a[7];
+  int8 arr_b[7];
+  uint16 arr_c[7];
+  int16 arr_d[7];
+  uint32 arr_e[7];
+  int32 arr_f[7];
+  uint64 arr_g[7];
+  int64 arr_h[7];
+  bool arr_i[7];
+  float arr_j[7];
+  double arr_k[7];
+ } __attribute__((__packed__)) stt[15];
+} __attribute__((__packed__));
+
+static void randomoo(DemoStateTest* ptr, size_t count)
+{
+ uint64 lcg[2] = { 0xDEADBEEFCAFEBABEULL, 0x0123456789ABCDEFULL };
+
+ for(size_t i = 0; i < count; i++)
+ {
+  ((uint8*)ptr)[i] = (lcg[0] ^ lcg[1]) >> 28;
+  lcg[0] = (19073486328125ULL * lcg[0]) + 1;
+  lcg[1] = (6364136223846793005ULL * lcg[1]) + 1442695040888963407ULL;
+ }
+ ptr->i = *(uint8*)&ptr->i & 0x1;
+ for(unsigned i = 0; i < 7; i++)
+  ptr->arr_i[i] = *(uint8*)&ptr->arr_i[i] & 0x1;
+
+ for(auto& s : ptr->stt)
+ {
+  s.i = *(uint8*)&s.i & 0x1;
+  for(unsigned i = 0; i < 7; i++)
+   s.arr_i[i] = *(uint8*)&s.arr_i[i] & 0x1;
+ }
+}
+
 static void StateAction(StateMem* sm, const unsigned load, const bool data_only)
 {
+ std::unique_ptr<DemoStateTest[]> dst(new DemoStateTest[2]);
+
+ if(load)
+  memset(&dst[0], 0, sizeof(DemoStateTest));
+ else
+  randomoo(&dst[0], sizeof(DemoStateTest));
+
+ randomoo(&dst[1], sizeof(DemoStateTest));
+
+ SFORMAT MoreStateRegs[] =
+ {
+  SFVAR(dst[0].a),
+  SFVAR(dst[0].b),
+  SFVAR(dst[0].c),
+  SFVAR(dst[0].d),
+  SFVAR(dst[0].e),
+  SFVAR(dst[0].f),
+  SFVAR(dst[0].g),
+  SFVAR(dst[0].h),
+  SFVAR(dst[0].i),
+  SFVAR(dst[0].j),
+  SFVAR(dst[0].k),
+
+  SFARRAY(dst[0].arr_a, 7),
+  SFARRAY(dst[0].arr_b, 7),
+  SFARRAY16(dst[0].arr_c, 7),
+  SFARRAY16(dst[0].arr_d, 7),
+  SFARRAY32(dst[0].arr_e, 7),
+  SFARRAY32(dst[0].arr_f, 7),
+  SFARRAY64(dst[0].arr_g, 7),
+  SFARRAY64(dst[0].arr_h, 7),
+  SFARRAYB(dst[0].arr_i, 7),
+  SFARRAYF(dst[0].arr_j, 7),
+  SFARRAYD(dst[0].arr_k, 7),
+
+  SFVAR(dst[0].stt->i, 15, sizeof(*dst[0].stt)),
+  SFVAR(dst[0].stt->h, 15, sizeof(*dst[0].stt)),
+  SFVAR(dst[0].stt->g, 15, sizeof(*dst[0].stt)),
+  SFVAR(dst[0].stt->f, 15, sizeof(*dst[0].stt)),
+  SFVAR(dst[0].stt->e, 15, sizeof(*dst[0].stt)),
+  SFVAR(dst[0].stt->d, 15, sizeof(*dst[0].stt)),
+  SFVAR(dst[0].stt->c, 15, sizeof(*dst[0].stt)),
+  SFVAR(dst[0].stt->b, 15, sizeof(*dst[0].stt)),
+  SFVAR(dst[0].stt->a, 15, sizeof(*dst[0].stt)),
+  SFVAR(dst[0].stt->j, 15, sizeof(*dst[0].stt)),
+  SFVAR(dst[0].stt->k, 15, sizeof(*dst[0].stt)),
+  SFARRAYB(dst[0].stt->arr_i, 7, 15, sizeof(*dst[0].stt)),
+  SFARRAY(dst[0].stt->arr_a, 7, 15, sizeof(*dst[0].stt)),
+  SFARRAY32(dst[0].stt->arr_e, 7, 15, sizeof(*dst[0].stt)),
+  SFARRAY(dst[0].stt->arr_b, 7, 15, sizeof(*dst[0].stt)),
+  SFARRAY32(dst[0].stt->arr_f, 7, 15, sizeof(*dst[0].stt)),
+  SFARRAY16(dst[0].stt->arr_c, 7, 15, sizeof(*dst[0].stt)),
+  SFARRAY64(dst[0].stt->arr_g, 7, 15, sizeof(*dst[0].stt)),
+  SFARRAY16(dst[0].stt->arr_d, 7, 15, sizeof(*dst[0].stt)),
+  SFARRAY64(dst[0].stt->arr_h, 7, 15, sizeof(*dst[0].stt)),
+  SFARRAYF(dst[0].stt->arr_j, 7, 15, sizeof(*dst[0].stt)),
+  SFARRAYD(dst[0].stt->arr_k, 7, 15, sizeof(*dst[0].stt)),
+
+  SFEND
+ };
+
  SFORMAT StateRegs[] =
  {
+  SFLINK(MoreStateRegs),
+  //
+  //
+  //
   SFVAR(Interlace),
   SFVAR(InterlaceField),
 
@@ -435,6 +576,9 @@ static void StateAction(StateMem* sm, const unsigned load, const bool data_only)
  };
 
  MDFNSS_StateAction(sm, load, data_only, StateRegs, "MAIN");
+
+ if(memcmp(&dst[0], &dst[1], sizeof(DemoStateTest)))
+  abort();
 
  if(load)
  {

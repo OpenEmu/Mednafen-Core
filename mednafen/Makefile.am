@@ -8,6 +8,7 @@ bin_PROGRAMS	=	mednafen
 mednafen_SOURCES 	= 	debug.cpp error.cpp mempatcher.cpp settings.cpp endian.cpp Time.cpp mednafen.cpp git.cpp file.cpp general.cpp memory.cpp netplay.cpp state.cpp state_rewind.cpp movie.cpp player.cpp PSFLoader.cpp SSFLoader.cpp SNSFLoader.cpp SPCReader.cpp tests.cpp qtrecord.cpp Stream.cpp MemoryStream.cpp FileStream.cpp IPSPatcher.cpp
 mednafen_LDADD 		= 	trio/libtrio.a
 mednafen_DEPENDENCIES	=	trio/libtrio.a
+noinst_LIBRARIES	=
 
 if HAVE_SDL
 SUBDIRS 		+=	drivers
@@ -64,9 +65,7 @@ include nes/Makefile.am.inc
 endif
 
 if WANT_NGP_EMU
-SUBDIRS += ngp
-mednafen_LDADD          +=      ngp/libngp.a
-mednafen_DEPENDENCIES   +=      ngp/libngp.a
+include ngp/Makefile.am.inc
 endif
 
 if WANT_PCE_EMU
@@ -90,9 +89,7 @@ include sms/Makefile.am.inc
 endif
 
 if WANT_SNES_EMU
-SUBDIRS += snes
-mednafen_LDADD          +=      snes/libsnes.a
-mednafen_DEPENDENCIES   +=      snes/libsnes.a
+include snes/Makefile.am.inc
 endif
 
 if WANT_SNES_FAUST_EMU

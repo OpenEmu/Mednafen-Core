@@ -3190,18 +3190,12 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 
 - (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-    if([_mednafenCoreModule isEqualToString:@"ss"])
-        block(NO, nil);
-    else
-        block(MDFNI_SaveState(fileName.fileSystemRepresentation, "", NULL, NULL, NULL), nil);
+    block(MDFNI_SaveState(fileName.fileSystemRepresentation, "", NULL, NULL, NULL), nil);
 }
 
 - (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-    if([_mednafenCoreModule isEqualToString:@"ss"])
-        block(NO, nil);
-    else
-        block(MDFNI_LoadState(fileName.fileSystemRepresentation, ""), nil);
+    block(MDFNI_LoadState(fileName.fileSystemRepresentation, ""), nil);
 }
 
 - (NSData *)serializeStateWithError:(NSError **)outError
