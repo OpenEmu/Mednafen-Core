@@ -3396,8 +3396,8 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
     int analogNumber = PSXMap[button] - 17;
     uint8_t *buf = (uint8_t *)_inputBuffer[player-1];
-    *(uint16*)& buf[3 + analogNumber * 2] = scaledValue;
-    *(uint16*)& buf[3 + (analogNumber ^ 1) * 2] = 0;
+    MDFN_en16lsb(&buf[3 + analogNumber * 2], scaledValue);
+    MDFN_en16lsb(&buf[3 + (analogNumber ^ 1) * 2], 0);
 }
 
 - (oneway void)didMoveSaturnJoystickDirection:(OESaturnButton)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
@@ -3405,8 +3405,8 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     int analogNumber = SS3DMap[button] - 13;
 
     uint8_t *buf = (uint8_t *)_inputBuffer[player-1];
-    *(uint16*)& buf[2 + analogNumber * 2] = 32767 * value;
-    *(uint16*)& buf[2 + (analogNumber ^ 1) * 2] = 0;
+    MDFN_en16lsb(&buf[2 + analogNumber * 2], 32767 * value);
+    MDFN_en16lsb(&buf[2 + (analogNumber ^ 1) * 2], 0);
 }
 
 - (void)changeDisplayMode
