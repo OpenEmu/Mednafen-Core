@@ -82,13 +82,13 @@
 			<array>
 				<dict>
 					<key>Description</key>
-					<string>TurboGrafx-CD/PC Engine CD BIOS</string>
+					<string>PC Engine CD Super CD-ROM System (v3.0 JP) BIOS</string>
 					<key>MD5</key>
-					<string>ff1a674273fe3540ccef576376407d1d</string>
+					<string>38179df8f4ac870017db21ebcbf53114</string>
 					<key>Name</key>
 					<string>syscard3.pce</string>
 					<key>Size</key>
-					<string>262656</string>
+					<string>262144</string>
 				</dict>
 			</array>
 		</dict>
@@ -102,7 +102,7 @@
 			<array>
 				<dict>
 					<key>Description</key>
-					<string>PC-FX BIOS</string>
+					<string>PC-FX (v1.00) BIOS</string>
 					<key>MD5</key>
 					<string>08e36edbea28a017f79f8d4f7ff9b6d7</string>
 					<key>Name</key>
@@ -122,7 +122,7 @@
 			<array>
 				<dict>
 					<key>Description</key>
-					<string>PlayStation (JP) SCPH-5500 BIOS</string>
+					<string>PlayStation SCPH-5500 (v3.0 Japan) BIOS</string>
 					<key>MD5</key>
 					<string>8dd7d5296a650fac7319bce665a6a53c</string>
 					<key>Name</key>
@@ -132,7 +132,7 @@
 				</dict>
 				<dict>
 					<key>Description</key>
-					<string>PlayStation (NA) SCPH-5501 BIOS</string>
+					<string>PlayStation SCPH-5501 (v3.0 America) BIOS</string>
 					<key>MD5</key>
 					<string>490f666e1afb15b7362b406ed1cea246</string>
 					<key>Name</key>
@@ -142,7 +142,7 @@
 				</dict>
 				<dict>
 					<key>Description</key>
-					<string>PlayStation (EU) SCPH-5502 BIOS</string>
+					<string>PlayStation SCPH-5502 (v3.0 Europe) BIOS</string>
 					<key>MD5</key>
 					<string>32736f17079d0b2b7024407c39bd3050</string>
 					<key>Name</key>
