@@ -158,23 +158,23 @@ void Reset(bool powering_up)
   memset(&LineSetup, 0, sizeof(LineSetup));
 
   //
-  //
+  // Registers with somewhat undefined state on power-on:
   //
   EWDR = 0;
   EWLR = 0;
   EWRR = 0;
- }
 
- UserClipX0 = 0;
- UserClipY0 = 0;
- UserClipX1 = 0;
- UserClipY1 = 0;
+  UserClipX0 = 0;
+  UserClipY0 = 0;
+  UserClipX1 = 0;
+  UserClipY1 = 0;
 
- SysClipX = 0;
- SysClipY = 0;
+  SysClipX = 0;
+  SysClipY = 0;
  
- LocalX = 0;
- LocalY = 0;
+  LocalX = 0;
+  LocalY = 0;
+ }
 
  FBDrawWhich = 0;
  //SS_SetPhysMemMap(0x05C80000, 0x05CFFFFF, FB[FBDrawWhich], sizeof(FB[0]), true);
@@ -189,7 +189,7 @@ void Reset(bool powering_up)
  DrawingActive = false;
 
  //
- // Begin confirmed.
+ // Begin registers/variables confirmed to be initialized on reset.
  TVMR = 0;
  FBCR = 0;
  PTMR = 0;
@@ -833,6 +833,7 @@ void Write16_DB(uint32 A, uint16 DB)
 
  if(A < 0x80000)
  {
+  SS_DBGTI(SS_DBG_VDP1_VRAMW, "[VDP1] Write to VRAM: 0x%04x->VRAM[0x%05x]", DB, A);
   VRAM[A >> 1] = DB;
   return;
  }
@@ -948,17 +949,6 @@ void StateAction(StateMem* sm, const unsigned load, const bool data_only)
   EraseParams.y_end &= 0x1FF;
   EraseParams.x_bound &= 0x7F << 3;
  }
-}
-
-
-uint8 PeekVRAM(const uint32 addr)
-{
- return ne16_rbo_be<uint8>(VRAM, addr & 0x7FFFF);
-}
-
-void PokeVRAM(const uint32 addr, const uint8 val)
-{
- ne16_wbo_be<uint8>(VRAM, addr & 0x7FFFF, val);
 }
 
 void MakeDump(const std::string& path)

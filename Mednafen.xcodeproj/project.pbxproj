@@ -4645,9 +4645,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"0.9.47\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.48\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00094700",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00094800",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
@@ -4708,9 +4708,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"0.9.47\\\"",
+					"-DMEDNAFEN_VERSION=\\\"0.9.48\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00094700",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00094800",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
