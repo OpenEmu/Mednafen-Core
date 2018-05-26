@@ -1,5 +1,6 @@
 #include "mednafen/types.h"
 #include "mednafen/git.h"
+#include "mednafen/mednafen.h"
 #include "mednafen/mednafen-driver.h"
 #include "thread.h"
 
@@ -30,6 +31,9 @@ void MDFND_PrintError(const char* err)
 {
     std::cerr << err;
 }
+
+void MDFND_OutputNotice(MDFN_NoticeType t, const char* s) noexcept
+{}
 
 void MDFND_MediaSetNotification(uint32 drive_idx, uint32 state_idx, uint32 media_idx, uint32 orientation_idx)
 {}
@@ -139,7 +143,10 @@ void MDFND_SendData(const void*, uint32) {}
 void MDFND_RecvData(void *, uint32) {}
 void MDFND_NetplayText(const uint8*, bool) {}
 void MDFND_NetworkClose() {}
-void MDFND_NetplaySetHints(bool active, bool behind) {}
+void MDFND_NetplaySetHints(bool active, bool behind, uint32 local_players_mask)
+{}
+void MDFND_OutputInfo(const char *s) noexcept
+{}
 int MDFND_NetworkConnect() { return 0; }
 bool MDFND_CheckNeedExit(void) { return false; }
 

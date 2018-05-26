@@ -183,9 +183,6 @@
 		8CB3E0BA17F20F6F0090372A /* galois.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D53317F1DE5A0090372A /* galois.cpp */; };
 		8CB3E0BB17F20F750090372A /* lec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D53517F1DE5A0090372A /* lec.cpp */; };
 		8CB3E0BC17F20F810090372A /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D53017F1DE5A0090372A /* crc32.cpp */; };
-		8CB3E0BF17F20FB40090372A /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D54E17F1DE5A0090372A /* unzip.c */; };
-		8CB3E0C017F20FB60090372A /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D54417F1DE5A0090372A /* ioapi.c */; };
-		8CB3E0C117F20FC50090372A /* minilzo.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D54917F1DE5A0090372A /* minilzo.c */; };
 		8CB3E0C217F210640090372A /* endian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D5CD17F1DE5B0090372A /* endian.cpp */; };
 		8CB3E0C317F2106D0090372A /* error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D5CF17F1DE5B0090372A /* error.cpp */; };
 		8CB3E0C417F210720090372A /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D5D117F1DE5B0090372A /* file.cpp */; };
@@ -270,6 +267,12 @@
 		94CFB6581A75DC2D001F174F /* quicklz.c in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6541A75DC2D001F174F /* quicklz.c */; };
 		94CFB65B1A75DC7C001F174F /* state_rewind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6591A75DC7B001F174F /* state_rewind.cpp */; };
 		94FD853218C7F53C001B426D /* pcecd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94FD853018C7F53C001B426D /* pcecd.cpp */; };
+		EE8973E820B90BC100F073C1 /* README.MEDNAFEN in Resources */ = {isa = PBXBuildFile; fileRef = EE8973E220B90BC100F073C1 /* README.MEDNAFEN */; };
+		EE8973E920B90BC100F073C1 /* Makefile.am.inc in Sources */ = {isa = PBXBuildFile; fileRef = EE8973E420B90BC100F073C1 /* Makefile.am.inc */; };
+		EE8973EA20B90BC100F073C1 /* README.LZO in Resources */ = {isa = PBXBuildFile; fileRef = EE8973E620B90BC100F073C1 /* README.LZO */; };
+		EE8973EB20B90BC100F073C1 /* minilzo.c in Sources */ = {isa = PBXBuildFile; fileRef = EE8973E720B90BC100F073C1 /* minilzo.c */; };
+		EE8973EE20B90D3800F073C1 /* ZIPReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EE8973EC20B90D3700F073C1 /* ZIPReader.cpp */; };
+		EE8973F120B90E2500F073C1 /* jpkeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EE8973F020B90E2400F073C1 /* jpkeyboard.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -497,16 +500,7 @@
 		8CB3D53C17F1DE5A0090372A /* scsicd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scsicd.cpp; sourceTree = "<group>"; };
 		8CB3D53D17F1DE5A0090372A /* scsicd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scsicd.h; sourceTree = "<group>"; };
 		8CB3D53F17F1DE5A0090372A /* SimpleFIFO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleFIFO.h; sourceTree = "<group>"; };
-		8CB3D54417F1DE5A0090372A /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
-		8CB3D54517F1DE5A0090372A /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
-		8CB3D54617F1DE5A0090372A /* lzoconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzoconf.h; sourceTree = "<group>"; };
-		8CB3D54717F1DE5A0090372A /* lzodefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzodefs.h; sourceTree = "<group>"; };
 		8CB3D54817F1DE5A0090372A /* Makefile.am.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = Makefile.am.inc; sourceTree = "<group>"; };
-		8CB3D54917F1DE5A0090372A /* minilzo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = minilzo.c; sourceTree = "<group>"; };
-		8CB3D54A17F1DE5A0090372A /* minilzo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minilzo.h; sourceTree = "<group>"; };
-		8CB3D54D17F1DE5A0090372A /* README.LZO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.LZO; sourceTree = "<group>"; };
-		8CB3D54E17F1DE5A0090372A /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
-		8CB3D54F17F1DE5A0090372A /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
 		8CB3D55117F1DE5A0090372A /* arm_cpu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = arm_cpu.c; sourceTree = "<group>"; };
 		8CB3D55217F1DE5A0090372A /* cputest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cputest.c; sourceTree = "<group>"; };
 		8CB3D55317F1DE5A0090372A /* cputest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cputest.h; sourceTree = "<group>"; };
@@ -1596,12 +1590,6 @@
 		8CB3DCA717F1DE5E0090372A /* v30mz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v30mz.h; sourceTree = "<group>"; };
 		8CB3DCA817F1DE5E0090372A /* wstech24.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = wstech24.txt; sourceTree = "<group>"; };
 		8CB3DCA917F1DE5E0090372A /* wswan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wswan.h; sourceTree = "<group>"; };
-		8CB3E09A17F1DFFF0090372A /* CHANGES */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGES; sourceTree = "<group>"; };
-		8CB3E09B17F1DFFF0090372A /* trio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trio.h; sourceTree = "<group>"; };
-		8CB3E09C17F1DFFF0090372A /* triodef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = triodef.h; sourceTree = "<group>"; };
-		8CB3E09D17F1DFFF0090372A /* trionan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trionan.h; sourceTree = "<group>"; };
-		8CB3E09E17F1DFFF0090372A /* triop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = triop.h; sourceTree = "<group>"; };
-		8CB3E09F17F1DFFF0090372A /* triostr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = triostr.h; sourceTree = "<group>"; };
 		8CB3E0A517F1E1B80090372A /* OELynxSystemResponderClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OELynxSystemResponderClient.h; path = ../OpenEmu/Lynx/OELynxSystemResponderClient.h; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* Mednafen.oecoreplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Mednafen.oecoreplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1702,6 +1690,26 @@
 		94FD853018C7F53C001B426D /* pcecd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pcecd.cpp; sourceTree = "<group>"; };
 		94FD853118C7F53C001B426D /* pcecd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pcecd.h; sourceTree = "<group>"; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		EE8973D420B90AA500F073C1 /* minilzo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minilzo.h; sourceTree = "<group>"; };
+		EE8973D520B90AA500F073C1 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		EE8973D720B90AA600F073C1 /* minilzo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minilzo.h; sourceTree = "<group>"; };
+		EE8973D920B90AA700F073C1 /* minilzo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minilzo.h; sourceTree = "<group>"; };
+		EE8973DB20B90AA700F073C1 /* trionan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trionan.h; sourceTree = "<group>"; };
+		EE8973DC20B90AA700F073C1 /* triodef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = triodef.h; sourceTree = "<group>"; };
+		EE8973DD20B90AA700F073C1 /* triostr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = triostr.h; sourceTree = "<group>"; };
+		EE8973DE20B90AA700F073C1 /* triop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = triop.h; sourceTree = "<group>"; };
+		EE8973DF20B90AA700F073C1 /* trio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trio.h; sourceTree = "<group>"; };
+		EE8973E120B90BC100F073C1 /* lzodefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzodefs.h; sourceTree = "<group>"; };
+		EE8973E220B90BC100F073C1 /* README.MEDNAFEN */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.MEDNAFEN; sourceTree = "<group>"; };
+		EE8973E320B90BC100F073C1 /* lzoconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzoconf.h; sourceTree = "<group>"; };
+		EE8973E420B90BC100F073C1 /* Makefile.am.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = Makefile.am.inc; sourceTree = "<group>"; };
+		EE8973E520B90BC100F073C1 /* _minilzo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _minilzo.h; sourceTree = "<group>"; };
+		EE8973E620B90BC100F073C1 /* README.LZO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.LZO; sourceTree = "<group>"; };
+		EE8973E720B90BC100F073C1 /* minilzo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = minilzo.c; sourceTree = "<group>"; };
+		EE8973EC20B90D3700F073C1 /* ZIPReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZIPReader.cpp; sourceTree = "<group>"; };
+		EE8973ED20B90D3800F073C1 /* ZIPReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZIPReader.h; sourceTree = "<group>"; };
+		EE8973EF20B90E2400F073C1 /* jpkeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jpkeyboard.h; path = ss/input/jpkeyboard.h; sourceTree = "<group>"; };
+		EE8973F020B90E2400F073C1 /* jpkeyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jpkeyboard.cpp; path = ss/input/jpkeyboard.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1916,6 +1924,8 @@
 		8715A9371D6E525C003ADE26 /* input */ = {
 			isa = PBXGroup;
 			children = (
+				EE8973EF20B90E2400F073C1 /* jpkeyboard.h */,
+				EE8973F020B90E2400F073C1 /* jpkeyboard.cpp */,
 				8715A9381D6E5273003ADE26 /* 3dpad.cpp */,
 				8715A9391D6E5273003ADE26 /* 3dpad.h */,
 				8715A93A1D6E5273003ADE26 /* common.h */,
@@ -2011,6 +2021,7 @@
 		8CB3D51D17F1DE5A0090372A /* mednafen */ = {
 			isa = PBXGroup;
 			children = (
+				EE8973E020B90BC100F073C1 /* minilzo */,
 				8795542F1EB66C1B00A08C56 /* AtomicFIFO.h */,
 				94817C291922B45500FDFC99 /* cdplay */,
 				8CB3D51F17F1DE5A0090372A /* cdrom */,
@@ -2166,18 +2177,11 @@
 		8CB3D54117F1DE5A0090372A /* compress */ = {
 			isa = PBXGroup;
 			children = (
+				EE8973EC20B90D3700F073C1 /* ZIPReader.cpp */,
+				EE8973ED20B90D3800F073C1 /* ZIPReader.h */,
 				94B082511A86982900D3C0BC /* GZFileStream.cpp */,
 				94B082521A86982900D3C0BC /* GZFileStream.h */,
-				8CB3D54417F1DE5A0090372A /* ioapi.c */,
-				8CB3D54517F1DE5A0090372A /* ioapi.h */,
-				8CB3D54617F1DE5A0090372A /* lzoconf.h */,
-				8CB3D54717F1DE5A0090372A /* lzodefs.h */,
 				8CB3D54817F1DE5A0090372A /* Makefile.am.inc */,
-				8CB3D54917F1DE5A0090372A /* minilzo.c */,
-				8CB3D54A17F1DE5A0090372A /* minilzo.h */,
-				8CB3D54D17F1DE5A0090372A /* README.LZO */,
-				8CB3D54E17F1DE5A0090372A /* unzip.c */,
-				8CB3D54F17F1DE5A0090372A /* unzip.h */,
 				94CFB6231A75D6CB001F174F /* ZLInflateFilter.cpp */,
 				94CFB6241A75D6CB001F174F /* ZLInflateFilter.h */,
 			);
@@ -4196,22 +4200,13 @@
 		8CB3E08917F1DFFF0090372A /* include */ = {
 			isa = PBXGroup;
 			children = (
-				8CB3E09917F1DFFF0090372A /* trio */,
+				EE8973D520B90AA500F073C1 /* config.h */,
+				EE8973D620B90AA600F073C1 /* minilzo */,
+				EE8973D320B90AA500F073C1 /* minilzo_external */,
+				EE8973D820B90AA700F073C1 /* minilzo_internal */,
+				EE8973DA20B90AA700F073C1 /* trio */,
 			);
 			path = include;
-			sourceTree = "<group>";
-		};
-		8CB3E09917F1DFFF0090372A /* trio */ = {
-			isa = PBXGroup;
-			children = (
-				8CB3E09A17F1DFFF0090372A /* CHANGES */,
-				8CB3E09B17F1DFFF0090372A /* trio.h */,
-				8CB3E09C17F1DFFF0090372A /* triodef.h */,
-				8CB3E09D17F1DFFF0090372A /* trionan.h */,
-				8CB3E09E17F1DFFF0090372A /* triop.h */,
-				8CB3E09F17F1DFFF0090372A /* triostr.h */,
-			);
-			path = trio;
 			sourceTree = "<group>";
 		};
 		94817C291922B45500FDFC99 /* cdplay */ = {
@@ -4278,6 +4273,56 @@
 			path = sdsp;
 			sourceTree = "<group>";
 		};
+		EE8973D320B90AA500F073C1 /* minilzo_external */ = {
+			isa = PBXGroup;
+			children = (
+				EE8973D420B90AA500F073C1 /* minilzo.h */,
+			);
+			path = minilzo_external;
+			sourceTree = "<group>";
+		};
+		EE8973D620B90AA600F073C1 /* minilzo */ = {
+			isa = PBXGroup;
+			children = (
+				EE8973D720B90AA600F073C1 /* minilzo.h */,
+			);
+			path = minilzo;
+			sourceTree = "<group>";
+		};
+		EE8973D820B90AA700F073C1 /* minilzo_internal */ = {
+			isa = PBXGroup;
+			children = (
+				EE8973D920B90AA700F073C1 /* minilzo.h */,
+			);
+			path = minilzo_internal;
+			sourceTree = "<group>";
+		};
+		EE8973DA20B90AA700F073C1 /* trio */ = {
+			isa = PBXGroup;
+			children = (
+				EE8973DB20B90AA700F073C1 /* trionan.h */,
+				EE8973DC20B90AA700F073C1 /* triodef.h */,
+				EE8973DD20B90AA700F073C1 /* triostr.h */,
+				EE8973DE20B90AA700F073C1 /* triop.h */,
+				EE8973DF20B90AA700F073C1 /* trio.h */,
+			);
+			path = trio;
+			sourceTree = "<group>";
+		};
+		EE8973E020B90BC100F073C1 /* minilzo */ = {
+			isa = PBXGroup;
+			children = (
+				EE8973E120B90BC100F073C1 /* lzodefs.h */,
+				EE8973E220B90BC100F073C1 /* README.MEDNAFEN */,
+				EE8973E320B90BC100F073C1 /* lzoconf.h */,
+				EE8973E420B90BC100F073C1 /* Makefile.am.inc */,
+				EE8973E520B90BC100F073C1 /* _minilzo.h */,
+				EE8973E620B90BC100F073C1 /* README.LZO */,
+				EE8973E720B90BC100F073C1 /* minilzo.c */,
+			);
+			path = minilzo;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -4330,6 +4375,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE8973E820B90BC100F073C1 /* README.MEDNAFEN in Resources */,
+				EE8973EA20B90BC100F073C1 /* README.LZO in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4378,6 +4425,7 @@
 				8CB3DE7517F1DE5E0090372A /* huc6273.cpp in Sources */,
 				8CB3E0BC17F20F810090372A /* crc32.cpp in Sources */,
 				8CB3DEA717F1DE5E0090372A /* sio.cpp in Sources */,
+				EE8973F120B90E2500F073C1 /* jpkeyboard.cpp in Sources */,
 				3DDC76191BD2D825002E7674 /* CDAFReader_SF.cpp in Sources */,
 				8CB3E0FF17F216370090372A /* mapping0.c in Sources */,
 				8CB3E0FB17F2161B0090372A /* registry.c in Sources */,
@@ -4400,6 +4448,7 @@
 				94CFB6331A75D740001F174F /* sha1.cpp in Sources */,
 				8CB3E0D617F2124E0090372A /* MemoryStream.cpp in Sources */,
 				8CB3E10317F216590090372A /* trio.c in Sources */,
+				EE8973EE20B90D3800F073C1 /* ZIPReader.cpp in Sources */,
 				8CB3E06117F1DE5E0090372A /* vb.cpp in Sources */,
 				8CB3E0AE17F20E6D0090372A /* netplay.cpp in Sources */,
 				8CB3DCCA17F1DE5E0090372A /* debug.cpp in Sources */,
@@ -4452,7 +4501,6 @@
 				94CFB6321A75D73F001F174F /* md5.cpp in Sources */,
 				8CB3E10917F216910090372A /* tblur.cpp in Sources */,
 				8CB3E05317F1DE5E0090372A /* vorbisfile.c in Sources */,
-				8CB3E0C117F20FC50090372A /* minilzo.c in Sources */,
 				94FD853218C7F53C001B426D /* pcecd.cpp in Sources */,
 				8CB3DE8A17F1DE5E0090372A /* cpu.cpp in Sources */,
 				8CB3DE5817F1DE5E0090372A /* mouse.cpp in Sources */,
@@ -4499,12 +4547,12 @@
 				87A30A421E57A44500114B03 /* Time.cpp in Sources */,
 				8CB3DE9817F1DE5E0090372A /* gamepad.cpp in Sources */,
 				8CB3E0D317F211FE0090372A /* vdc.cpp in Sources */,
+				EE8973E920B90BC100F073C1 /* Makefile.am.inc in Sources */,
 				8CB3DE8417F1DE5E0090372A /* rainbow.cpp in Sources */,
 				8CB3E06017F1DE5E0090372A /* timer.cpp in Sources */,
 				94B082531A86982900D3C0BC /* GZFileStream.cpp in Sources */,
 				94CFB6281A75D70C001F174F /* IPSPatcher.cpp in Sources */,
 				8CB3DD6717F1DE5E0090372A /* rom.cpp in Sources */,
-				8CB3E0BF17F20FB40090372A /* unzip.c in Sources */,
 				8795543F1EB66E2E00A08C56 /* extram.cpp in Sources */,
 				8CB3E0EC17F214140090372A /* resample.c in Sources */,
 				8CB3E0B217F20EFA0090372A /* cdromif.cpp in Sources */,
@@ -4528,7 +4576,6 @@
 				94B0824F1A8697EF00D3C0BC /* CDAFReader_Vorbis.cpp in Sources */,
 				877661681E772FC1009252B0 /* mission.cpp in Sources */,
 				8CB3E0FA17F216160090372A /* floor0.c in Sources */,
-				8CB3E0C017F20FB60090372A /* ioapi.c in Sources */,
 				8CB3E10017F216440090372A /* mdct.c in Sources */,
 				8CB3E0B417F20F0C0090372A /* CDAccess_CCD.cpp in Sources */,
 				8CB3E0B817F20F5A0090372A /* recover-raw.cpp in Sources */,
@@ -4546,6 +4593,7 @@
 				948D5B4718C8083D00346504 /* Stereo_Buffer.cpp in Sources */,
 				94817C441922C8E400FDFC99 /* cputest.c in Sources */,
 				94817C451922C8E400FDFC99 /* x86_cpu.c in Sources */,
+				EE8973EB20B90BC100F073C1 /* minilzo.c in Sources */,
 				94817C461922D29B00FDFC99 /* demo.cpp in Sources */,
 				94CFB6341A75D740001F174F /* sha256.cpp in Sources */,
 				94817C471922D36300FDFC99 /* primitives.cpp in Sources */,
@@ -4627,14 +4675,16 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/include\"",
 					"\"$(SRCROOT)/mednafen/hw_cpu\"",
 					"\"$(SRCROOT)/mednafen/hw_misc\"",
 					"\"$(SRCROOT)/mednafen/hw_sound\"",
 					"\"$(SRCROOT)/mednafen/hw_video\"",
 					"\"$(SRCROOT)/libsndfile\"",
+					"\"$(SRCROOT)/mednafen/trio\"",
+					"\"$(SRCROOT)\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "\"$(USER_LIBRARY_DIR)/Application Support/OpenEmu/Cores\"";
@@ -4645,9 +4695,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"0.9.48\\\"",
+					"-DMEDNAFEN_VERSION=\\\"1.21.3\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00094800",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x01210100",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
@@ -4691,13 +4741,14 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/include\"",
 					"\"$(SRCROOT)/mednafen/hw_cpu\"",
 					"\"$(SRCROOT)/mednafen/hw_misc\"",
 					"\"$(SRCROOT)/mednafen/hw_sound\"",
 					"\"$(SRCROOT)/mednafen/hw_video\"",
 					"\"$(SRCROOT)/libsndfile\"",
+					"\"$(SRCROOT)/mednafen/trio\"",
+					"\"$(SRCROOT)\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "\"$(USER_LIBRARY_DIR)/Application Support/OpenEmu/Cores\"";
@@ -4708,9 +4759,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"0.9.48\\\"",
+					"-DMEDNAFEN_VERSION=\\\"1.21.3\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00094800",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x01210100",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
@@ -4751,6 +4802,7 @@
 		1DEB913F08733D840010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -4787,6 +4839,7 @@
 		1DEB914008733D840010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
