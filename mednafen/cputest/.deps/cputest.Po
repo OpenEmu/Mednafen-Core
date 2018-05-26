@@ -1,0 +1,6 @@
+cputest/cputest.o: cputest/cputest.c cputest/cputest.h \
+  ../include/config.h
+
+cputest/cputest.h:
+
+../include/config.h:
