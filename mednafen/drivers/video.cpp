@@ -1215,7 +1215,7 @@ void Video_Sync(MDFNGI *gi)
   }
   else if(CurrentScaler->id == NTVB_2XSAI || CurrentScaler->id == NTVB_SUPER2XSAI || CurrentScaler->id == NTVB_SUPEREAGLE)
   {
-   Init_2xSaI(screen->format->BitsPerPixel, 555); // systemColorDepth, BitFormat
+   Init_2xSaI(32, 555); // systemColorDepth, BitFormat
   }
 #endif
  }
