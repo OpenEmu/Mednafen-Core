@@ -563,9 +563,10 @@ INLINE int32 VCE::SyncReal(const int32 timestamp)
   cd_event = PCECD_Run(timestamp);
 
  if(sgfx)
-  SyncSub<true, false>(clocks);
+// https://github.com/OpenEmu/Mednafen-Core/commit/18a33dc8abe05ab697ab5ff2e1a366c9da00e9fd
+  SyncSub<true, true>(clocks);
  else
-  SyncSub<false, false>(clocks);
+  SyncSub<false, true>(clocks);
 
  //
  //
