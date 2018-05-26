@@ -36,7 +36,7 @@
 #include	"sound/WAVRecord.h"
 #include	"cdrom/cdromif.h"
 #include	"mempatcher.h"
-#include	"compress/minilzo.h"
+#include	<minilzo/minilzo.h>
 #include	"tests.h"
 #include	"video/tblur.h"
 #include	"qtrecord.h"
@@ -1286,7 +1286,7 @@ bool MDFNI_InitializeModules(void)
   &EmulatedCDPlay,
   &EmulatedDEMO
  };
- static_assert(MEDNAFEN_VERSION_NUMERIC >= 0x00102100, "Bad MEDNAFEN_VERSION_NUMERIC");
+ static_assert(MEDNAFEN_VERSION_NUMERIC >= 0x00102101, "Bad MEDNAFEN_VERSION_NUMERIC");
 
  for(unsigned int i = 0; i < sizeof(InternalSystems) / sizeof(MDFNGI *); i++)
   AddSystem(InternalSystems[i]);

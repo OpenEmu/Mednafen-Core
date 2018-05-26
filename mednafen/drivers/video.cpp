@@ -137,6 +137,12 @@ static const MDFNSetting_EnumList VDriver_List[] =
  { "opengl", VDRIVER_OPENGL, "OpenGL", gettext_noop("All video-related Mednafen features are available with this video driver.") },
  { "softfb", VDRIVER_SOFTSDL, "Software Blitting to Framebuffer", gettext_noop("Slower with lower-quality scaling than OpenGL, but if you don't have hardware-accelerated OpenGL rendering, it will probably be faster than software OpenGL rendering. Bilinear interpolation not available. OpenGL shaders do not work with this output method, of course.") },
 
+ // Backwards-compat:
+ { "0", VDRIVER_OPENGL },
+ { "1", VDRIVER_SOFTSDL },
+ { "sdl", VDRIVER_SOFTSDL },
+ { "overlay", VDRIVER__COUNT },
+
  { NULL, 0 },
 };
 

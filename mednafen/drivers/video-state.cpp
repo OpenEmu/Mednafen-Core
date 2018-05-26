@@ -96,7 +96,7 @@ static void SSCleanup(void)
 // TODO: Handle memory allocation errors.
 void DrawSaveStates(int32 screen_w, int32 screen_h, double exs, double eys, int rs, int gs, int bs, int as)
 {
- if(StateShow < Time::MonoMS())
+ if(StateShow <= Time::MonoMS())
  {
   SSCleanup();
  }

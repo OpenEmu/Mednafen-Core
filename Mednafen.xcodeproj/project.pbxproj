@@ -67,6 +67,8 @@
 		87A30A471E57CBF700114B03 /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87A30A451E57CBF700114B03 /* string.cpp */; };
 		87C6560320B9D7A400D25A97 /* ZIPReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87C6560120B9D7A300D25A97 /* ZIPReader.cpp */; };
 		87C6560620B9DA8300D25A97 /* jpkeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87C6560520B9DA8200D25A97 /* jpkeyboard.cpp */; };
+		87C6561020B9F13F00D25A97 /* Makefile.am.inc in Sources */ = {isa = PBXBuildFile; fileRef = 87C6560B20B9F13E00D25A97 /* Makefile.am.inc */; };
+		87C6561220B9F13F00D25A97 /* minilzo.c in Sources */ = {isa = PBXBuildFile; fileRef = 87C6560E20B9F13E00D25A97 /* minilzo.c */; };
 		87D380E91D962E8800FC657D /* bios.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7C717F1DE5B0090372A /* bios.cpp */; };
 		87D380EA1D962E8800FC657D /* biosHLE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7C917F1DE5B0090372A /* biosHLE.cpp */; };
 		87D380EB1D962E8800FC657D /* dma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7CA17F1DE5B0090372A /* dma.cpp */; };
@@ -185,7 +187,6 @@
 		8CB3E0BA17F20F6F0090372A /* galois.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D53317F1DE5A0090372A /* galois.cpp */; };
 		8CB3E0BB17F20F750090372A /* lec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D53517F1DE5A0090372A /* lec.cpp */; };
 		8CB3E0BC17F20F810090372A /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D53017F1DE5A0090372A /* crc32.cpp */; };
-		8CB3E0C117F20FC50090372A /* minilzo.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D54917F1DE5A0090372A /* minilzo.c */; };
 		8CB3E0C217F210640090372A /* endian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D5CD17F1DE5B0090372A /* endian.cpp */; };
 		8CB3E0C317F2106D0090372A /* error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D5CF17F1DE5B0090372A /* error.cpp */; };
 		8CB3E0C417F210720090372A /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D5D117F1DE5B0090372A /* file.cpp */; };
@@ -454,6 +455,13 @@
 		87C6560220B9D7A400D25A97 /* ZIPReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZIPReader.h; sourceTree = "<group>"; };
 		87C6560420B9DA8200D25A97 /* jpkeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jpkeyboard.h; path = ss/input/jpkeyboard.h; sourceTree = "<group>"; };
 		87C6560520B9DA8200D25A97 /* jpkeyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jpkeyboard.cpp; path = ss/input/jpkeyboard.cpp; sourceTree = "<group>"; };
+		87C6560820B9F13E00D25A97 /* lzodefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzodefs.h; sourceTree = "<group>"; };
+		87C6560920B9F13E00D25A97 /* README.MEDNAFEN */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.MEDNAFEN; sourceTree = "<group>"; };
+		87C6560A20B9F13E00D25A97 /* lzoconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzoconf.h; sourceTree = "<group>"; };
+		87C6560B20B9F13E00D25A97 /* Makefile.am.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = Makefile.am.inc; sourceTree = "<group>"; };
+		87C6560C20B9F13E00D25A97 /* README.LZO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.LZO; sourceTree = "<group>"; };
+		87C6560D20B9F13E00D25A97 /* _minilzo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _minilzo.h; sourceTree = "<group>"; };
+		87C6560E20B9F13E00D25A97 /* minilzo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = minilzo.c; sourceTree = "<group>"; };
 		87CD091F1B3DFB3100021C64 /* SNSFLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SNSFLoader.cpp; sourceTree = "<group>"; };
 		87CD09201B3DFB3100021C64 /* SNSFLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SNSFLoader.h; sourceTree = "<group>"; };
 		87CD09211B3DFB4500021C64 /* SPCReader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SPCReader.cpp; sourceTree = "<group>"; };
@@ -501,12 +509,7 @@
 		8CB3D53C17F1DE5A0090372A /* scsicd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scsicd.cpp; sourceTree = "<group>"; };
 		8CB3D53D17F1DE5A0090372A /* scsicd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scsicd.h; sourceTree = "<group>"; };
 		8CB3D53F17F1DE5A0090372A /* SimpleFIFO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleFIFO.h; sourceTree = "<group>"; };
-		8CB3D54617F1DE5A0090372A /* lzoconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzoconf.h; sourceTree = "<group>"; };
-		8CB3D54717F1DE5A0090372A /* lzodefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzodefs.h; sourceTree = "<group>"; };
 		8CB3D54817F1DE5A0090372A /* Makefile.am.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = Makefile.am.inc; sourceTree = "<group>"; };
-		8CB3D54917F1DE5A0090372A /* minilzo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = minilzo.c; sourceTree = "<group>"; };
-		8CB3D54A17F1DE5A0090372A /* minilzo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minilzo.h; sourceTree = "<group>"; };
-		8CB3D54D17F1DE5A0090372A /* README.LZO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.LZO; sourceTree = "<group>"; };
 		8CB3D55117F1DE5A0090372A /* arm_cpu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = arm_cpu.c; sourceTree = "<group>"; };
 		8CB3D55217F1DE5A0090372A /* cputest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cputest.c; sourceTree = "<group>"; };
 		8CB3D55317F1DE5A0090372A /* cputest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cputest.h; sourceTree = "<group>"; };
@@ -1971,6 +1974,20 @@
 			path = net;
 			sourceTree = "<group>";
 		};
+		87C6560720B9F13E00D25A97 /* minilzo */ = {
+			isa = PBXGroup;
+			children = (
+				87C6560820B9F13E00D25A97 /* lzodefs.h */,
+				87C6560920B9F13E00D25A97 /* README.MEDNAFEN */,
+				87C6560A20B9F13E00D25A97 /* lzoconf.h */,
+				87C6560B20B9F13E00D25A97 /* Makefile.am.inc */,
+				87C6560C20B9F13E00D25A97 /* README.LZO */,
+				87C6560D20B9F13E00D25A97 /* _minilzo.h */,
+				87C6560E20B9F13E00D25A97 /* minilzo.c */,
+			);
+			path = minilzo;
+			sourceTree = "<group>";
+		};
 		87CD09231B3DFB5400021C64 /* snes_faust */ = {
 			isa = PBXGroup;
 			children = (
@@ -2050,6 +2067,7 @@
 				8CB3D6E717F1DE5B0090372A /* mempatcher-driver.h */,
 				8CB3D6E817F1DE5B0090372A /* mempatcher.cpp */,
 				8CB3D6E917F1DE5B0090372A /* mempatcher.h */,
+				87C6560720B9F13E00D25A97 /* minilzo */,
 				8CB3D6EA17F1DE5B0090372A /* movie-driver.h */,
 				8CB3D6EB17F1DE5B0090372A /* movie.cpp */,
 				8CB3D6EC17F1DE5B0090372A /* movie.h */,
@@ -2156,12 +2174,7 @@
 			children = (
 				94B082511A86982900D3C0BC /* GZFileStream.cpp */,
 				94B082521A86982900D3C0BC /* GZFileStream.h */,
-				8CB3D54617F1DE5A0090372A /* lzoconf.h */,
-				8CB3D54717F1DE5A0090372A /* lzodefs.h */,
 				8CB3D54817F1DE5A0090372A /* Makefile.am.inc */,
-				8CB3D54917F1DE5A0090372A /* minilzo.c */,
-				8CB3D54A17F1DE5A0090372A /* minilzo.h */,
-				8CB3D54D17F1DE5A0090372A /* README.LZO */,
 				87C6560120B9D7A300D25A97 /* ZIPReader.cpp */,
 				87C6560220B9D7A400D25A97 /* ZIPReader.h */,
 				94CFB6231A75D6CB001F174F /* ZLInflateFilter.cpp */,
@@ -4418,7 +4431,6 @@
 				94CFB6321A75D73F001F174F /* md5.cpp in Sources */,
 				8CB3E10917F216910090372A /* tblur.cpp in Sources */,
 				8CB3E05317F1DE5E0090372A /* vorbisfile.c in Sources */,
-				8CB3E0C117F20FC50090372A /* minilzo.c in Sources */,
 				94FD853218C7F53C001B426D /* pcecd.cpp in Sources */,
 				8CB3DE8A17F1DE5E0090372A /* cpu.cpp in Sources */,
 				8CB3DE5817F1DE5E0090372A /* mouse.cpp in Sources */,
@@ -4545,6 +4557,7 @@
 				87D380EF1D962E8800FC657D /* gfx_scanline_mono.cpp in Sources */,
 				87D380F01D962E8800FC657D /* interrupt.cpp in Sources */,
 				87D380F11D962E8800FC657D /* mem.cpp in Sources */,
+				87C6561020B9F13F00D25A97 /* Makefile.am.inc in Sources */,
 				87D380F21D962E8800FC657D /* neopop.cpp in Sources */,
 				87D380F31D962E8800FC657D /* rom.cpp in Sources */,
 				87D380F41D962E8800FC657D /* rtc.cpp in Sources */,
@@ -4552,6 +4565,7 @@
 				87D380F61D962E8800FC657D /* T6W28_Apu.cpp in Sources */,
 				87D380F71D962E8800FC657D /* TLCS900h_disassemble.cpp in Sources */,
 				87D380F81D962E8800FC657D /* TLCS900h_disassemble_dst.cpp in Sources */,
+				87C6561220B9F13F00D25A97 /* minilzo.c in Sources */,
 				87D380F91D962E8800FC657D /* TLCS900h_disassemble_extra.cpp in Sources */,
 				87D380FA1D962E8800FC657D /* TLCS900h_disassemble_reg.cpp in Sources */,
 				87D380FB1D962E8800FC657D /* TLCS900h_disassemble_src.cpp in Sources */,
@@ -4612,9 +4626,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"1.21.0-UNSTABLE\\\"",
+					"-DMEDNAFEN_VERSION=\\\"1.21.1\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00102100",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00102101",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
@@ -4676,9 +4690,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"1.21.0-UNSTABLE\\\"",
+					"-DMEDNAFEN_VERSION=\\\"1.21.1\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00102100",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00102101",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",

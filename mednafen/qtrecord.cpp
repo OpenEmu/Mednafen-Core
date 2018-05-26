@@ -22,7 +22,7 @@
 #include <mednafen/mednafen.h>
 #include <mednafen/Time.h>
 #include "qtrecord.h"
-#include "compress/minilzo.h"
+#include <minilzo/minilzo.h>
 #include "video/png.h"
 
 #include <zlib.h>

@@ -178,7 +178,14 @@ void MDFNFILE::Open(const char *path, const FileExtensionSpecStruct *known_ext, 
     tfp->seek(0, SEEK_SET);
 
     if(tfp->size() > MaxROMImageSize)
-     throw MDFN_Error(0, _("ROM image is too large; maximum size allowed is %llu bytes."), (unsigned long long)MaxROMImageSize);
+    {
+     const char* hint = "";
+
+     if(!MDFN_strazicmp(f_ext.c_str(), ".bin") || !MDFN_strazicmp(f_ext.c_str(), ".iso") || !MDFN_strazicmp(f_ext.c_str(), ".img"))
+      hint = _("  If you are trying to load a CD image, load it via CUE/CCD/TOC/M3U instead of BIN/ISO/IMG.");
+
+     throw MDFN_Error(0, _("ROM image is too large; maximum size allowed is %llu bytes.%s"), (unsigned long long)MaxROMImageSize, hint);
+    }
 
     str = std::move(tfp);
    }

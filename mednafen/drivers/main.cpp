@@ -160,7 +160,7 @@ static const MDFNSetting DriverSettings[] =
   { "sftoggle", MDFNSF_NOFLAGS, gettext_noop("Treat the SLOW-forward button as a toggle."), NULL, MDFNST_BOOL, "0" },
 
   { "nothrottle", MDFNSF_NOFLAGS, gettext_noop("Disable speed throttling when sound is disabled."), NULL, MDFNST_BOOL, "0"},
-  { "autosave", MDFNSF_NOFLAGS, gettext_noop("Automatic load/save state on game load/save."), gettext_noop("Automatically save and load save states when a game is closed or loaded, respectively."), MDFNST_BOOL, "0"},
+  { "autosave", MDFNSF_NOFLAGS, gettext_noop("Automatically load/save state on game load/close."), gettext_noop("Automatically save and load save states when a game is closed or loaded, respectively."), MDFNST_BOOL, "0"},
   { "sound.driver", MDFNSF_NOFLAGS, gettext_noop("Select sound driver."), gettext_noop("The following choices are possible, sorted by preference, high to low, when \"default\" driver is used, but dependent on being compiled in."), MDFNST_ENUM, "default", NULL, NULL, NULL, NULL, SDriver_List },
   { "sound.device", MDFNSF_NOFLAGS, gettext_noop("Select sound output device."), gettext_noop("When using ALSA sound output under Linux, the \"sound.device\" setting \"default\" is Mednafen's default, IE \"hw:0\", not ALSA's \"default\". If you want to use ALSA's \"default\", use \"sexyal-literal-default\"."), MDFNST_STRING, "default", NULL, NULL },
   { "sound.volume", MDFNSF_NOFLAGS, gettext_noop("Sound volume level, in percent."), gettext_noop("Setting this volume control higher than the default of \"100\" may severely distort the sound."), MDFNST_UINT, "100", "0", "150" },
@@ -965,6 +965,8 @@ bool sound_active;	// true if sound is enabled and initialized
 
 static EmuRealSyncher ers;
 
+static bool autosave_load_error = false;
+
 static int LoadGame(const char *force_module, const char *path)
 {
 	assert(MDFND_ThreadID() == MainThreadID);
@@ -1002,8 +1004,16 @@ static int LoadGame(const char *force_module, const char *path)
 	if(MDFN_GetSettingB("sound"))
 	 sound_active = Sound_Init(tmp);
 
+	// Load state before network connection.
+	// TODO: Move into core, MDFNI_LoadGame()
         if(MDFN_GetSettingB("autosave"))
-	 MDFNI_LoadState(NULL, "mca");
+	{
+	 if(!MDFNI_LoadState(NULL, "mca"))
+	 {
+	  autosave_load_error = true;
+	  return 0;
+	 }
+	}
 
 	if(netconnect)
 	 MDFNI_NetplayConnect();
@@ -1061,7 +1071,7 @@ int CloseGame(void)
         if(soundrecfn)
          MDFNI_StopWAVRecord();
 
-	if(MDFN_GetSettingB("autosave"))
+	if(MDFN_GetSettingB("autosave") && !autosave_load_error)
 	 MDFNI_SaveState(NULL, "mca", NULL, NULL, NULL);
 
 	MDFNI_NetplayDisconnect();

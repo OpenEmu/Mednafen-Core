@@ -848,10 +848,18 @@ bool MDFNI_LoadState(const char *fname, const char *suffix) noexcept
  }
  catch(std::exception &e)
  {
+  MDFN_Error* me = dynamic_cast<MDFN_Error*>(&e);
+
   if(!fname && !suffix)
    MDFN_Notify(MDFN_NOTICE_ERROR, _("State %d load error: %s"), CurrentState, e.what());
   else
+  {
+   // FIXME: Autosave kludgery, refactor interfaces in the future to make cleaner.
+   if(suffix && me && me->GetErrno() == ENOENT)
+    return true;
+
    MDFND_OutputNotice(MDFN_NOTICE_ERROR, e.what());
+  }
 
   if(MDFNnetplay)
    MDFND_NetplayText(e.what(), false);

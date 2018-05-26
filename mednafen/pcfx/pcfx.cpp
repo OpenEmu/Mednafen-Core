@@ -1017,6 +1017,7 @@ static void StateAction(StateMem *sm, const unsigned load, const bool data_only)
  {
   SFPTR8(RAM, 0x200000),
   SFVAR(Last_VDC_AR),
+  SFVAR(RAM_LPA),
   SFVAR(BackupControl),
   SFVAR(ExBusReset),
   SFPTR8(BackupRAM, BRAMDisabled ? 0 : 0x8000),
