@@ -42,13 +42,13 @@ void Time_Init(void)
 {
  #ifdef WIN32
   tgt_base = timeGetTime();
-// #else
-//  if(MDFN_UNLIKELY(clock_gettime(CLOCK_MONOTONIC, &cgt_base) == -1))
-//  {
-//   ErrnoHolder ene(errno);
-//
-//   throw MDFN_Error(ene.Errno(), _("%s failed: %s"), "clock_gettime()", ene.StrError());
-//  }
+ #else
+  if(MDFN_UNLIKELY(clock_gettime(CLOCK_MONOTONIC, &cgt_base) == -1))
+  {
+   ErrnoHolder ene(errno);
+
+   throw MDFN_Error(ene.Errno(), _("%s failed: %s"), "clock_gettime()", ene.StrError());
+  }
  #endif
  Initialized = true;
 }
@@ -197,19 +197,19 @@ int64 MonoUS(void)
  {
   return (int64)1000 * (timeGetTime() - tgt_base);
  }
-// #else
-// {
-//  struct timespec tp;
-//
-//  if(MDFN_UNLIKELY(clock_gettime(CLOCK_MONOTONIC, &tp) == -1))
-//  {
-//   ErrnoHolder ene(errno);
-//
-//   throw MDFN_Error(ene.Errno(), _("%s failed: %s"), "clock_gettime()", ene.StrError());
-//  }
-//
-//  return (int64)(tp.tv_sec - cgt_base.tv_sec) * 1000 * 1000 + (tp.tv_nsec - cgt_base.tv_nsec) / 1000;
-// }
+ #else
+ {
+  struct timespec tp;
+
+  if(MDFN_UNLIKELY(clock_gettime(CLOCK_MONOTONIC, &tp) == -1))
+  {
+   ErrnoHolder ene(errno);
+
+   throw MDFN_Error(ene.Errno(), _("%s failed: %s"), "clock_gettime()", ene.StrError());
+  }
+
+  return (int64)(tp.tv_sec - cgt_base.tv_sec) * 1000 * 1000 + (tp.tv_nsec - cgt_base.tv_nsec) / 1000;
+ }
  #endif
 }
 
