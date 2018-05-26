@@ -147,7 +147,7 @@ static int StateAction(StateMem *sm, int load, int data_only)
         SFVARN(IRQCount, "IRQC"),
         SFVARN(IRQa, "IRQA"),
         SFVARN(IRQLatch, "IRQL"),
-        SFARRAYN(DRegs, 11, "DREG"),
+        SFPTR8N(DRegs, 11, "DREG"),
         SFEND
  };
 

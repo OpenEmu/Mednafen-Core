@@ -1,5 +1,6 @@
 #include "mednafen/types.h"
 #include "mednafen/git.h"
+#include "mednafen.h"
 #include "mednafen/mednafen-driver.h"
 #include "thread.h"
 
@@ -22,6 +23,12 @@ void MDFND_Message(const char *str)
 {
     std::cerr << str;
 }
+
+void MDFND_OutputNotice(MDFN_NoticeType t, const char* s) noexcept
+{}
+
+void MDFND_OutputInfo(const char *s) noexcept
+{}
 
 void MDFND_MidSync(const EmulateSpecStruct *)
 {}
@@ -139,7 +146,7 @@ void MDFND_SendData(const void*, uint32) {}
 void MDFND_RecvData(void *, uint32) {}
 void MDFND_NetplayText(const uint8*, bool) {}
 void MDFND_NetworkClose() {}
-void MDFND_NetplaySetHints(bool active, bool behind) {}
+void MDFND_NetplaySetHints(bool active, bool behind, uint32 local_players_mask) {}
 int MDFND_NetworkConnect() { return 0; }
 bool MDFND_CheckNeedExit(void) { return false; }
 

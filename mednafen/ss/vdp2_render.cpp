@@ -148,7 +148,6 @@ static uint8 BackCCRatio;
 static struct
 {
  uint16 XStart, XEnd;
- uint16 YStart, YEnd;
  uint32 LineWinAddr;
  bool LineWinEn;
  //
@@ -788,14 +787,10 @@ static INLINE void RegsWrite(uint32 A, uint16 V)
 
   //
   case 0xC0: Window[0].XStart = V & 0x3FF; break;
-  case 0xC2: Window[0].YStart = V & 0x1FF; break;
   case 0xC4: Window[0].XEnd = V & 0x3FF; break;
-  case 0xC6: Window[0].YEnd = V & 0x1FF; break;
 
   case 0xC8: Window[1].XStart = V & 0x3FF; break;
-  case 0xCA: Window[1].YStart = V & 0x1FF; break;
   case 0xCC: Window[1].XEnd = V & 0x3FF; break;
-  case 0xCE: Window[1].YEnd = V & 0x1FF; break;
 
   case 0xD0:
   case 0xD2:
@@ -1105,8 +1100,6 @@ static void Reset(bool powering_up)
  {
   Window[w].XStart = 0;
   Window[w].XEnd = 0;
-  Window[w].YStart = 0;
-  Window[w].YEnd = 0;
   Window[w].LineWinAddr = 0;
   Window[w].LineWinEn = false;
 
@@ -2793,17 +2786,8 @@ static NO_INLINE void DrawLine(const uint16 out_line, const uint16 vdp2_line, co
   // Line Window
   //
   {
-   int32 w_ycomp_line;
-
-   if(InterlaceMode == IM_DOUBLE)
-    w_ycomp_line = (vdp2_line << 1) + field;
-   else
-    w_ycomp_line = vdp2_line;
-
    for(unsigned d = 0; d < 2; d++)
    {
-    int32 ys = Window[d].YStart, ye = Window[d].YEnd;
-
     if(Window[d].LineWinEn)
     {
      const uint16* vrt = &VRAM[Window[d].CurLineWinAddr & 0x3FFFE];
@@ -2839,13 +2823,7 @@ static NO_INLINE void DrawLine(const uint16 out_line, const uint16 vdp2_line, co
 
     Window[d].CurLineWinAddr += 2 << (InterlaceMode == IM_DOUBLE);
 
-    if(InterlaceMode != IM_DOUBLE)
-    {
-     ys >>= 1;
-     ye >>= 1;
-    }
-
-    Window[d].YMet = (w_ycomp_line >= Window[d].YStart) & (w_ycomp_line <= Window[d].YEnd);
+    Window[d].YMet = LIB[vdp2_line].win_ymet[d];
     //
     //
     //
@@ -3318,9 +3296,9 @@ void VDP2REND_SetGetVideoParams(MDFNGI* gi, const bool caspect, const int sls, c
  gi->lcm_width = (ShowHOverscan? 10560 : 10240);
  gi->lcm_height = (LineVisLast + 1 - LineVisFirst) * 2;
 
- gi->mouse_scale_x = (float)(ShowHOverscan? 21472 : 20821) / gi->nominal_width;
+ gi->mouse_scale_x = (float)(ShowHOverscan? 21472 : 20821);
  gi->mouse_offs_x = (float)(ShowHOverscan? 0 : 651) / 2;
- gi->mouse_scale_y = 1.0;
+ gi->mouse_scale_y = gi->nominal_height;
  gi->mouse_offs_y = LineVisFirst;
  //
  //
@@ -3330,7 +3308,7 @@ void VDP2REND_SetGetVideoParams(MDFNGI* gi, const bool caspect, const int sls, c
   gi->nominal_width = (ShowHOverscan ? 352 : 341);
   gi->lcm_width = gi->nominal_width * 2;
 
-  gi->mouse_scale_x = (float)(ShowHOverscan? 21472 : 20821) / gi->nominal_width;
+  gi->mouse_scale_x = (float)(ShowHOverscan? 21472 : 20821);
   gi->mouse_offs_x = (float)(ShowHOverscan? 0 : 651) / 2;
  }
 }
@@ -3484,18 +3462,18 @@ void VDP2REND_StateAction(StateMem* sm, const unsigned load, const bool data_onl
 
   SFVAR(MosaicVCount),
 
-  SFARRAY32(VCLast, 2),
+  SFVAR(VCLast),
 
-  SFARRAY32(YCoordAccum, 2),
-  SFARRAY32(MosEff_YCoordAccum, 2),
+  SFVAR(YCoordAccum),
+  SFVAR(MosEff_YCoordAccum),
 
-  SFARRAY32(CurXScrollIF, 2),
-  SFARRAY32(CurYScrollIF, 2),
-  SFARRAY16(CurXCoordInc, 2),
-  SFARRAY32(CurLSA, 2),
+  SFVAR(CurXScrollIF),
+  SFVAR(CurYScrollIF),
+  SFVAR(CurXCoordInc),
+  SFVAR(CurLSA),
 
-  SFARRAY16(NBG23_YCounter, 2),
-  SFARRAY16(MosEff_NBG23_YCounter, 2),
+  SFVAR(NBG23_YCounter),
+  SFVAR(MosEff_NBG23_YCounter),
 
   SFVAR(CurBackTabAddr),
   SFVAR(CurBackColor),
@@ -3504,12 +3482,11 @@ void VDP2REND_StateAction(StateMem* sm, const unsigned load, const bool data_onl
   SFVAR(CurLCColor),
 
   // XStart and XEnd can be modified by line window processing.
-  SFVAR(Window->XStart, 2, sizeof(*Window)),
-  SFVAR(Window->XEnd, 2, sizeof(*Window)),
-  SFVAR(Window->YMet, 2, sizeof(*Window)),
-  SFVAR(Window->CurXStart, 2, sizeof(*Window)),
-  SFVAR(Window->CurXEnd, 2, sizeof(*Window)),
-  SFVAR(Window->CurLineWinAddr, 2, sizeof(*Window)),
+  SFVAR(Window->XStart, 2, sizeof(*Window), Window),
+  SFVAR(Window->XEnd, 2, sizeof(*Window), Window),
+  SFVAR(Window->CurXStart, 2, sizeof(*Window), Window),
+  SFVAR(Window->CurXEnd, 2, sizeof(*Window), Window),
+  SFVAR(Window->CurLineWinAddr, 2, sizeof(*Window), Window),
 
   SFEND
  };

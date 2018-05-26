@@ -302,12 +302,12 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_cflags_gcc_option.m4 \
 	$(top_srcdir)/m4/lib-prefix.m4 $(top_srcdir)/m4/lock.m4 \
 	$(top_srcdir)/m4/longlong.m4 $(top_srcdir)/m4/nls.m4 \
 	$(top_srcdir)/m4/po.m4 $(top_srcdir)/m4/printf-posix.m4 \
-	$(top_srcdir)/m4/progtest.m4 $(top_srcdir)/m4/size_max.m4 \
-	$(top_srcdir)/m4/stdint_h.m4 $(top_srcdir)/m4/threadlib.m4 \
-	$(top_srcdir)/m4/uintmax_t.m4 $(top_srcdir)/m4/visibility.m4 \
-	$(top_srcdir)/m4/wchar_t.m4 $(top_srcdir)/m4/wint_t.m4 \
-	$(top_srcdir)/m4/xsize.m4 $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/progtest.m4 $(top_srcdir)/m4/sdl2.m4 \
+	$(top_srcdir)/m4/size_max.m4 $(top_srcdir)/m4/stdint_h.m4 \
+	$(top_srcdir)/m4/threadlib.m4 $(top_srcdir)/m4/uintmax_t.m4 \
+	$(top_srcdir)/m4/visibility.m4 $(top_srcdir)/m4/wchar_t.m4 \
+	$(top_srcdir)/m4/wint_t.m4 $(top_srcdir)/m4/xsize.m4 \
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -589,8 +589,8 @@ am__mednafen_SOURCES_DIST = debug.cpp error.cpp mempatcher.cpp \
 	sound/Fir_Resampler.cpp sound/WAVRecord.cpp \
 	sound/OwlResampler.cpp sound/okiadpcm.cpp net/Net.cpp \
 	net/Net_POSIX.cpp net/Net_WS2.cpp compress/minilzo.c \
-	compress/ioapi.c compress/unzip.c compress/GZFileStream.cpp \
-	compress/ZLInflateFilter.cpp hash/md5.cpp hash/sha1.cpp \
+	compress/GZFileStream.cpp compress/ZLInflateFilter.cpp \
+	compress/ZIPReader.cpp hash/md5.cpp hash/sha1.cpp \
 	hash/sha256.cpp string/escape.cpp string/string.cpp \
 	video/surface.cpp video/font-data.cpp video/font-data-18x18.c \
 	video/font-data-12x13.c video/png.cpp video/primitives.cpp \
@@ -912,9 +912,9 @@ am_mednafen_OBJECTS = debug.$(OBJEXT) error.$(OBJEXT) \
 	sound/Fir_Resampler.$(OBJEXT) sound/WAVRecord.$(OBJEXT) \
 	sound/OwlResampler.$(OBJEXT) sound/okiadpcm.$(OBJEXT) \
 	net/Net.$(OBJEXT) $(am__objects_34) $(am__objects_35) \
-	compress/minilzo.$(OBJEXT) compress/ioapi.$(OBJEXT) \
-	compress/unzip.$(OBJEXT) compress/GZFileStream.$(OBJEXT) \
-	compress/ZLInflateFilter.$(OBJEXT) hash/md5.$(OBJEXT) \
+	compress/minilzo.$(OBJEXT) compress/GZFileStream.$(OBJEXT) \
+	compress/ZLInflateFilter.$(OBJEXT) \
+	compress/ZIPReader.$(OBJEXT) hash/md5.$(OBJEXT) \
 	hash/sha1.$(OBJEXT) hash/sha256.$(OBJEXT) \
 	string/escape.$(OBJEXT) string/string.$(OBJEXT) \
 	video/surface.$(OBJEXT) video/font-data.$(OBJEXT) \
@@ -1151,8 +1151,9 @@ PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POSUB = @POSUB@
 PRI_MACROS_BROKEN = @PRI_MACROS_BROKEN@
 RANLIB = @RANLIB@
+SDL2_CONFIG = @SDL2_CONFIG@
+SDL2_FRAMEWORK = @SDL2_FRAMEWORK@
 SDL_CFLAGS = @SDL_CFLAGS@
-SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
@@ -1272,8 +1273,8 @@ mednafen_SOURCES = debug.cpp error.cpp mempatcher.cpp settings.cpp \
 	sound/Fir_Resampler.cpp sound/WAVRecord.cpp \
 	sound/OwlResampler.cpp sound/okiadpcm.cpp net/Net.cpp \
 	$(am__append_54) $(am__append_55) compress/minilzo.c \
-	compress/ioapi.c compress/unzip.c compress/GZFileStream.cpp \
-	compress/ZLInflateFilter.cpp hash/md5.cpp hash/sha1.cpp \
+	compress/GZFileStream.cpp compress/ZLInflateFilter.cpp \
+	compress/ZIPReader.cpp hash/md5.cpp hash/sha1.cpp \
 	hash/sha256.cpp string/escape.cpp string/string.cpp \
 	video/surface.cpp video/font-data.cpp video/font-data-18x18.c \
 	video/font-data-12x13.c video/png.cpp video/primitives.cpp \
@@ -2720,13 +2721,11 @@ compress/$(DEPDIR)/$(am__dirstamp):
 	@: > compress/$(DEPDIR)/$(am__dirstamp)
 compress/minilzo.$(OBJEXT): compress/$(am__dirstamp) \
 	compress/$(DEPDIR)/$(am__dirstamp)
-compress/ioapi.$(OBJEXT): compress/$(am__dirstamp) \
-	compress/$(DEPDIR)/$(am__dirstamp)
-compress/unzip.$(OBJEXT): compress/$(am__dirstamp) \
-	compress/$(DEPDIR)/$(am__dirstamp)
 compress/GZFileStream.$(OBJEXT): compress/$(am__dirstamp) \
 	compress/$(DEPDIR)/$(am__dirstamp)
 compress/ZLInflateFilter.$(OBJEXT): compress/$(am__dirstamp) \
+	compress/$(DEPDIR)/$(am__dirstamp)
+compress/ZIPReader.$(OBJEXT): compress/$(am__dirstamp) \
 	compress/$(DEPDIR)/$(am__dirstamp)
 hash/$(am__dirstamp):
 	@$(MKDIR_P) hash
@@ -2947,10 +2946,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@cheat_formats/$(DEPDIR)/psx.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@cheat_formats/$(DEPDIR)/snes.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compress/$(DEPDIR)/GZFileStream.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@compress/$(DEPDIR)/ZIPReader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compress/$(DEPDIR)/ZLInflateFilter.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@compress/$(DEPDIR)/ioapi.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compress/$(DEPDIR)/minilzo.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@compress/$(DEPDIR)/unzip.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@cputest/$(DEPDIR)/cputest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@cputest/$(DEPDIR)/ppc_cpu.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@cputest/$(DEPDIR)/x86_cpu.Po@am__quote@

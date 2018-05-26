@@ -442,9 +442,9 @@ static int NWC_StateAction(StateMem *sm, int load, int data_only)
 {
  SFORMAT StateRegs[] =
  {
-  SFARRAY(WRAM, WRAM_Size),
-  SFARRAY(CHRRAM, 8192),
-  SFARRAY(DRegs, 4),
+  SFPTR8(WRAM, WRAM_Size),
+  SFPTR8(CHRRAM, 8192),
+  SFPTR8(DRegs, 4),
   SFVAR(lreset),
   SFVAR(Buffer),
   SFVAR(BufferShift),
@@ -471,9 +471,9 @@ static int StateAction(StateMem *sm, int load, int data_only)
 
  SFORMAT StateRegs[] =
  {
-  SFARRAY(WRAM, WRAM_Size),
-  SFARRAY(CHRRAM, 8192),
-  SFARRAY(DRegs, 4),
+  SFPTR8(WRAM, WRAM_Size),
+  SFPTR8(CHRRAM, 8192),
+  SFPTR8(DRegs, 4),
   SFVAR(lreset),
   SFVAR(Buffer),
   SFVAR(BufferShift),

@@ -44,6 +44,10 @@
 #import "OEVBSystemResponderClient.h"
 #import "OEWSSystemResponderClient.h"
 
+#ifdef DEBUG
+    #error "Cores should not be compiled in DEBUG! Follow the guide https://github.com/OpenEmu/OpenEmu/wiki/Compiling-From-Source-Guide"
+#endif
+
 static MDFNGI *game;
 static MDFN_Surface *surf;
 
@@ -2739,6 +2743,7 @@ static void mednafen_init()
       @"T-5013H",    // Soviet Strike (Europe) / (USA)
       @"T-10621G",   // Soviet Strike (Japan)
       @"T-1105G",    // Taito Chase H.Q. + S.C.I. (Japan)
+      //@"T-4801G",    // Tama - Adventurous Ball in Giddy Labyrinth (Japan)
       @"T-14412G",   // Touge King the Spirits 2 (Japan)
       @"MK-81043",   // Virtua Cop 2 (Europe) / (Korea) / (USA)
       @"GS-9097",    // Virtua Cop 2 (Japan)
@@ -3098,7 +3103,12 @@ static void emulation_run()
         for(unsigned i = 0; i < _multiTapPlayerCount; i++)
         {
             if(_isSS3DControlPadSupportedGame)
+            //{
                 game->SetInput(i, "3dpad", (uint8_t *)_inputBuffer[i]);
+                // Toggle default position of analog mode switch to Analog(○)
+                // "Analog mode is not compatible with all games.  For some compatible games, analog mode reportedly must be enabled before the game boots up for the game to recognize it properly."
+                //_inputBuffer[i][0] |= 1 << SS3DMap[OESaturnButtonAnalogMode];
+            //}
             else
                 game->SetInput(i, "gamepad", (uint8_t *)_inputBuffer[i]);
         }

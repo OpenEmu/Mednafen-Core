@@ -42,6 +42,7 @@ void Time_Init(void)
 {
  #ifdef WIN32
   tgt_base = timeGetTime();
+// https://github.com/OpenEmu/Mednafen-Core/issues/15
 // #else
 //  if(MDFN_UNLIKELY(clock_gettime(CLOCK_MONOTONIC, &cgt_base) == -1))
 //  {
@@ -197,6 +198,7 @@ int64 MonoUS(void)
  {
   return (int64)1000 * (timeGetTime() - tgt_base);
  }
+// https://github.com/OpenEmu/Mednafen-Core/issues/15
 // #else
 // {
 //  struct timespec tp;

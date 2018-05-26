@@ -86,19 +86,26 @@ struct DMAWriteTabS
  uint8 compare;
 };
 
-static const DMAWriteTabS dma_write_tab[2/*bus*/][8/*add setting*/][4/*write align*/][12/*count*/][5] =
+static const struct
 {
+ const DMAWriteTabS acb[2/*bus*/][8/*add setting*/][4/*write align*/][12/*count*/][5];
+ const DMAWriteTabS aciv1[4][24][8];
+} dma_write_tab =
+{
+ //
  {
-  #include "scu_actab.inc"
+  {
+   #include "scu_actab.inc"
+  },
+  {
+   #include "scu_btab.inc"
+  }
  },
- {
-  #include "scu_btab.inc"
- }
-};
 
-static const DMAWriteTabS dma_write_tab_aciv1[4][24][8] =
-{
- #include "scu_aciv1tab.inc"
+ //
+ {
+  #include "scu_aciv1tab.inc"
+ }
 };
 
 static struct DMALevelS
@@ -627,7 +634,7 @@ static INLINE void SCU_RegRW_DB(uint32 A, uint32* DB)
 
    case 0x8C:
 	if(!DSP.IsRunning())
-	 (&DSP.DataRAM[0][0])[DSP.RA++] = *DB;
+	 MDAP(DSP.DataRAM)[DSP.RA++] = *DB;
 	break;
   }
  }
@@ -725,7 +732,7 @@ static INLINE void SCU_RegRW_DB(uint32 A, uint32* DB)
 
    case 0x8C:
 	if(!DSP.IsRunning())
-	 *DB = (&DSP.DataRAM[0][0])[DSP.RA++];
+	 *DB = MDAP(DSP.DataRAM)[DSP.RA++];
 	else
 	 *DB = 0xFFFFFFFF;
 	break;
@@ -1241,9 +1248,9 @@ static bool StartDMATransfer(DMALevelS* d, const uint32 ra, const uint32 wa, con
  d->Buffer = d->ReadFunc(d->CurReadBase);
 
  if(wb != 0x1 && d->WriteAdd == 0x1)
-  d->WATable = &dma_write_tab_aciv1[wa & 0x3][(bc < 16) ? bc : (16 | (bc & 0x7))][0];
+  d->WATable = &dma_write_tab.aciv1[wa & 0x3][(bc < 16) ? bc : (16 | (bc & 0x7))][0];
  else
-  d->WATable = &dma_write_tab[wb == 1][d->WriteAdd][wa & 0x3][(bc < 12) ? bc : (8 | (bc & 0x3))][0];
+  d->WATable = &dma_write_tab.acb[wb == 1][d->WriteAdd][wa & 0x3][(bc < 12) ? bc : (8 | (bc & 0x3))][0];
 
  return true;
 }
@@ -1645,7 +1652,7 @@ static void DSP_Reset(bool powering_up)
    DSP.ProgRAM[i] = DSP_DecodeInstruction(0);
 
   for(unsigned i = 0; i < 256; i++)
-   (&DSP.DataRAM[0][0])[i] = 0;
+   MDAP(DSP.DataRAM)[i] = 0;
  }
 
  DSP.PC = 0;
@@ -1893,7 +1900,7 @@ void SCU_Reset(bool powering_up)
   d.WriteUpdate = false;
   d.SF = 0;
 
-  d.WATable = &dma_write_tab[0][0][0][0][0];
+  d.WATable = &dma_write_tab.acb[0][0][0][0][0];
   d.ReadFunc = rftab[0];
   d.TableReadFunc = NULL;
  }
@@ -1944,7 +1951,7 @@ static MDFN_COLD void SCU_StateAction(StateMem* sm, const unsigned load, const b
   SFVAR(DSP.AC.T),
   SFVAR(DSP.P.T),
 
-  SFARRAY(DSP.CT, 4),
+  SFVAR(DSP.CT),
 
   SFVAR(DSP.RX),
   SFVAR(DSP.RY),
@@ -1952,34 +1959,34 @@ static MDFN_COLD void SCU_StateAction(StateMem* sm, const unsigned load, const b
   SFVAR(DSP.RAO),
   SFVAR(DSP.WAO),
 
-  SFARRAY32(&DSP.DataRAM[0][0], 4 * 64),
+  SFVARN(DSP.DataRAM, "&DSP.DataRAM[0][0]"),
 
-  SFARRAY32(DSP_ProgRAM, 256),
+  SFVAR(DSP_ProgRAM),
 
-  SFVAR(DMALevel->StartReadAddr, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->StartWriteAddr, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->StartByteCount, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->ReadAdd, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->WriteAdd, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->Enable, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->Active, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->GoGoGadget, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->Indirect, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->ReadUpdate, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->WriteUpdate, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->SF, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->FinishTime, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->WriteBus, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->CurReadBase, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->CurReadSub, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->CurWriteAddr, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->CurByteCount, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->Buffer, 3, sizeof(DMALevelS)),
-  SFARRAY32(DMALevel_WATable, 3),
-  SFARRAY(DMALevel_ReadFunc, 3),
-  SFARRAY(DMALevel_TableReadFunc, 3),
-  SFVAR(DMALevel->CurTableAddr, 3, sizeof(DMALevelS)),
-  SFVAR(DMALevel->FinalTransfer, 3, sizeof(DMALevelS)),
+  SFVAR(DMALevel->StartReadAddr, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->StartWriteAddr, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->StartByteCount, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->ReadAdd, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->WriteAdd, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->Enable, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->Active, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->GoGoGadget, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->Indirect, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->ReadUpdate, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->WriteUpdate, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->SF, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->FinishTime, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->WriteBus, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->CurReadBase, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->CurReadSub, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->CurWriteAddr, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->CurByteCount, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->Buffer, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel_WATable),
+  SFVAR(DMALevel_ReadFunc),
+  SFVAR(DMALevel_TableReadFunc),
+  SFVAR(DMALevel->CurTableAddr, 3, sizeof(*DMALevel), DMALevel),
+  SFVAR(DMALevel->FinalTransfer, 3, sizeof(*DMALevel), DMALevel),
 
   SFVAR(SCU_DMA_TimeCounter),
   SFVAR(SCU_DMA_RunUntil),
@@ -2024,8 +2031,8 @@ static MDFN_COLD void SCU_StateAction(StateMem* sm, const unsigned load, const b
  DSP_NextInstrLooped = (DSP.NextInstr == DSP_DecodeInstruction<true>(DSP.NextInstr >> 32));
  //
  //
- const DMAWriteTabS* const dwt_ptrs[2] = { (const DMAWriteTabS*)dma_write_tab, (const DMAWriteTabS*)dma_write_tab_aciv1 };
- const size_t dwt_counts[2] = { sizeof(dma_write_tab) / sizeof(DMAWriteTabS), sizeof(dma_write_tab_aciv1) / sizeof(DMAWriteTabS) };
+ const DMAWriteTabS* const dwt_ptrs[2] = { (const DMAWriteTabS*)dma_write_tab.acb, (const DMAWriteTabS*)dma_write_tab.aciv1 };
+ const size_t dwt_counts[2] = { sizeof(dma_write_tab.acb) / sizeof(DMAWriteTabS), sizeof(dma_write_tab.aciv1) / sizeof(DMAWriteTabS) };
 
  for(unsigned level = 0; level < 3; level++)
  {
