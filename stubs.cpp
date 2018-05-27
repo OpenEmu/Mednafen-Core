@@ -14,16 +14,6 @@ void MDFND_Sleep(unsigned int time)
     usleep(time * 1000);
 }
 
-void MDFND_DispMessage(char *str)
-{
-    //std::cerr << str;
-}
-
-void MDFND_Message(const char *str)
-{
-    std::cerr << str;
-}
-
 void MDFND_OutputNotice(MDFN_NoticeType t, const char* s) noexcept
 {}
 
@@ -32,11 +22,6 @@ void MDFND_OutputInfo(const char *s) noexcept
 
 void MDFND_MidSync(const EmulateSpecStruct *)
 {}
-
-void MDFND_PrintError(const char* err)
-{
-    std::cerr << err;
-}
 
 void MDFND_MediaSetNotification(uint32 drive_idx, uint32 state_idx, uint32 media_idx, uint32 orientation_idx)
 {}
