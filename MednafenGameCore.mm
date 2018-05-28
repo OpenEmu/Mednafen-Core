@@ -3126,7 +3126,7 @@ static void emulation_run()
                 uint8_t *buf = (uint8_t *)_inputBuffer[i];
                 MDFN_en16lsb(&buf[2], 32767);
                 MDFN_en16lsb(&buf[4], 32767);
-                MDFN_en16lsb(&buf[5], 32767);
+                MDFN_en16lsb(&buf[6], 32767);
             }
         }
 
