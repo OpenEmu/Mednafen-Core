@@ -3081,7 +3081,16 @@ static void emulation_run()
         }
 
         for(unsigned i = 0; i < _multiTapPlayerCount; i++)
+        {
             game->SetInput(i, "dualshock", (uint8_t *)_inputBuffer[i]);
+            
+            //Center the analog inputs
+            uint8_t *buf = (uint8_t *)_inputBuffer[i];
+            MDFN_en16lsb(&buf[3], 32767);
+            MDFN_en16lsb(&buf[5], 32767);
+            MDFN_en16lsb(&buf[7], 32767);
+            MDFN_en16lsb(&buf[9], 32767);
+        }
     }
     else if ([_mednafenCoreModule isEqualToString:@"ss"])
     {
@@ -3110,7 +3119,15 @@ static void emulation_run()
                 //_inputBuffer[i][0] |= 1 << SS3DMap[OESaturnButtonAnalogMode];
             //}
             else
+            {
                 game->SetInput(i, "gamepad", (uint8_t *)_inputBuffer[i]);
+            
+                //Center the analog inputs
+                uint8_t *buf = (uint8_t *)_inputBuffer[i];
+                MDFN_en16lsb(&buf[2], 32767);
+                MDFN_en16lsb(&buf[4], 32767);
+                MDFN_en16lsb(&buf[5], 32767);
+            }
         }
 
         game->SetInput(12, "builtin", (uint8_t *)_inputBuffer[12]); // reset button status
