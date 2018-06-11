@@ -3306,7 +3306,7 @@ const int PCEMap[]  = { 4, 6, 7, 5, 0, 1, 8, 9, 10, 11, 3, 2, 12 };
 const int PCFXMap[] = { 8, 10, 11, 9, 0, 1, 2, 3, 4, 5, 7, 6 };
 const int PSXMap[]  = { 4, 6, 7, 5, 12, 13, 14, 15, 10, 8, 1, 11, 9, 2, 3, 0, 16, 23, 23, 21, 21, 19, 19, 17, 17 };
 const int SSMap[]   = { 4, 5, 6, 7, 10, 8, 9, 2, 1, 0, 15, 3, 11 };
-const int SS3DMap[] = { 0, 1, 2, 3, 6, 4, 5, 10, 9, 8, 18, 17, 7, 12, 15, 15, 13, 13, 17, 17};
+const int SS3DMap[] = { 0, 1, 2, 3, 6, 4, 5, 10, 9, 8, 18, 20, 7, 12, 15, 15, 13, 13, 18, 20};
 const int VBMap[]   = { 9, 8, 7, 6, 4, 13, 12, 5, 3, 2, 0, 1, 10, 11 };
 const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
@@ -3449,13 +3449,20 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)didMoveSaturnJoystickDirection:(OESaturnButton)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
+    value *= 32767 ; // de-normalize
+    
     int analogNumber = SS3DMap[button] - 13;
-
-    if (button == OESaturnLeftAnalogLeft || button == OESaturnLeftAnalogUp || button == OESaturnAnalogL)
+   
+    if (button == OESaturnLeftAnalogLeft || button == OESaturnLeftAnalogUp)
         value *= -1;
     
+    if (!(button == OESaturnAnalogL || button == OESaturnAnalogR)) {
+        //Adjust all axis but Trigger buttons
+        value += 32767;
+    }
+    
     uint8_t *buf = (uint8_t *)_inputBuffer[player-1];
-    MDFN_en16lsb(&buf[2 + analogNumber], 32767 * value + 32767);
+    MDFN_en16lsb(&buf[2 + analogNumber], value);
 }
 
 - (void)changeDisplayMode
