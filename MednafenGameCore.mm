@@ -3112,21 +3112,20 @@ static void emulation_run()
         for(unsigned i = 0; i < _multiTapPlayerCount; i++)
         {
             if(_isSS3DControlPadSupportedGame)
-            //{
+            {
                 game->SetInput(i, "3dpad", (uint8_t *)_inputBuffer[i]);
                 // Toggle default position of analog mode switch to Analog(○)
                 // "Analog mode is not compatible with all games.  For some compatible games, analog mode reportedly must be enabled before the game boots up for the game to recognize it properly."
                 //_inputBuffer[i][0] |= 1 << SS3DMap[OESaturnButtonAnalogMode];
-            //}
-            else
-            {
-                game->SetInput(i, "gamepad", (uint8_t *)_inputBuffer[i]);
-            
-                //Center the analog inputs
+                
+                //Center the analog axis inputs
                 uint8_t *buf = (uint8_t *)_inputBuffer[i];
                 MDFN_en16lsb(&buf[2], 32767);
                 MDFN_en16lsb(&buf[4], 32767);
-                MDFN_en16lsb(&buf[6], 32767);
+            }
+            else
+            {
+                game->SetInput(i, "gamepad", (uint8_t *)_inputBuffer[i]);
             }
         }
 
