@@ -3081,7 +3081,16 @@ static void emulation_run()
         }
 
         for(unsigned i = 0; i < _multiTapPlayerCount; i++)
+        {
             game->SetInput(i, "dualshock", (uint8_t *)_inputBuffer[i]);
+            
+            //Center the analog inputs
+            uint8_t *buf = (uint8_t *)_inputBuffer[i];
+            MDFN_en16lsb(&buf[3], 32767);
+            MDFN_en16lsb(&buf[5], 32767);
+            MDFN_en16lsb(&buf[7], 32767);
+            MDFN_en16lsb(&buf[9], 32767);
+        }
     }
     else if ([_mednafenCoreModule isEqualToString:@"ss"])
     {
@@ -3103,14 +3112,21 @@ static void emulation_run()
         for(unsigned i = 0; i < _multiTapPlayerCount; i++)
         {
             if(_isSS3DControlPadSupportedGame)
-            //{
+            {
                 game->SetInput(i, "3dpad", (uint8_t *)_inputBuffer[i]);
                 // Toggle default position of analog mode switch to Analog(○)
                 // "Analog mode is not compatible with all games.  For some compatible games, analog mode reportedly must be enabled before the game boots up for the game to recognize it properly."
                 //_inputBuffer[i][0] |= 1 << SS3DMap[OESaturnButtonAnalogMode];
-            //}
+                
+                //Center the analog axis inputs
+                uint8_t *buf = (uint8_t *)_inputBuffer[i];
+                MDFN_en16lsb(&buf[2], 32767);
+                MDFN_en16lsb(&buf[4], 32767);
+            }
             else
+            {
                 game->SetInput(i, "gamepad", (uint8_t *)_inputBuffer[i]);
+            }
         }
 
         game->SetInput(12, "builtin", (uint8_t *)_inputBuffer[12]); // reset button status
@@ -3287,9 +3303,9 @@ const int LynxMap[] = { 6, 7, 4, 5, 0, 1, 3, 2 };
 const int NGPMap[]  = { 0, 1, 2, 3, 4, 5, 6 };
 const int PCEMap[]  = { 4, 6, 7, 5, 0, 1, 8, 9, 10, 11, 3, 2, 12 };
 const int PCFXMap[] = { 8, 10, 11, 9, 0, 1, 2, 3, 4, 5, 7, 6 };
-const int PSXMap[]  = { 4, 6, 7, 5, 12, 13, 14, 15, 10, 8, 1, 11, 9, 2, 3, 0, 16, 24, 23, 22, 21, 20, 19, 18, 17 };
+const int PSXMap[]  = { 4, 6, 7, 5, 12, 13, 14, 15, 10, 8, 1, 11, 9, 2, 3, 0, 16, 23, 23, 21, 21, 19, 19, 17, 17 };
 const int SSMap[]   = { 4, 5, 6, 7, 10, 8, 9, 2, 1, 0, 15, 3, 11 };
-const int SS3DMap[] = { 0, 1, 2, 3, 6, 4, 5, 10, 9, 8, 18, 17, 7, 12, 15, 16, 13, 14, 18, 17};
+const int SS3DMap[] = { 0, 1, 2, 3, 6, 4, 5, 10, 9, 8, 18, 20, 7, 12, 15, 15, 13, 13, 18, 20};
 const int VBMap[]   = { 9, 8, 7, 6, 4, 13, 12, 5, 3, 2, 0, 1, 10, 11 };
 const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
@@ -3418,22 +3434,34 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     // Fix the analog circle-to-square axis range conversion by scaling between a value of 1.00 and 1.50
     // We cannot use MDFNI_SetSetting("psx.input.port1.dualshock.axis_scale", "1.33") directly.
     // Background: https://mednafen.github.io/documentation/psx.html#Section_analog_range
-    value *= 32767; // de-normalize
-    double scaledValue = MIN(floor(0.5 + value * 1.33), 32767); // 30712 / cos(2*pi/8) / 32767 = 1.33
+    value *= 32767 ; // de-normalize
 
+    double scaledValue = MIN(floor(0.5 + value * 1.33), 32767); // 30712 / cos(2*pi/8) / 32767 = 1.33
+    
+    if (button == OEPSXLeftAnalogLeft || button == OEPSXLeftAnalogUp || button == OEPSXRightAnalogLeft || button == OEPSXRightAnalogUp)
+        scaledValue *= -1;
+    
     int analogNumber = PSXMap[button] - 17;
     uint8_t *buf = (uint8_t *)_inputBuffer[player-1];
-    MDFN_en16lsb(&buf[3 + analogNumber * 2], scaledValue);
-    MDFN_en16lsb(&buf[3 + (analogNumber ^ 1) * 2], 0);
+    MDFN_en16lsb(&buf[3 + analogNumber], scaledValue + 32767);
 }
 
 - (oneway void)didMoveSaturnJoystickDirection:(OESaturnButton)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
+    value *= 32767 ; // de-normalize
+    
     int analogNumber = SS3DMap[button] - 13;
-
+   
+    if (button == OESaturnLeftAnalogLeft || button == OESaturnLeftAnalogUp)
+        value *= -1;
+    
+    if (!(button == OESaturnAnalogL || button == OESaturnAnalogR)) {
+        //Adjust all axis but Trigger buttons
+        value += 32767;
+    }
+    
     uint8_t *buf = (uint8_t *)_inputBuffer[player-1];
-    MDFN_en16lsb(&buf[2 + analogNumber * 2], 32767 * value);
-    MDFN_en16lsb(&buf[2 + (analogNumber ^ 1) * 2], 0);
+    MDFN_en16lsb(&buf[2 + analogNumber], value);
 }
 
 - (void)changeDisplayMode
