@@ -2315,6 +2315,17 @@ static void mednafen_init()
       @"SLPS-02269" : @4, // Zoku Mikagura Shoujo Tanteidan - Kanketsuhen (Japan) (Disc 4)
       };
 
+    // PlayStation games requiring only 1 memory card inserted
+    NSArray *psxSingleMemoryCardGames =
+    @[
+      @"SCUS-94409", // Codename - Tenka (USA) (v1.0) / (v1.1)
+      @"SLES-00613", // Lifeforce Tenka (Europe)
+      @"SLES-00614", // Lifeforce Tenka (France)
+      @"SLES-00615", // Lifeforce Tenka (Germany)
+      @"SLES-00616", // Lifeforce Tenka (Italy)
+      @"SLES-00617", // Lifeforce Tenka (Spain)
+      ];
+
     // Saturn multi-disc games
     NSDictionary *ssMultiDiscGames =
     @{
@@ -2789,6 +2800,12 @@ static void mednafen_init()
                 if(current->_multiTapPlayerCount > 5)
                     MDFNI_SetSetting("psx.input.pport2.multitap", "1"); // Enable multitap on PSX port 2
             }
+        }
+
+        // PSX: Insert only 1 memory card if required
+        if ([psxSingleMemoryCardGames containsObject:[current ROMSerial]])
+        {
+            MDFNI_SetSetting("psx.input.port2.memcard", "0"); // Disable memory card on PSX port 2
         }
     }
 
