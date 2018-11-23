@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2016, OpenEmu Team
+ Copyright (c) 2018, OpenEmu Team
 
 
  Redistribution and use in source and binary forms, with or without
@@ -78,33 +78,33 @@ namespace MDFN_IEN_VB
     NSMutableArray *_allCueSheetFiles;
 }
 
+- (void)initializeMednafen;
+
 @end
 
 static __weak MednafenGameCore *_current;
 
 @implementation MednafenGameCore
 
-static void mednafen_init()
+- (void)initializeMednafen
 {
-    GET_CURRENT_OR_RETURN();
-
     MDFNI_InitializeModules();
 
     std::vector<MDFNSetting> settings;
 
-    NSString *batterySavesDirectory = current.batterySavesDirectoryPath;
-    NSString *biosPath = current.biosDirectoryPath;
+    NSString *batterySavesDirectory = self.batterySavesDirectoryPath;
+    NSString *biosPath = self.biosDirectoryPath;
 
     MDFNI_Initialize(biosPath.fileSystemRepresentation, settings);
 
     // Set bios/system file and memcard save paths
-    MDFNI_SetSetting("pce.cdbios", [[[biosPath stringByAppendingPathComponent:@"syscard3"] stringByAppendingPathExtension:@"pce"] fileSystemRepresentation]); // PCE CD BIOS
-    MDFNI_SetSetting("pcfx.bios", [[[biosPath stringByAppendingPathComponent:@"pcfx"] stringByAppendingPathExtension:@"rom"] fileSystemRepresentation]); // PCFX BIOS
-    MDFNI_SetSetting("psx.bios_jp", [[[biosPath stringByAppendingPathComponent:@"scph5500"] stringByAppendingPathExtension:@"bin"] fileSystemRepresentation]); // JP SCPH-5500 BIOS
-    MDFNI_SetSetting("psx.bios_na", [[[biosPath stringByAppendingPathComponent:@"scph5501"] stringByAppendingPathExtension:@"bin"] fileSystemRepresentation]); // NA SCPH-5501 BIOS
-    MDFNI_SetSetting("psx.bios_eu", [[[biosPath stringByAppendingPathComponent:@"scph5502"] stringByAppendingPathExtension:@"bin"] fileSystemRepresentation]); // EU SCPH-5502 BIOS
-    MDFNI_SetSetting("ss.bios_jp", [[[biosPath stringByAppendingPathComponent:@"sega_101"] stringByAppendingPathExtension:@"bin"] fileSystemRepresentation]); // JP SS BIOS
-    MDFNI_SetSetting("ss.bios_na_eu", [[[biosPath stringByAppendingPathComponent:@"mpr-17933"] stringByAppendingPathExtension:@"bin"] fileSystemRepresentation]); // NA/EU SS BIOS
+    MDFNI_SetSetting("pce.cdbios", [[biosPath stringByAppendingPathComponent:@"syscard3"] stringByAppendingPathExtension:@"pce"].fileSystemRepresentation); // PCE CD BIOS
+    MDFNI_SetSetting("pcfx.bios", [[biosPath stringByAppendingPathComponent:@"pcfx"] stringByAppendingPathExtension:@"rom"].fileSystemRepresentation); // PCFX BIOS
+    MDFNI_SetSetting("psx.bios_jp", [[biosPath stringByAppendingPathComponent:@"scph5500"] stringByAppendingPathExtension:@"bin"].fileSystemRepresentation); // JP SCPH-5500 BIOS
+    MDFNI_SetSetting("psx.bios_na", [[biosPath stringByAppendingPathComponent:@"scph5501"] stringByAppendingPathExtension:@"bin"].fileSystemRepresentation); // NA SCPH-5501 BIOS
+    MDFNI_SetSetting("psx.bios_eu", [[biosPath stringByAppendingPathComponent:@"scph5502"] stringByAppendingPathExtension:@"bin"].fileSystemRepresentation); // EU SCPH-5502 BIOS
+    MDFNI_SetSetting("ss.bios_jp", [[biosPath stringByAppendingPathComponent:@"sega_101"] stringByAppendingPathExtension:@"bin"].fileSystemRepresentation); // JP SS BIOS
+    MDFNI_SetSetting("ss.bios_na_eu", [[biosPath stringByAppendingPathComponent:@"mpr-17933"] stringByAppendingPathExtension:@"bin"].fileSystemRepresentation); // NA/EU SS BIOS
     MDFNI_SetSetting("filesys.path_sav", batterySavesDirectory.fileSystemRepresentation); // Memcards
 
     // VB defaults. dox http://mednafen.sourceforge.net/documentation/09x/vb.html
@@ -122,7 +122,7 @@ static void mednafen_init()
     MDFNI_SetSetting("psx.h_overscan", "0"); // Remove PSX overscan
 
     // PlayStation SBI required games (LibCrypt)
-    NSDictionary *sbiRequiredGames =
+    NSDictionary<NSString *, NSNumber *> *sbiRequiredGames =
     @{
       @"SLES-01226" : @1, // Actua Ice Hockey 2 (Europe)
       @"SLES-02563" : @1, // Anstoss - Premier Manager (Germany)
@@ -329,7 +329,7 @@ static void mednafen_init()
       };
 
     // PlayStation Multitap supported games (incomplete list)
-    NSDictionary *psxMultiTapGames =
+    NSDictionary<NSString *, NSNumber *> *psxMultiTapGames =
     @{
       @"SLES-02339" : @3, // Arcade Party Pak (Europe, Australia)
       @"SLUS-00952" : @3, // Arcade Party Pak (USA)
@@ -1061,7 +1061,7 @@ static void mednafen_init()
       };
 
     // 5-player-or-less games requiring Multitap on port 2 instead of port 1
-    NSArray *psxMultiTap5PlayerPort2 =
+    NSArray<NSString *> *psxMultiTap5PlayerPort2 =
     @[
       @"SLES-01893", // Bomberman (Europe)
       @"SLPS-01717", // Bomberman (Japan)
@@ -1077,7 +1077,7 @@ static void mednafen_init()
       ];
 
     // PlayStation multi-disc games (mostly complete, few missing obscure undumped/unverified JP releases)
-    NSDictionary *psxMultiDiscGames =
+    NSDictionary<NSString *, NSNumber *> *psxMultiDiscGames =
     @{
       @"SLPS-00071" : @2, // 3x3 Eyes - Kyuusei Koushu (Japan) (Disc 1)
       @"SLPS-00072" : @2, // 3x3 Eyes - Kyuusei Koushu (Japan) (Disc 2)
@@ -2316,7 +2316,7 @@ static void mednafen_init()
       };
 
     // PlayStation games requiring only 1 memory card inserted
-    NSArray *psxSingleMemoryCardGames =
+    NSArray<NSString *> *psxSingleMemoryCardGames =
     @[
       @"SCUS-94409", // Codename - Tenka (USA) (v1.0) / (v1.1)
       @"SLES-00613", // Lifeforce Tenka (Europe)
@@ -2327,7 +2327,7 @@ static void mednafen_init()
       ];
 
     // Saturn multi-disc games
-    NSDictionary *ssMultiDiscGames =
+    NSDictionary<NSString *, NSNumber *> *ssMultiDiscGames =
     @{
       @"T-21301G"   : @3, // 3x3 Eyes - Kyuusei Koushu S (Japan) (Disc 1 - 3)
       //@"T-21301G"   : @3, // 3x3 Eyes - Kyuusei Koushu S (Japan) (Disc 3) (Special CD-ROM)
@@ -2513,7 +2513,7 @@ static void mednafen_init()
       };
 
     // Saturn Multitap supported games
-    NSDictionary *ssMultiTapGames =
+    NSDictionary<NSString *, NSNumber *> *ssMultiTapGames =
     @{
       @"T-6004G"    : @4, // America Oudan Ultra Quiz (Japan)
       @"T-20001G"   : @4, // Bakushou!! All Yoshimoto Quiz Ou Ketteisen DX (Japan)
@@ -2638,7 +2638,7 @@ static void mednafen_init()
       };
 
     // Saturn 3D Control Pad supported games (including some Arcade Racer and Mission Stick)
-    NSArray *ss3DControlPadGames =
+    NSArray<NSString *> *ss3DControlPadGames =
     @[
       @"GS-9087",    // Advanced World War Sennen Teikoku no Koubou - Last of the Millennium (Japan)
       @"GS-9076",    // Azel - Panzer Dragoon RPG (Japan) (Disc 1 - 4)
@@ -2772,46 +2772,46 @@ static void mednafen_init()
       @"GS-9120",    // World Series Baseball II (Japan)
       ];
 
-    if ([current->_mednafenCoreModule isEqualToString:@"psx"])
+    if ([_mednafenCoreModule isEqualToString:@"psx"])
     {
         // PSX: Check if multiple discs required
-        if (psxMultiDiscGames[[current ROMSerial]])
+        if (psxMultiDiscGames[self.ROMSerial])
         {
-            current->_isMultiDiscGame = YES;
-            current->_multiDiscTotal = [[psxMultiDiscGames objectForKey:[current ROMSerial]] intValue];
+            _isMultiDiscGame = YES;
+            _multiDiscTotal = [psxMultiDiscGames[self.ROMSerial] intValue];
         }
 
         // PSX: Check if SBI file is required
-        if (sbiRequiredGames[[current ROMSerial]])
+        if (sbiRequiredGames[self.ROMSerial])
         {
-            current->_isSBIRequired = YES;
+            _isSBIRequired = YES;
         }
 
         // PSX: Set multitap configuration if detected
-        if (psxMultiTapGames[[current ROMSerial]])
+        if (psxMultiTapGames[self.ROMSerial])
         {
-            current->_multiTapPlayerCount = [[psxMultiTapGames objectForKey:[current ROMSerial]] intValue];
+            _multiTapPlayerCount = [psxMultiTapGames[self.ROMSerial] intValue];
 
-            if([psxMultiTap5PlayerPort2 containsObject:[current ROMSerial]])
+            if([psxMultiTap5PlayerPort2 containsObject:self.ROMSerial])
                 MDFNI_SetSetting("psx.input.pport2.multitap", "1"); // Enable multitap on PSX port 2
             else
             {
                 MDFNI_SetSetting("psx.input.pport1.multitap", "1"); // Enable multitap on PSX port 1
-                if(current->_multiTapPlayerCount > 5)
+                if(_multiTapPlayerCount > 5)
                     MDFNI_SetSetting("psx.input.pport2.multitap", "1"); // Enable multitap on PSX port 2
             }
         }
 
         // PSX: Insert only 1 memory card if required
-        if ([psxSingleMemoryCardGames containsObject:[current ROMSerial]])
+        if ([psxSingleMemoryCardGames containsObject:self.ROMSerial])
         {
             MDFNI_SetSetting("psx.input.port2.memcard", "0"); // Disable memory card on PSX port 2
         }
     }
 
-    if ([current->_mednafenCoreModule isEqualToString:@"ss"])
+    if ([_mednafenCoreModule isEqualToString:@"ss"])
     {
-        NSString *hex = [current ROMHeader];
+        NSString *hex = self.ROMHeader;
         NSUInteger len = hex.length;
 
         // Ensure valid hex string
@@ -2819,32 +2819,32 @@ static void mednafen_init()
             return;
 
         // Convert header hex to ascii
-        NSMutableString *ascii = [[NSMutableString alloc] init];
+        NSMutableString *ascii = [NSMutableString string];
         for(int i=0; i< len; i+=2)
         {
             NSString *byte = [hex substringWithRange:NSMakeRange(i, 2)];
-            unsigned char chr = strtol([byte UTF8String], nil, 16);
+            unsigned char chr = strtol(byte.UTF8String, nil, 16);
             [ascii appendFormat:@"%c", chr];
         }
 
         // Extract serial from header
         NSString *serial = [ascii substringWithRange:NSMakeRange(32, 10)];
-        serial = [serial stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        _current.ROMSerial = serial;
+        serial = [serial stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+        self.ROMSerial = serial;
 
         // SS: Check if multiple discs required
-        if (ssMultiDiscGames[[current ROMSerial]])
+        if (ssMultiDiscGames[self.ROMSerial])
         {
-            current->_isMultiDiscGame = YES;
-            current->_multiDiscTotal = [[ssMultiDiscGames objectForKey:[current ROMSerial]] intValue];
+            _isMultiDiscGame = YES;
+            _multiDiscTotal = [ssMultiDiscGames[self.ROMSerial] intValue];
         }
 
         // SS: Set multitap configuration if detected
-        if (ssMultiTapGames[[current ROMSerial]])
+        if (ssMultiTapGames[self.ROMSerial])
         {
-            current->_multiTapPlayerCount = [[ssMultiTapGames objectForKey:[current ROMSerial]] intValue];
+            _multiTapPlayerCount = [ssMultiTapGames[self.ROMSerial] intValue];
 
-            if(current->_multiTapPlayerCount < 8)
+            if(_multiTapPlayerCount < 8)
                 // From the Sega Saturn 6 Player Multi-Player Adaptor manual:
                 // 3-7 Player games
                 MDFNI_SetSetting("ss.input.sport2.multitap", "1"); // Enable multitap on SS port 2
@@ -2859,9 +2859,9 @@ static void mednafen_init()
         // SS: Check if 3D Control Pad is supported
         // Some games e.g. 3D Lemmings (Europe) / (Japan) and Chaos Control (Japan) have compat issues,
         // even when in digital mode, so enable on a per-game basis.
-        if ([ss3DControlPadGames containsObject:[current ROMSerial]])
+        if ([ss3DControlPadGames containsObject:self.ROMSerial])
         {
-            current->_isSS3DControlPadSupportedGame = YES;
+            _isSS3DControlPadSupportedGame = YES;
         }
 
     }
@@ -2893,45 +2893,10 @@ static void mednafen_init()
 
 # pragma mark - Execution
 
-static void emulation_run()
-{
-    GET_CURRENT_OR_RETURN();
-
-    static int16_t sound_buf[0x10000];
-    int32 rects[game->fb_height];
-
-    memset(rects, 0, game->fb_height*sizeof(int32));
-
-    EmulateSpecStruct spec = {0};
-    spec.surface = surf;
-    spec.SoundRate = current->_sampleRate;
-    spec.SoundBuf = sound_buf;
-    spec.LineWidths = rects;
-    spec.SoundBufMaxSize = sizeof(sound_buf) / 2;
-    spec.SoundVolume = 1.0;
-    spec.soundmultiplier = 1.0;
-
-    MDFNI_Emulate(&spec);
-
-    current->_mednafenCoreTiming = current->_masterClock / spec.MasterCycles;
-
-    current->_videoOffsetX = spec.DisplayRect.x;
-    current->_videoOffsetY = spec.DisplayRect.y;
-    if(game->multires) {
-        current->_videoWidth = rects[spec.DisplayRect.y];
-    }
-    else {
-        current->_videoWidth = spec.DisplayRect.w ?: rects[spec.DisplayRect.y];
-    }
-    current->_videoHeight  = spec.DisplayRect.h;
-
-    update_audio_batch(spec.SoundBuf, spec.SoundBufSize);
-}
-
 - (BOOL)loadFileAtPath:(NSString *)path error:(NSError **)error
 {
     // Set the current system
-    NSDictionary *mednafenCoreModules =
+    NSDictionary<NSString *, NSString *> *mednafenCoreModules =
     @{
       @"openemu.system.lynx"   : @"lynx",
       @"openemu.system.ngp"    : @"ngp",
@@ -2944,19 +2909,20 @@ static void emulation_run()
       @"openemu.system.ws"     : @"wswan",
       };
 
-    _mednafenCoreModule = [mednafenCoreModules objectForKey:[self systemIdentifier]];
+    _mednafenCoreModule = mednafenCoreModules[self.systemIdentifier];
 
     // Create battery save dir
-    [[NSFileManager defaultManager] createDirectoryAtPath:[self batterySavesDirectoryPath] withIntermediateDirectories:YES attributes:nil error:NULL];
+    NSURL *batterySavesDirectory = [NSURL fileURLWithPath:self.batterySavesDirectoryPath];
+    [NSFileManager.defaultManager createDirectoryAtURL:batterySavesDirectory withIntermediateDirectories:YES attributes:nil error:nil];
 
     // Parse number of discs in m3u
-    if([[[path pathExtension] lowercaseString] isEqualToString:@"m3u"])
+    if([path.pathExtension.lowercaseString isEqualToString:@"m3u"])
     {
         NSString *m3uString = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@".*\\.cue|.*\\.ccd" options:NSRegularExpressionCaseInsensitive error:nil];
         NSUInteger numberOfMatches = [regex numberOfMatchesInString:m3uString options:0 range:NSMakeRange(0, m3uString.length)];
 
-        NSLog(@"Loaded m3u containing %lu cue sheets or ccd", numberOfMatches);
+        NSLog(@"[Mednafen] Loaded m3u containing %lu cue sheets or ccd", numberOfMatches);
 
         _maxDiscs = numberOfMatches;
 
@@ -2969,15 +2935,15 @@ static void emulation_run()
                 [_allCueSheetFiles addObject:[m3uString substringWithRange:range]];
         }];
     }
-    else if([[[path pathExtension] lowercaseString] isEqualToString:@"cue"])
+    else if([path.pathExtension.lowercaseString isEqualToString:@"cue"])
     {
-        NSString *filename = [path lastPathComponent];
+        NSString *filename = path.lastPathComponent;
         [_allCueSheetFiles addObject:filename];
     }
 
-    mednafen_init();
+    [self initializeMednafen];
 
-    game = MDFNI_LoadGame([_mednafenCoreModule UTF8String], path.fileSystemRepresentation);
+    game = MDFNI_LoadGame(_mednafenCoreModule.UTF8String, path.fileSystemRepresentation);
 
     if(!game)
         return NO;
@@ -3045,10 +3011,10 @@ static void emulation_run()
     }
     else if ([_mednafenCoreModule isEqualToString:@"psx"])
     {
-        NSLog(@"PSX serial: %@ player count: %d", [_current ROMSerial], _multiTapPlayerCount);
+        NSLog(@"[Mednafen] PSX serial: %@ player count: %d", self.ROMSerial, _multiTapPlayerCount);
 
         // Check if loading a multi-disc game without m3u
-        if(_isMultiDiscGame && ![[[path pathExtension] lowercaseString] isEqualToString:@"m3u"])
+        if(_isMultiDiscGame && ![path.pathExtension.lowercaseString isEqualToString:@"m3u"])
         {
             NSError *outErr = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:@{
                 NSLocalizedDescriptionKey : @"Required m3u file missing.",
@@ -3061,18 +3027,18 @@ static void emulation_run()
         }
 
         // Handle required SBI files for games
-        if(_isSBIRequired && _allCueSheetFiles.count && ([[[path pathExtension] lowercaseString] isEqualToString:@"cue"] || [[[path pathExtension] lowercaseString] isEqualToString:@"m3u"]))
+        if(_isSBIRequired && _allCueSheetFiles.count && ([path.pathExtension.lowercaseString isEqualToString:@"cue"] || [path.pathExtension.lowercaseString isEqualToString:@"m3u"]))
         {
-            NSURL *romPath = [NSURL fileURLWithPath:[path stringByDeletingLastPathComponent]];
+            NSURL *romPath = [NSURL fileURLWithPath:path.stringByDeletingLastPathComponent];
 
             BOOL missingFileStatus = NO;
             NSUInteger missingFileCount = 0;
-            NSMutableString *missingFilesList = [[NSMutableString alloc] init];
+            NSMutableString *missingFilesList = [NSMutableString string];
 
             // Build a path to SBI file and check if it exists
             for(NSString *cueSheetFile in _allCueSheetFiles)
             {
-                NSString *extensionlessFilename = [cueSheetFile stringByDeletingPathExtension];
+                NSString *extensionlessFilename = cueSheetFile.stringByDeletingPathExtension;
                 NSURL *sbiFile = [romPath URLByAppendingPathComponent:[extensionlessFilename stringByAppendingPathExtension:@"sbi"]];
 
                 // Check if the required SBI files exist
@@ -3111,10 +3077,10 @@ static void emulation_run()
     }
     else if ([_mednafenCoreModule isEqualToString:@"ss"])
     {
-        NSLog(@"SS serial: %@ player count: %d", [_current ROMSerial], _multiTapPlayerCount);
+        NSLog(@"[Mednafen] SS serial: %@ player count: %d", self.ROMSerial, _multiTapPlayerCount);
 
         // Check if loading a multi-disc game without m3u
-        if(_isMultiDiscGame && ![[[path pathExtension] lowercaseString] isEqualToString:@"m3u"])
+        if(_isMultiDiscGame && ![path.pathExtension.lowercaseString isEqualToString:@"m3u"])
         {
             NSError *outErr = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:@{
                 NSLocalizedDescriptionKey : @"Required m3u file missing.",
@@ -3160,7 +3126,35 @@ static void emulation_run()
 
 - (void)executeFrame
 {
-    emulation_run();
+    static int16_t sound_buf[0x10000];
+    int32 rects[game->fb_height];
+
+    memset(rects, 0, game->fb_height*sizeof(int32));
+
+    EmulateSpecStruct spec = {0};
+    spec.surface = surf;
+    spec.SoundRate = _sampleRate;
+    spec.SoundBuf = sound_buf;
+    spec.LineWidths = rects;
+    spec.SoundBufMaxSize = sizeof(sound_buf) / 2;
+    spec.SoundVolume = 1.0;
+    spec.soundmultiplier = 1.0;
+
+    MDFNI_Emulate(&spec);
+
+    _mednafenCoreTiming = _masterClock / spec.MasterCycles;
+
+    _videoOffsetX = spec.DisplayRect.x;
+    _videoOffsetY = spec.DisplayRect.y;
+    if(game->multires) {
+        _videoWidth = rects[spec.DisplayRect.y];
+    }
+    else {
+        _videoWidth = spec.DisplayRect.w ?: rects[spec.DisplayRect.y];
+    }
+    _videoHeight  = spec.DisplayRect.h;
+
+    [[self ringBufferAtIndex:0] write:spec.SoundBuf maxLength:spec.SoundBufSize * self.channelCount * 2];
 }
 
 - (void)resetEmulation
@@ -3228,14 +3222,6 @@ static void emulation_run()
 
 # pragma mark - Audio
 
-static size_t update_audio_batch(const int16_t *data, size_t frames)
-{
-    GET_CURRENT_OR_RETURN(frames);
-
-    [[current ringBufferAtIndex:0] write:data maxLength:frames * [current channelCount] * 2];
-    return frames;
-}
-
 - (double)audioSampleRate
 {
     return _sampleRate ? _sampleRate : 48000;
@@ -3281,8 +3267,8 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
 - (BOOL)deserializeState:(NSData *)state withError:(NSError **)outError
 {
     NSError *error;
-    const void *bytes = [state bytes];
-    size_t length = [state length];
+    const void *bytes = state.bytes;
+    size_t length = state.length;
 
     MemoryStream stream(length, -1);
     memcpy(stream.map(), bytes, length);
@@ -3295,7 +3281,7 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
                                     code:OEGameCoreStateHasWrongSizeError
                                 userInfo:@{
                                            NSLocalizedDescriptionKey : @"Save state has wrong file size.",
-                                           NSLocalizedRecoverySuggestionErrorKey : [NSString stringWithFormat:@"The size of the save state does not have the right size, %lu expected, got: %ld.", serialSize, [state length]],
+                                           NSLocalizedRecoverySuggestionErrorKey : [NSString stringWithFormat:@"The size of the save state does not have the right size, %lu expected, got: %ld.", serialSize, state.length],
                                         }];
     }
 
@@ -3326,27 +3312,27 @@ const int SS3DMap[] = { 0, 1, 2, 3, 6, 4, 5, 10, 9, 8, 18, 20, 7, 12, 15, 15, 13
 const int VBMap[]   = { 9, 8, 7, 6, 4, 13, 12, 5, 3, 2, 0, 1, 10, 11 };
 const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
-- (oneway void)didPushLynxButton:(OELynxButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didPushLynxButton:(OELynxButton)button forPlayer:(NSUInteger)player
 {
     _inputBuffer[player-1][0] |= 1 << LynxMap[button];
 }
 
-- (oneway void)didReleaseLynxButton:(OELynxButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didReleaseLynxButton:(OELynxButton)button forPlayer:(NSUInteger)player
 {
     _inputBuffer[player-1][0] &= ~(1 << LynxMap[button]);
 }
 
-- (oneway void)didPushNGPButton:(OENGPButton)button;
+- (oneway void)didPushNGPButton:(OENGPButton)button
 {
     _inputBuffer[0][0] |= 1 << NGPMap[button];
 }
 
-- (oneway void)didReleaseNGPButton:(OENGPButton)button;
+- (oneway void)didReleaseNGPButton:(OENGPButton)button
 {
     _inputBuffer[0][0] &= ~(1 << NGPMap[button]);
 }
 
-- (oneway void)didPushPCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didPushPCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player
 {
     if (button != OEPCEButtonMode) // Check for six button mode toggle
         _inputBuffer[player-1][0] |= 1 << PCEMap[button];
@@ -3354,13 +3340,13 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         _inputBuffer[player-1][0] ^= 1 << PCEMap[button];
 }
 
-- (oneway void)didReleasePCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didReleasePCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player
 {
     if (button != OEPCEButtonMode)
         _inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
 }
 
-- (oneway void)didPushPCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didPushPCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player
 {
     if (button != OEPCECDButtonMode) // Check for six button mode toggle
         _inputBuffer[player-1][0] |= 1 << PCEMap[button];
@@ -3368,18 +3354,18 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         _inputBuffer[player-1][0] ^= 1 << PCEMap[button];
 }
 
-- (oneway void)didReleasePCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didReleasePCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player
 {
     if (button != OEPCECDButtonMode)
         _inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
 }
 
-- (oneway void)didPushPCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didPushPCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player
 {
     _inputBuffer[player-1][0] |= 1 << PCFXMap[button];
 }
 
-- (oneway void)didReleasePCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didReleasePCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player
 {
     _inputBuffer[player-1][0] &= ~(1 << PCFXMap[button]);
 }
@@ -3416,32 +3402,32 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         _inputBuffer[player-1][0] &= ~(1 << SSMap[button]);
 }
 
-- (oneway void)didPushVBButton:(OEVBButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didPushVBButton:(OEVBButton)button forPlayer:(NSUInteger)player
 {
     _inputBuffer[player-1][0] |= 1 << VBMap[button];
 }
 
-- (oneway void)didReleaseVBButton:(OEVBButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didReleaseVBButton:(OEVBButton)button forPlayer:(NSUInteger)player
 {
     _inputBuffer[player-1][0] &= ~(1 << VBMap[button]);
 }
 
-- (oneway void)didPushWSButton:(OEWSButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didPushWSButton:(OEWSButton)button forPlayer:(NSUInteger)player
 {
     _inputBuffer[player-1][0] |= 1 << WSMap[button];
 }
 
-- (oneway void)didReleaseWSButton:(OEWSButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didReleaseWSButton:(OEWSButton)button forPlayer:(NSUInteger)player
 {
     _inputBuffer[player-1][0] &= ~(1 << WSMap[button]);
 }
 
-- (oneway void)didPushPSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didPushPSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player
 {
     _inputBuffer[player-1][0] |= 1 << PSXMap[button];
 }
 
-- (oneway void)didReleasePSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didReleasePSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player
 {
     _inputBuffer[player-1][0] &= ~(1 << PSXMap[button]);
 }
@@ -3452,7 +3438,6 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     // We cannot use MDFNI_SetSetting("psx.input.port1.dualshock.axis_scale", "1.33") directly.
     // Background: https://mednafen.github.io/documentation/psx.html#Section_analog_range
     value *= 32767 ; // de-normalize
-
     double scaledValue = MIN(floor(0.5 + value * 1.33), 32767); // 30712 / cos(2*pi/8) / 32767 = 1.33
     
     if (button == OEPSXLeftAnalogLeft || button == OEPSXLeftAnalogUp || button == OEPSXRightAnalogLeft || button == OEPSXRightAnalogUp)
@@ -3480,6 +3465,8 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     uint8_t *buf = (uint8_t *)_inputBuffer[player-1];
     MDFN_en16lsb(&buf[2 + analogNumber], value);
 }
+
+# pragma mark - Display Mode
 
 - (void)changeDisplayMode
 {
@@ -3547,6 +3534,8 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         }
     }
 }
+
+#pragma mark - Discs
 
 - (void)setDisc:(NSUInteger)discNumber
 {
