@@ -48,6 +48,14 @@
     #error "Cores should not be compiled in DEBUG! Follow the guide https://github.com/OpenEmu/OpenEmu/wiki/Compiling-From-Source-Guide"
 #endif
 
+#define OptionDefault(_NAME_, _PREFKEY_) @{ OEGameCoreDisplayModeNameKey : _NAME_, OEGameCoreDisplayModePrefKeyNameKey : _PREFKEY_, OEGameCoreDisplayModeStateKey : @YES, }
+#define Option(_NAME_, _PREFKEY_) @{ OEGameCoreDisplayModeNameKey : _NAME_, OEGameCoreDisplayModePrefKeyNameKey : _PREFKEY_, OEGameCoreDisplayModeStateKey : @NO, }
+#define OptionIndented(_NAME_, _PREFKEY_) @{ OEGameCoreDisplayModeNameKey : _NAME_, OEGameCoreDisplayModePrefKeyNameKey : _PREFKEY_, OEGameCoreDisplayModeStateKey : @NO, OEGameCoreDisplayModeIndentationLevelKey : @(1), }
+#define OptionToggleable(_NAME_, _PREFKEY_) @{ OEGameCoreDisplayModeNameKey : _NAME_, OEGameCoreDisplayModePrefKeyNameKey : _PREFKEY_, OEGameCoreDisplayModeStateKey : @NO, OEGameCoreDisplayModeAllowsToggleKey : @YES, }
+#define OptionToggleableNoSave(_NAME_, _PREFKEY_) @{ OEGameCoreDisplayModeNameKey : _NAME_, OEGameCoreDisplayModePrefKeyNameKey : _PREFKEY_, OEGameCoreDisplayModeStateKey : @NO, OEGameCoreDisplayModeAllowsToggleKey : @YES, OEGameCoreDisplayModeDisallowPrefSaveKey : @YES, }
+#define Label(_NAME_) @{ OEGameCoreDisplayModeLabelKey : _NAME_, }
+#define SeparatorItem() @{ OEGameCoreDisplayModeSeparatorItemKey : @"",}
+
 static MDFNGI *game;
 static MDFN_Surface *surf;
 
@@ -55,7 +63,6 @@ namespace MDFN_IEN_VB
 {
     extern void VIP_SetParallaxDisable(bool disabled);
     extern void VIP_SetAnaglyphColors(uint32 lcolor, uint32 rcolor);
-    int mednafenCurrentDisplayMode = 1;
 }
 
 @interface MednafenGameCore () <OELynxSystemResponderClient, OENGPSystemResponderClient, OEPCESystemResponderClient, OEPCECDSystemResponderClient, OEPCFXSystemResponderClient, OEPSXSystemResponderClient, OESaturnSystemResponderClient, OEVBSystemResponderClient, OEWSSystemResponderClient>
@@ -76,9 +83,11 @@ namespace MDFN_IEN_VB
     BOOL _isMultiDiscGame;
     BOOL _isSS3DControlPadSupportedGame;
     NSMutableArray *_allCueSheetFiles;
+    NSMutableArray <NSMutableDictionary <NSString *, id> *> *_availableDisplayModes;
 }
 
 - (void)initializeMednafen;
+- (void)loadDisplayModeOptions;
 
 @end
 
@@ -3121,6 +3130,11 @@ static __weak MednafenGameCore *_current;
 
     MDFNI_SetMedia(0, 2, 0, 0); // Disc selection API
 
+    // Only temporary, so core doesn't crash on an older OpenEmu version
+    if ([self respondsToSelector:@selector(displayModeInfo)]) {
+        [self loadDisplayModeOptions];
+    }
+
     return YES;
 }
 
@@ -3468,70 +3482,115 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 # pragma mark - Display Mode
 
-- (void)changeDisplayMode
+- (NSArray <NSDictionary <NSString *, id> *> *)displayModes
 {
-    if ([_mednafenCoreModule isEqualToString:@"vb"])
+    if(![_mednafenCoreModule isEqualToString:@"vb"])
+        return nil;
+
+    if (_availableDisplayModes.count == 0)
     {
-        switch (MDFN_IEN_VB::mednafenCurrentDisplayMode)
-        {
-            case 0: // (2D) red/black
-                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x000000);
-                MDFN_IEN_VB::VIP_SetParallaxDisable(true);
-                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
-                break;
+        _availableDisplayModes = [NSMutableArray array];
 
-            case 1: // (2D) white/black
-                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFFFFFF, 0x000000);
-                MDFN_IEN_VB::VIP_SetParallaxDisable(true);
-                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
-                break;
+        NSArray <NSDictionary <NSString *, id> *> *availableModesWithDefault =
+        @[
+          Label(@"Palette"),
+          OptionDefault(@"Red/Black (2D)", @"vbPalette"),
+          Option(@"White/Black (2D)", @"vbPalette"),
+          Option(@"Magenta/Black (2D)", @"vbPalette"),
+          SeparatorItem(),
+          Option(@"Red/Blue", @"vbPalette"),
+          Option(@"Red/Cyan", @"vbPalette"),
+          Option(@"Red/Electric Cyan", @"vbPalette"),
+          Option(@"Red/Green", @"vbPalette"),
+          Option(@"Green/Magenta", @"vbPalette"),
+          Option(@"Yellow/Blue", @"vbPalette"),
+          ];
 
-            case 2: // (2D) purple/black
-                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF00FF, 0x000000);
-                MDFN_IEN_VB::VIP_SetParallaxDisable(true);
-                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
-                break;
+        // Deep mutable copy
+        _availableDisplayModes = (NSMutableArray *)CFBridgingRelease(CFPropertyListCreateDeepCopy(kCFAllocatorDefault, (CFArrayRef)availableModesWithDefault, kCFPropertyListMutableContainers));
+    }
 
-            case 3: // (3D) red/blue
-                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x0000FF);
-                MDFN_IEN_VB::VIP_SetParallaxDisable(false);
-                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
-                break;
+    return [_availableDisplayModes copy];
+}
 
-            case 4: // (3D) red/cyan
-                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x00B7EB);
-                MDFN_IEN_VB::VIP_SetParallaxDisable(false);
-                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
-                break;
+- (void)changeDisplayWithMode:(NSString *)displayMode
+{
+    if (_availableDisplayModes.count == 0)
+        [self displayModes];
 
-            case 5: // (3D) red/electric cyan
-                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x00FFFF);
-                MDFN_IEN_VB::VIP_SetParallaxDisable(false);
-                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
-                break;
+    // First check if 'displayMode' is valid
+    BOOL isValidDisplayMode = NO;
 
-            case 6: // (3D) red/green
-                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x00FF00);
-                MDFN_IEN_VB::VIP_SetParallaxDisable(false);
-                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
-                break;
-
-            case 7: // (3D) green/red
-                MDFN_IEN_VB::VIP_SetAnaglyphColors(0x00FF00, 0xFF0000);
-                MDFN_IEN_VB::VIP_SetParallaxDisable(false);
-                MDFN_IEN_VB::mednafenCurrentDisplayMode++;
-                break;
-
-            case 8: // (3D) yellow/blue
-                MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFFFF00, 0x0000FF);
-                MDFN_IEN_VB::VIP_SetParallaxDisable(false);
-                MDFN_IEN_VB::mednafenCurrentDisplayMode = 0;
-                break;
-
-            default:
-                return;
-                break;
+    for (NSDictionary *modeDict in _availableDisplayModes) {
+        if ([modeDict[OEGameCoreDisplayModeNameKey] isEqualToString:displayMode]) {
+            isValidDisplayMode = YES;
+            break;
         }
+    }
+
+    // Disallow a 'displayMode' not found in _availableDisplayModes
+    if (!isValidDisplayMode)
+        return;
+
+    // Handle option state changes
+    for (NSMutableDictionary *optionDict in _availableDisplayModes) {
+        if (optionDict[OEGameCoreDisplayModeLabelKey] || optionDict[OEGameCoreDisplayModeSeparatorItemKey])
+            continue;
+        // Mutually exclusive option state change
+        else if ([optionDict[OEGameCoreDisplayModeNameKey] isEqualToString:displayMode])
+            optionDict[OEGameCoreDisplayModeStateKey] = @YES;
+        // Reset
+        else
+            optionDict[OEGameCoreDisplayModeStateKey] = @NO;
+    }
+
+    if ([displayMode isEqualToString:@"Red/Black (2D)"]) {
+        MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x000000);
+        MDFN_IEN_VB::VIP_SetParallaxDisable(true);
+    }
+    else if ([displayMode isEqualToString:@"White/Black (2D)"]) {
+        MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFFFFFF, 0x000000);
+        MDFN_IEN_VB::VIP_SetParallaxDisable(true);
+    }
+    else if ([displayMode isEqualToString:@"Magenta/Black (2D)"]) {
+        MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF00FF, 0x000000);
+        MDFN_IEN_VB::VIP_SetParallaxDisable(true);
+    }
+    else if ([displayMode isEqualToString:@"Red/Blue"]) {
+        MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x0000FF);
+        MDFN_IEN_VB::VIP_SetParallaxDisable(false);
+    }
+    else if ([displayMode isEqualToString:@"Red/Cyan"]) {
+        MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x00B7EB);
+        MDFN_IEN_VB::VIP_SetParallaxDisable(false);
+    }
+    else if ([displayMode isEqualToString:@"Red/Electric Cyan"]) {
+        MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x00FFFF);
+        MDFN_IEN_VB::VIP_SetParallaxDisable(false);
+    }
+    else if ([displayMode isEqualToString:@"Red/Green"]) {
+        MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFF0000, 0x00FF00);
+        MDFN_IEN_VB::VIP_SetParallaxDisable(false);
+    }
+    else if ([displayMode isEqualToString:@"Green/Magenta"]) {
+        MDFN_IEN_VB::VIP_SetAnaglyphColors(0x00FF00, 0xFF00FF);
+        MDFN_IEN_VB::VIP_SetParallaxDisable(false);
+    }
+    else if ([displayMode isEqualToString:@"Yellow/Blue"]) {
+        MDFN_IEN_VB::VIP_SetAnaglyphColors(0xFFFF00, 0x0000FF);
+        MDFN_IEN_VB::VIP_SetParallaxDisable(false);
+    }
+}
+
+- (void)loadDisplayModeOptions
+{
+    if(![_mednafenCoreModule isEqualToString:@"vb"])
+        return;
+
+    // Restore palette
+    NSString *lastPalette = self.displayModeInfo[@"vbPalette"];
+    if (lastPalette && ![lastPalette isEqualToString:@"Red/Black (2D)"]) {
+        [self changeDisplayWithMode:lastPalette];
     }
 }
 
@@ -3539,7 +3598,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (void)setDisc:(NSUInteger)discNumber
 {
-    uint32_t index = discNumber - 1; // 0-based index
+    uint32_t index = (uint32_t)discNumber - 1; // 0-based index
     MDFNI_SetMedia(0, 0, 0, 0); // open drive/eject disc
 
     // Open/eject needs a bit of delay, so wait 1 second until inserting new disc
