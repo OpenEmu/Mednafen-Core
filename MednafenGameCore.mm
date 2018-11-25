@@ -3480,6 +3480,26 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     MDFN_en16lsb(&buf[2 + analogNumber], value);
 }
 
+- (oneway void)mouseMovedAtPoint:(OEIntPoint)point
+{
+}
+
+- (oneway void)leftMouseDownAtPoint:(OEIntPoint)point
+{
+}
+
+- (oneway void)leftMouseUp
+{
+}
+
+- (oneway void)rightMouseDownAtPoint:(OEIntPoint)point
+{
+}
+
+- (oneway void)rightMouseUp
+{
+}
+
 # pragma mark - Display Mode
 
 - (NSArray <NSDictionary <NSString *, id> *> *)displayModes
