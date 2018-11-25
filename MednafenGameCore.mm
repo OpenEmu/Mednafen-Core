@@ -3534,7 +3534,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
     // Handle option state changes
     for (NSMutableDictionary *optionDict in _availableDisplayModes) {
-        if (optionDict[OEGameCoreDisplayModeLabelKey] || optionDict[OEGameCoreDisplayModeSeparatorItemKey])
+        if (!optionDict[OEGameCoreDisplayModeNameKey])
             continue;
         // Mutually exclusive option state change
         else if ([optionDict[OEGameCoreDisplayModeNameKey] isEqualToString:displayMode])
