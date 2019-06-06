@@ -186,7 +186,6 @@
 		8CB3E08417F1DE5E0090372A /* tcache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3DCA217F1DE5E0090372A /* tcache.cpp */; };
 		8CB3E08717F1DE5E0090372A /* v30mz.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3DCA617F1DE5E0090372A /* v30mz.cpp */; };
 		8CB3E0AB17F1FAD00090372A /* stubs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454E3B17852E61006C057B /* stubs.cpp */; };
-		8CB3E0AC17F1FAD20090372A /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94454E3617852E44006C057B /* thread.cpp */; };
 		8CB3E0AE17F20E6D0090372A /* netplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7C417F1DE5B0090372A /* netplay.cpp */; };
 		8CB3E0B117F20EF10090372A /* scsicd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D53C17F1DE5A0090372A /* scsicd.cpp */; };
 		8CB3E0B317F20F010090372A /* CDAccess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D52417F1DE5A0090372A /* CDAccess.cpp */; };
@@ -4509,7 +4508,6 @@
 				8CB3DE9F17F1DE5E0090372A /* irq.cpp in Sources */,
 				8CB3DE8C17F1DE5E0090372A /* dis.cpp in Sources */,
 				8CB3DEA917F1DE5E0090372A /* spu.cpp in Sources */,
-				8CB3E0AC17F1FAD20090372A /* thread.cpp in Sources */,
 				8CB3E07517F1DE5E0090372A /* dis_groups.cpp in Sources */,
 				8CB3E0D517F212490090372A /* memory.cpp in Sources */,
 				8CB3E0EB17F2140E0090372A /* qtrecord.cpp in Sources */,

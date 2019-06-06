@@ -2955,7 +2955,7 @@ static __weak MednafenGameCore *_current;
 
     [self initializeMednafen];
 
-    game = MDFNI_LoadGame(_mednafenCoreModule.UTF8String, path.fileSystemRepresentation);
+    game = MDFNI_LoadGame(_mednafenCoreModule.UTF8String, &::Mednafen::NVFS, path.fileSystemRepresentation);
 
     if(!game)
         return NO;
@@ -3126,6 +3126,11 @@ static __weak MednafenGameCore *_current;
 
         game->SetInput(12, "builtin", (uint8_t *)_inputBuffer[12]); // reset button status
     }
+    else if ([_mednafenCoreModule isEqualToString:@"vb"])
+    {
+        game->SetInput(0, "gamepad", (uint8_t *)_inputBuffer[0]);
+        game->SetInput(1, "misc", (uint8_t *)_inputBuffer[1]); // low battery sensor bit, unused currently
+    }
     else
     {
         game->SetInput(0, "gamepad", (uint8_t *)_inputBuffer[0]);
@@ -3148,7 +3153,7 @@ static __weak MednafenGameCore *_current;
 
     memset(rects, 0, game->fb_height*sizeof(int32));
 
-    EmulateSpecStruct spec = {0};
+    EmulateSpecStruct spec;
     spec.surface = surf;
     spec.SoundRate = _sampleRate;
     spec.SoundBuf = sound_buf;
