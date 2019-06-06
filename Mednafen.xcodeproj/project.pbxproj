@@ -64,6 +64,7 @@
 		872FC2D622A9790F00AF67DE /* SwiftResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 872FC2D522A9790E00AF67DE /* SwiftResampler.cpp */; };
 		872FC2E022A97A9C00AF67DE /* Deinterlacer_Simple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 872FC2DE22A97A9B00AF67DE /* Deinterlacer_Simple.cpp */; };
 		872FC2E122A97A9C00AF67DE /* Deinterlacer_Blend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 872FC2DF22A97A9C00AF67DE /* Deinterlacer_Blend.cpp */; };
+		872FC2F222A981DB00AF67DE /* idct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 872FC2F022A981DA00AF67DE /* idct.cpp */; };
 		8759F08E1F5673F3009CBC01 /* ar4mp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8759F08C1F5673F3009CBC01 /* ar4mp.cpp */; };
 		877661671E772FC1009252B0 /* keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 877661631E772FC1009252B0 /* keyboard.cpp */; };
 		877661681E772FC1009252B0 /* mission.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 877661651E772FC1009252B0 /* mission.cpp */; };
@@ -134,7 +135,6 @@
 		8CB3DE7717F1DE5E0090372A /* mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D84F17F1DE5C0090372A /* mouse.cpp */; };
 		8CB3DE7817F1DE5E0090372A /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D85117F1DE5C0090372A /* input.cpp */; };
 		8CB3DE7917F1DE5E0090372A /* interrupt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D85317F1DE5C0090372A /* interrupt.cpp */; };
-		8CB3DE7B17F1DE5E0090372A /* jrevdct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D85617F1DE5C0090372A /* jrevdct.cpp */; };
 		8CB3DE7E17F1DE5E0090372A /* king.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D85A17F1DE5C0090372A /* king.cpp */; };
 		8CB3DE8317F1DE5E0090372A /* pcfx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D86017F1DE5C0090372A /* pcfx.cpp */; };
 		8CB3DE8417F1DE5E0090372A /* rainbow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D86217F1DE5C0090372A /* rainbow.cpp */; };
@@ -466,6 +466,8 @@
 		872FC2ED22A97E9C00AF67DE /* disk2.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; path = disk2.inc; sourceTree = "<group>"; };
 		872FC2EE22A97E9C00AF67DE /* video.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; path = video.inc; sourceTree = "<group>"; };
 		872FC2EF22A97E9C00AF67DE /* apple2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = apple2.cpp; sourceTree = "<group>"; };
+		872FC2F022A981DA00AF67DE /* idct.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = idct.cpp; sourceTree = "<group>"; };
+		872FC2F122A981DA00AF67DE /* idct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = idct.h; sourceTree = "<group>"; };
 		8759F08C1F5673F3009CBC01 /* ar4mp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ar4mp.cpp; sourceTree = "<group>"; };
 		8759F08D1F5673F3009CBC01 /* ar4mp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ar4mp.h; sourceTree = "<group>"; };
 		877661631E772FC1009252B0 /* keyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = keyboard.cpp; path = ss/input/keyboard.cpp; sourceTree = "<group>"; };
@@ -1164,8 +1166,6 @@
 		8CB3D85317F1DE5C0090372A /* interrupt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interrupt.cpp; sourceTree = "<group>"; };
 		8CB3D85417F1DE5C0090372A /* interrupt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interrupt.h; sourceTree = "<group>"; };
 		8CB3D85517F1DE5C0090372A /* io-handler.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = "io-handler.inc"; sourceTree = "<group>"; };
-		8CB3D85617F1DE5C0090372A /* jrevdct.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jrevdct.cpp; sourceTree = "<group>"; };
-		8CB3D85717F1DE5C0090372A /* jrevdct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jrevdct.h; sourceTree = "<group>"; };
 		8CB3D85817F1DE5C0090372A /* king-bgfast-blit.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = "king-bgfast-blit.inc"; sourceTree = "<group>"; };
 		8CB3D85917F1DE5C0090372A /* king-bgfast.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = "king-bgfast.inc"; sourceTree = "<group>"; };
 		8CB3D85A17F1DE5C0090372A /* king.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = king.cpp; sourceTree = "<group>"; };
@@ -3150,14 +3150,14 @@
 				8CB3D84917F1DE5C0090372A /* gamedb.inc */,
 				8CB3D84A17F1DE5C0090372A /* huc6273.cpp */,
 				8CB3D84B17F1DE5C0090372A /* huc6273.h */,
+				872FC2F022A981DA00AF67DE /* idct.cpp */,
+				872FC2F122A981DA00AF67DE /* idct.h */,
 				8CB3D84C17F1DE5C0090372A /* input */,
 				8CB3D85117F1DE5C0090372A /* input.cpp */,
 				8CB3D85217F1DE5C0090372A /* input.h */,
 				8CB3D85317F1DE5C0090372A /* interrupt.cpp */,
 				8CB3D85417F1DE5C0090372A /* interrupt.h */,
 				8CB3D85517F1DE5C0090372A /* io-handler.inc */,
-				8CB3D85617F1DE5C0090372A /* jrevdct.cpp */,
-				8CB3D85717F1DE5C0090372A /* jrevdct.h */,
 				8CB3D85817F1DE5C0090372A /* king-bgfast-blit.inc */,
 				8CB3D85917F1DE5C0090372A /* king-bgfast.inc */,
 				8CB3D85A17F1DE5C0090372A /* king.cpp */,
@@ -4561,6 +4561,7 @@
 				8CB3DE9D17F1DE5E0090372A /* multitap.cpp in Sources */,
 				8CB3DD6417F1DE5E0090372A /* memmap.cpp in Sources */,
 				94CFB65B1A75DC7C001F174F /* state_rewind.cpp in Sources */,
+				872FC2F222A981DB00AF67DE /* idct.cpp in Sources */,
 				8CB3DD6017F1DE5E0090372A /* cart.cpp in Sources */,
 				8CB3DD6617F1DE5E0090372A /* ram.cpp in Sources */,
 				8CB3DD6517F1DE5E0090372A /* mikie.cpp in Sources */,
@@ -4633,7 +4634,6 @@
 				8CB3E04417F1DE5E0090372A /* floor1.c in Sources */,
 				8CB3E10C17F216B60090372A /* main.cpp in Sources */,
 				8CB3DD6817F1DE5E0090372A /* susie.cpp in Sources */,
-				8CB3DE7B17F1DE5E0090372A /* jrevdct.cpp in Sources */,
 				8CB3DE5717F1DE5E0090372A /* gamepad.cpp in Sources */,
 				8CB3E0F317F215C90090372A /* escape.cpp in Sources */,
 				8CB3E05D17F1DE5E0090372A /* input.cpp in Sources */,
@@ -4747,9 +4747,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"1.22.0-UNSTABLE\\\"",
+					"-DMEDNAFEN_VERSION=\\\"1.22.1\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00102200",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00102201",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
@@ -4777,6 +4777,8 @@
 					"-DSIZEOF_VOID_P=8",
 					"-DSIZEOF_DOUBLE=8",
 					"-DHAVE_LIBSNDFILE",
+					"-DHAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE_NP",
+					"-DMDFN_PCE_VCE_AWESOMEMODE",
 					"-mllvm",
 					"-disable-lsr",
 				);
@@ -4811,9 +4813,9 @@
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"1.22.0-UNSTABLE\\\"",
+					"-DMEDNAFEN_VERSION=\\\"1.22.1\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00102200",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00102201",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DARCH_X86",
@@ -4841,6 +4843,8 @@
 					"-DSIZEOF_VOID_P=8",
 					"-DSIZEOF_DOUBLE=8",
 					"-DHAVE_LIBSNDFILE",
+					"-DHAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE_NP",
+					"-DMDFN_PCE_VCE_AWESOMEMODE",
 					"-mllvm",
 					"-disable-lsr",
 				);
