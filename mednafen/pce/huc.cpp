@@ -21,7 +21,7 @@
 #include <mednafen/hw_misc/arcade_card/arcade_card.h>
 #include <mednafen/hash/md5.h>
 #include <mednafen/file.h>
-#include <mednafen/cdrom/cdromif.h>
+#include <mednafen/cdrom/CDInterface.h>
 #include <mednafen/mempatcher.h>
 #include <mednafen/compress/GZFileStream.h>
 #include <mednafen/FileStream.h>
@@ -191,11 +191,10 @@ static void LoadSaveMemory(const std::string& path, uint8* const data, const uin
  try
  {
   std::unique_ptr<Stream> fp(possibly_gz ? (Stream*)(new GZFileStream(path, GZFileStream::MODE::READ)) : (Stream*)(new FileStream(path, FileStream::MODE_READ)));
-// 10.11 zlib bug https://github.com/OpenEmu/Mednafen-Core/commit/05d66b1bfcd96151fc75215c49709618c11bf447
-//  const uint64 fp_size_tmp = fp->size();
-//
-//  if(fp_size_tmp != len)
-//   throw MDFN_Error(0, _("Save game memory file \"%s\" is an incorrect size(%llu bytes).  The correct size is %llu bytes."), path.c_str(), (unsigned long long)fp_size_tmp, (unsigned long long)len);
+  const uint64 fp_size_tmp = fp->size();
+
+  if(fp_size_tmp != len)
+   throw MDFN_Error(0, _("Save game memory file \"%s\" is an incorrect size(%llu bytes).  The correct size is %llu bytes."), path.c_str(), (unsigned long long)fp_size_tmp, (unsigned long long)len);
 
   fp->read(data, len);
  }
@@ -206,7 +205,7 @@ static void LoadSaveMemory(const std::string& path, uint8* const data, const uin
  }
 }
 
-uint32 HuC_Load(MDFNFILE* fp, bool DisableBRAM, SysCardType syscard)
+uint32 HuC_Load(Stream* s, bool DisableBRAM, SysCardType syscard)
 {
  uint32 crc = 0;
  const uint32 sf2_threshold = 2048 * 1024;
@@ -218,11 +217,11 @@ uint32 HuC_Load(MDFNFILE* fp, bool DisableBRAM, SysCardType syscard)
  {
   uint64 len, m_len;
 
-  len = fp->size();
+  len = s->size();
   if(len & 512)	// Skip copier header.
   {
    len &= ~512;
-   fp->seek(512, SEEK_SET);
+   s->seek(512, SEEK_SET);
   }
   m_len = (len + 8191) &~ 8191;
 
@@ -230,12 +229,12 @@ uint32 HuC_Load(MDFNFILE* fp, bool DisableBRAM, SysCardType syscard)
   {
    uint8 buf[8192];
 
-   fp->read(buf, 8192);
+   s->read(buf, 8192);
 
    if(!memcmp(buf + 0x1FD0, "MCGENJIN", 8))
     mcg_mapper = true;
 
-   fp->seek(-8192, SEEK_CUR);	// Seek backwards so we don't undo skip copier header.
+   s->seek(-8192, SEEK_CUR);	// Seek backwards so we don't undo skip copier header.
   }
 
   if(!syscard && m_len >= sf2_threshold && !mcg_mapper)
@@ -278,7 +277,7 @@ uint32 HuC_Load(MDFNFILE* fp, bool DisableBRAM, SysCardType syscard)
 
   if(mcg_mapper)
   {
-   mcg = new MCGenjin(fp);
+   mcg = new MCGenjin(s);
 
    for(unsigned i = 0; i < 128; i++)
    {
@@ -309,7 +308,7 @@ uint32 HuC_Load(MDFNFILE* fp, bool DisableBRAM, SysCardType syscard)
 
   HuCROM = new uint8[m_len];
   memset(HuCROM, 0xFF, m_len);
-  fp->read(HuCROM, std::min<uint64>(m_len, len));
+  s->read(HuCROM, std::min<uint64>(m_len, len));
   crc = crc32(0, HuCROM, std::min<uint64>(m_len, len));
 
   if(syscard == SYSCARD_NONE)
