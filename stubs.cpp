@@ -4,7 +4,7 @@ void Mednafen::MDFND_OutputNotice(MDFN_NoticeType t, const char* s) noexcept {}
 
 void Mednafen::MDFND_OutputInfo(const char *s) noexcept {}
 
-void Mednafen::MDFND_MidSync(const EmulateSpecStruct *) {}
+void Mednafen::MDFND_MidSync(EmulateSpecStruct *espec, const unsigned flags) {}
 
 void Mednafen::MDFND_MediaSetNotification(uint32 drive_idx, uint32 state_idx, uint32 media_idx, uint32 orientation_idx) {}
 

@@ -56,6 +56,8 @@
 #define Label(_NAME_) @{ OEGameCoreDisplayModeLabelKey : _NAME_, }
 #define SeparatorItem() @{ OEGameCoreDisplayModeSeparatorItemKey : @"",}
 
+using namespace Mednafen;
+
 static MDFNGI *game;
 static MDFN_Surface *surf;
 
