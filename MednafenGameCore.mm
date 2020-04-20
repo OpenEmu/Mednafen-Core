@@ -84,6 +84,7 @@ namespace MDFN_IEN_VB
     BOOL _isSBIRequired;
     BOOL _isMultiDiscGame;
     BOOL _isSS3DControlPadSupportedGame;
+    BOOL _isPCE6ButtonPadSupportedGame;
     NSMutableArray *_allCueSheetFiles;
     NSMutableArray <NSMutableDictionary <NSString *, id> *> *_availableDisplayModes;
 }
@@ -2786,6 +2787,40 @@ static __weak MednafenGameCore *_current;
       @"GS-9120",    // World Series Baseball II (Japan)
       ];
 
+    // TurboGrafx-16/PC Engine/CD 6-Button Pad supported games
+    NSArray<NSString *> *pce6ButtonPadGames =
+    @[
+      // PCE
+      @"0d9135be3267876bfec7f588abeda5bb", // Street Fighter II' - Champion Edition (Japan)
+      @"cff035e7d00159ad0879df71e9aa25ca", // Strip Fighter II (Japan) (Unl)
+
+      // PCE CD identified by Redump cue sheet MD5 hash for now.
+      @"39b67de686bdea7f25cb17bb5dd59bf3", // Advanced V.G. (Japan)
+      @"a8123121b3f3a0fc4f15f68123e300de", // Flash Hiders (Japan)
+      //@"ee5429409475963c8e6d4dc1d3b8af47", // Garou Densetsu 2 - Aratanaru Tatakai (Japan) (FABT, FAET, FAFT) - cannot toggle in-game
+      //@"d78a5009974e8616665a7c89568c4619", // Ryuuko no Ken (Japan) (En,Ja,Es) (FABT) - cannot toggle 2/6 button mode in-game at "key assign" options.
+      //@"367a499bb93e61c36f2fdff4bea2fe5c", // Ryuuko no Ken (Japan) (En,Ja,Es) (FACT) - toggling 2/6 button mode in-game at "key assign" options breaks input, unlike "FABT" dump which does nothing.
+      @"e42f62d283c5e29bf32ab5c3d1d71f05", // Ys IV - The Dawn of Ys (Japan) (Rev 3)
+
+      // Not compatible, may need Avenue Pad 3 instead of Avenue Pad 6 / Arcade Pad 6
+      // Asuka 120% Maxima - Burning Fest. Maxima (Japan)
+      // Far East of Eden - Tengai Makyou - Fuun Kabuki-den (Japan)
+      // Forgotten Worlds (Japan)
+      // Forgotten Worlds (USA) (En,Ja)
+      // Garou Densetsu Special (Japan) (FABT)
+      // World Heroes 2 (Japan) - needs the Avenue Pad 3
+      ];
+
+    if ([_mednafenCoreModule isEqualToString:@"pce"])
+    {
+        // PCE: Check if 6 Button Pad is supported
+        // Incompatible games will have broken input, so enable on a per-game basis.
+        if ([pce6ButtonPadGames containsObject:self.ROMMD5.lowercaseString])
+        {
+            _isPCE6ButtonPadSupportedGame = YES;
+        }
+    }
+
     if ([_mednafenCoreModule isEqualToString:@"psx"])
     {
         // PSX: Check if multiple discs required
@@ -3358,6 +3393,9 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)didPushPCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player
 {
+    if (!_isPCE6ButtonPadSupportedGame && button == OEPCEButtonMode)
+        return;
+
     if (button != OEPCEButtonMode) // Check for six button mode toggle
         _inputBuffer[player-1][0] |= 1 << PCEMap[button];
     else
@@ -3372,6 +3410,9 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)didPushPCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player
 {
+    if (!_isPCE6ButtonPadSupportedGame && button == OEPCECDButtonMode)
+        return;
+
     if (button != OEPCECDButtonMode) // Check for six button mode toggle
         _inputBuffer[player-1][0] |= 1 << PCEMap[button];
     else
