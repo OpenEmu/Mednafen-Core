@@ -84,6 +84,7 @@ namespace MDFN_IEN_VB
     BOOL _isSBIRequired;
     BOOL _isMultiDiscGame;
     BOOL _isSS3DControlPadSupportedGame;
+    BOOL _isSSVirtuaGunSupportedGame;
     BOOL _isPCE6ButtonPadSupportedGame;
     NSMutableArray *_allCueSheetFiles;
     NSMutableArray <NSMutableDictionary <NSString *, id> *> *_availableDisplayModes;
@@ -132,6 +133,8 @@ static __weak MednafenGameCore *_current;
     MDFNI_SetSetting("pce.slend", "239"); // PCE: Last rendered scanline
 
     MDFNI_SetSetting("psx.h_overscan", "0"); // Remove PSX overscan
+
+    //MDFNI_SetSetting("ss.input.port1.gun_chairs", "0x1000000"); // SS: Disable crosshair drawing
 
     // PlayStation SBI required games (LibCrypt)
     NSDictionary<NSString *, NSNumber *> *sbiRequiredGames =
@@ -2674,9 +2677,9 @@ static __weak MednafenGameCore *_current;
       @"MK-81067",   // Christmas NiGHTS into Dreams... (USA)
       @"T-5029H-50", // Croc - Legend of the Gobbos (Europe) / (USA)
       @"T-26410G",   // Croc! - Pau-Pau Island (Japan)
-      @"T-9509H-50", // Crypt Killer (Europe)
-      @"T-9518G",    // Henry Explorers (Japan)
-      @"T-9509H",    // Crypt Killer (USA)
+      //@"T-9509H-50", // Crypt Killer (Europe)
+      //@"T-9518G",    // Henry Explorers (Japan)
+      //@"T-9509H",    // Crypt Killer (USA)
       @"MK-81205",   // Cyber Speedway (Europe)
       @"MK-81204",   // Cyber Speedway (USA)
       @"GS-9022",    // Gran Chaser (Japan)
@@ -2710,8 +2713,8 @@ static __weak MednafenGameCore *_current;
       @"T-12303H",   // Hardcore 4X4 (Europe)
       @"T-13703H",   // TNN Motor Sports Hardcore 4X4 (USA)
       @"T-4313G",    // Deka Yonku - Tough The Truck (Japan)
-      @"MK-81802",   // House of the Dead, The (Europe) / (USA)
-      @"GS-9173",    // House of the Dead, The (Japan)
+      //@"MK-81802",   // House of the Dead, The (Europe) / (USA)
+      //@"GS-9173",    // House of the Dead, The (Japan)
       @"T-25503G",   // Initial D - Koudou Saisoku Densetsu (Japan)
       @"T-18008G",   // Jungle Park - Saturn Shima (Japan)
       @"T-19723G",   // Kiss yori... (Japan)
@@ -2771,8 +2774,8 @@ static __weak MednafenGameCore *_current;
       @"T-1105G",    // Taito Chase H.Q. + S.C.I. (Japan)
       //@"T-4801G",    // Tama - Adventurous Ball in Giddy Labyrinth (Japan)
       @"T-14412G",   // Touge King the Spirits 2 (Japan)
-      @"MK-81043",   // Virtua Cop 2 (Europe) / (Korea) / (USA)
-      @"GS-9097",    // Virtua Cop 2 (Japan)
+      //@"MK-81043",   // Virtua Cop 2 (Europe) / (Korea) / (USA)
+      //@"GS-9097",    // Virtua Cop 2 (Japan)
       @"T-19718G",   // Virtuacall S (Japan) (Disc 1) (Game Honpen)
       @"T-7104G",    // Virtual Kyoutei 2 (Japan)
       @"MK-81024",   // Wing Arms (Europe) / (USA)
@@ -2785,6 +2788,35 @@ static __weak MednafenGameCore *_current;
       @"MK-81181",   // World League Soccer '98 (Europe)
       @"MK-81113",   // World Series Baseball II (Europe) / (USA)
       @"GS-9120",    // World Series Baseball II (Japan)
+      ];
+
+    // Saturn Stunner / Virtua Gun supported games
+    NSArray<NSString *> *ssVirtuaGunGames =
+    @[
+      @"T-25408H",   // Area 51 (Europe)
+      @"T-18613G",   // Area 51 (Japan)
+      @"T-9705H",    // Area 51 (USA)
+      @"T-15102H",   // Chaos Control (Europe)
+      @"T-7006G",    // Chaos Control Remix (Japan)
+      @"T-9509H-50", // Crypt Killer (Europe)
+      @"T-9518G",    // Henry Explorers (Japan)
+      @"T-9509H",    // Crypt Killer (USA)
+      @"T-23202G",   // Death Crimson (Japan)
+      //@"T-16103H",   // Die Hard Trilogy (Europe) / (USA)
+      //@"GS-9123",    // Die Hard Trilogy (Japan)
+      @"MK-81802",   // House of the Dead, The (Europe) / (USA)
+      @"GS-9173",    // House of the Dead, The (Japan)
+      @"T-25417H",   // Maximum Force (Europe)
+      @"T-9707H",    // Maximum Force (USA)
+      @"GS-9088",    // Mechanical Violator Hakaider - Last Judgement (Japan)
+      @"MK-81087",   // Mighty Hits (Europe)
+      @"T-16604G",   // Mighty Hits (Japan)
+      //@"T-9510G",    // Policenauts (Japan)
+      @"T-30403H",   // Scud - The Disposable Assassin (USA)
+      @"MK-81015",   // Virtua Cop (Europe) / (USA)
+      @"GS-9060",    // Virtua Cop (Japan)
+      @"MK-81043",   // Virtua Cop 2 (Europe) / (Korea) / (USA)
+      @"GS-9097",    // Virtua Cop 2 (Japan)
       ];
 
     // TurboGrafx-16/PC Engine/CD 6-Button Pad supported games
@@ -2911,6 +2943,12 @@ static __weak MednafenGameCore *_current;
         if ([ss3DControlPadGames containsObject:self.ROMSerial])
         {
             _isSS3DControlPadSupportedGame = YES;
+        }
+
+        // SS: Check if Stunner / Virtua Gun is supported
+        if ([ssVirtuaGunGames containsObject:self.ROMSerial])
+        {
+            _isSSVirtuaGunSupportedGame = YES;
         }
 
     }
@@ -3149,11 +3187,17 @@ static __weak MednafenGameCore *_current;
                 // Toggle default position of analog mode switch to Analog(○)
                 // "Analog mode is not compatible with all games.  For some compatible games, analog mode reportedly must be enabled before the game boots up for the game to recognize it properly."
                 //_inputBuffer[i][0] |= 1 << SS3DMap[OESaturnButtonAnalogMode];
-                
+
                 //Center the analog axis inputs
                 uint8_t *buf = (uint8_t *)_inputBuffer[i];
                 MDFN_en16lsb(&buf[2], 32767);
                 MDFN_en16lsb(&buf[4], 32767);
+            }
+            else if(_isSSVirtuaGunSupportedGame)
+            {
+                // Force Stunner / Virtua Gun to Port 1 and Gamepad to Port 2
+                game->SetInput(0, "gun", (uint8_t *)_inputBuffer[0]);
+                game->SetInput(1, "gamepad", (uint8_t *)_inputBuffer[1]);
             }
             else
             {
@@ -3448,6 +3492,15 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         else
             _inputBuffer[player-1][0] ^= 1 << SS3DMap[button];
     }
+    else if(_isSSVirtuaGunSupportedGame && player == 1)
+    {
+        // Handle START for player 1 Stunner / Virtua Gun
+        if (button == OESaturnButtonStart)
+        {
+            uint8_t *buf = (uint8_t *)_inputBuffer[0];
+            MDFN_enlsb(&buf[4], 1 << 1); // START
+        }
+    }
     else
         _inputBuffer[player-1][0] |= 1 << SSMap[button];
 
@@ -3462,6 +3515,15 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
         if (button != OESaturnButtonAnalogMode)
             _inputBuffer[player-1][0] &= ~(1 << SS3DMap[button]);
+    }
+    else if(_isSSVirtuaGunSupportedGame && player == 1)
+    {
+        // Handle START for player 1 Stunner / Virtua Gun
+        if (button == OESaturnButtonStart)
+        {
+            uint8_t *buf = (uint8_t *)_inputBuffer[0];
+            MDFN_enlsb(&buf[4], 0); // release
+        }
     }
     else
         _inputBuffer[player-1][0] &= ~(1 << SSMap[button]);
@@ -3533,22 +3595,66 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)mouseMovedAtPoint:(OEIntPoint)point
 {
+    if(_isSSVirtuaGunSupportedGame)
+    {
+        int scaled_x_coord;
+        int scaled_y_coord;
+
+        // Handle high res mode
+        // Can probably simplify this; check SMPC_EndFrame() and IODevice_Gun::Draw()
+        if(_videoHeight < 480)
+        {
+            scaled_x_coord = (point.x + game->mouse_offs_x) * game->mouse_scale_x / game->nominal_width;
+            scaled_y_coord = (point.y + game->mouse_offs_y) * game->mouse_scale_y / game->nominal_height;
+        }
+        else
+        {
+            scaled_x_coord = (point.x + game->mouse_offs_x) * game->mouse_scale_x / (game->nominal_width * 2);
+            scaled_y_coord = (point.y + game->mouse_offs_y) * game->mouse_scale_y / (game->nominal_height * 2);
+        }
+
+        uint8_t *buf = (uint8_t *)_inputBuffer[0];
+        MDFN_en16lsb(&buf[0], scaled_x_coord); // X coord
+        MDFN_en16lsb(&buf[2], scaled_y_coord); // Y coord
+    }
 }
 
 - (oneway void)leftMouseDownAtPoint:(OEIntPoint)point
 {
+    if(_isSSVirtuaGunSupportedGame)
+    {
+        [self mouseMovedAtPoint:point];
+
+        uint8_t *buf = (uint8_t *)_inputBuffer[0];
+        MDFN_enlsb(&buf[4], 1 << 0); // TRIGGER
+    }
 }
 
 - (oneway void)leftMouseUp
 {
+    if(_isSSVirtuaGunSupportedGame)
+    {
+        uint8_t *buf = (uint8_t *)_inputBuffer[0];
+        MDFN_enlsb(&buf[4], 0); // release TRIGGER
+    }
 }
 
 - (oneway void)rightMouseDownAtPoint:(OEIntPoint)point
 {
+    if(_isSSVirtuaGunSupportedGame)
+    {
+        uint8_t *buf = (uint8_t *)_inputBuffer[0];
+        MDFN_enlsb(&buf[4], 1 << 2); // Offscreen Shot aka RELOAD
+    }
 }
 
 - (oneway void)rightMouseUp
 {
+    if(_isSSVirtuaGunSupportedGame)
+    {
+        uint8_t *buf = (uint8_t *)_inputBuffer[0];
+        MDFN_enlsb(&buf[4], 0); // release Offscreen Shot aka RELOAD
+    }
 }
 
 # pragma mark - Display Mode
