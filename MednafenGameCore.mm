@@ -72,6 +72,7 @@ namespace MDFN_IEN_VB
     uint32_t *_inputBuffer[13];
     int _videoWidth, _videoHeight;
     int _videoOffsetX, _videoOffsetY;
+    int _mouseScaledX, _mouseScaledY;
     int _multiTapPlayerCount;
     double _sampleRate;
     double _masterClock;
@@ -3498,7 +3499,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         if (button == OESaturnButtonStart)
         {
             uint8_t *buf = (uint8_t *)_inputBuffer[0];
-            MDFN_enlsb(&buf[4], 1 << 1); // START
+            MDFN_enlsb<uint8_t>(&buf[4], 1 << 1); // START
         }
     }
     else
@@ -3522,7 +3523,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         if (button == OESaturnButtonStart)
         {
             uint8_t *buf = (uint8_t *)_inputBuffer[0];
-            MDFN_enlsb(&buf[4], 0); // release
+            MDFN_enlsb<uint8_t>(&buf[4], 0); // release
         }
     }
     else
@@ -3597,25 +3598,13 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 {
     if(_isSSVirtuaGunSupportedGame)
     {
-        int scaled_x_coord;
-        int scaled_y_coord;
-
-        // Handle high res mode
-        // Can probably simplify this; check SMPC_EndFrame() and IODevice_Gun::Draw()
-        if(_videoHeight < 480)
-        {
-            scaled_x_coord = (point.x + game->mouse_offs_x) * game->mouse_scale_x / game->nominal_width;
-            scaled_y_coord = (point.y + game->mouse_offs_y) * game->mouse_scale_y / game->nominal_height;
-        }
-        else
-        {
-            scaled_x_coord = (point.x + game->mouse_offs_x) * game->mouse_scale_x / (game->nominal_width * 2);
-            scaled_y_coord = (point.y + game->mouse_offs_y) * game->mouse_scale_y / (game->nominal_height * 2);
-        }
+        [self scaleMouseCoordsAtPoint:point];
+        _mouseScaledX = (_mouseScaledX + game->mouse_offs_x) * (game->mouse_scale_x / game->nominal_width);
+        _mouseScaledY = (_mouseScaledY + game->mouse_offs_y) * (game->mouse_scale_y / game->nominal_height);
 
         uint8_t *buf = (uint8_t *)_inputBuffer[0];
-        MDFN_en16lsb(&buf[0], scaled_x_coord); // X coord
-        MDFN_en16lsb(&buf[2], scaled_y_coord); // Y coord
+        MDFN_en16lsb(&buf[0], _mouseScaledX); // X coord
+        MDFN_en16lsb(&buf[2], _mouseScaledY); // Y coord
     }
 }
 
@@ -3626,7 +3615,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         [self mouseMovedAtPoint:point];
 
         uint8_t *buf = (uint8_t *)_inputBuffer[0];
-        MDFN_enlsb(&buf[4], 1 << 0); // TRIGGER
+        MDFN_enlsb<uint8_t>(&buf[4], 1 << 0); // TRIGGER
     }
 }
 
@@ -3635,7 +3624,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     if(_isSSVirtuaGunSupportedGame)
     {
         uint8_t *buf = (uint8_t *)_inputBuffer[0];
-        MDFN_enlsb(&buf[4], 0); // release TRIGGER
+        MDFN_enlsb<uint8_t>(&buf[4], 0); // release TRIGGER
     }
 }
 
@@ -3644,7 +3633,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     if(_isSSVirtuaGunSupportedGame)
     {
         uint8_t *buf = (uint8_t *)_inputBuffer[0];
-        MDFN_enlsb(&buf[4], 1 << 2); // Offscreen Shot aka RELOAD
+        MDFN_enlsb<uint8_t>(&buf[4], 1 << 2); // Offscreen Shot aka RELOAD
     }
 }
 
@@ -3653,7 +3642,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     if(_isSSVirtuaGunSupportedGame)
     {
         uint8_t *buf = (uint8_t *)_inputBuffer[0];
-        MDFN_enlsb(&buf[4], 0); // release Offscreen Shot aka RELOAD
+        MDFN_enlsb<uint8_t>(&buf[4], 0); // release Offscreen Shot aka RELOAD
     }
 }
 
@@ -3787,6 +3776,34 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 - (NSUInteger)discCount
 {
     return _maxDiscs ? _maxDiscs : 1;
+}
+
+// MARK: - Utility
+
+- (void)scaleMouseCoordsAtPoint:(OEIntPoint)aPoint
+{
+    // Calculate aspect ratio used by front end method -[OEGameLayerView correctScreenSize:forAspectSize:]
+    CGFloat wr = (CGFloat) game->nominal_width / _videoWidth;
+    CGFloat hr = (CGFloat) game->nominal_height / _videoHeight;
+    CGFloat ratio = MAX(hr, wr);
+    NSSize scaled = NSMakeSize((wr / ratio), (hr / ratio));
+
+    CGFloat halfw = scaled.width;
+    CGFloat halfh = scaled.height;
+
+    // Resized 1x window resolution based on values of -[OEGameCore aspectSize]
+    NSSize scaledWindow;
+    scaledWindow = _videoWidth <= game->nominal_width ?
+    NSMakeSize(_videoWidth / halfh, _videoHeight / halfw) :
+    NSMakeSize(_videoWidth * halfw, _videoHeight * halfh);
+
+    // Scale mouse X/Y coords by ratios
+    NSSize scaledRatio =
+    NSMakeSize((CGFloat)game->nominal_width  / scaledWindow.width,
+               (CGFloat)game->nominal_height / scaledWindow.height);
+
+    _mouseScaledX = aPoint.x * (CGFloat)scaledRatio.width;
+    _mouseScaledY = aPoint.y * (CGFloat)scaledRatio.height;
 }
 
 @end
