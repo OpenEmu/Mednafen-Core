@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2018, OpenEmu Team
+ Copyright (c) 2020, OpenEmu Team
 
 
  Redistribution and use in source and binary forms, with or without
@@ -87,6 +87,8 @@ namespace MDFN_IEN_VB
     BOOL _isSS3DControlPadSupportedGame;
     BOOL _isSSVirtuaGunSupportedGame;
     BOOL _isPCE6ButtonPadSupportedGame;
+    BOOL _isPSXJustifierSupportedGame;
+    BOOL _isPSXGunConSupportedGame;
     NSMutableArray *_allCueSheetFiles;
     NSMutableArray <NSMutableDictionary <NSString *, id> *> *_availableDisplayModes;
 }
@@ -2345,6 +2347,95 @@ static __weak MednafenGameCore *_current;
       @"SLES-00617", // Lifeforce Tenka (Spain)
       ];
 
+    // PlayStation Konami Justifier exclusive games
+    NSArray<NSString *> *psxJustifierExclusiveGames =
+    @[
+      @"SLES-00578", // Area 51 (Europe)
+      @"SLES-03783", // Area 51 (Europe) (En,Fr,De,Es) (Midway Classics)
+      @"SLPS-00726", // Area 51 (Japan)
+      @"SLPS-00725", // Area 51 (Japan) (Special Pack)
+      @"SLUS-00164", // Area 51 (USA) / (Rev 1)
+      @"SLES-00292", // Crypt Killer (Europe)
+      @"SLPM-86021", // Henry Explorers (Japan)
+      @"SLUS-00335", // Crypt Killer (USA)
+      //@"SLES-00445", // Die Hard Trilogy (Europe)
+      //@"SLPS-00585", // Die Hard Trilogy (Japan)
+      //@"SLUS-00119", // Die Hard Trilogy (USA) / (Rev 1)
+      @"SLES-00542", // Lethal Enforcers I & II (Europe)
+      @"SLPM-86025", // Lethal Enforcers Deluxe Pack (Japan)
+      @"SLUS-00293", // Lethal Enforcers I & II (USA)
+      //@"", // Horned Owl (Japan) - has no serial in the dump.
+      @"SLPS-00583", // Mighty Hits (Japan)
+      @"SCUS-94408", // Project - Horned Owl (USA)
+      //@"SLES-00654", // Star Wars - Rebel Assault II - The Hidden Empire (Europe) (Disc 1)
+      //@"SLES-10654", // Star Wars - Rebel Assault II - The Hidden Empire (Europe) (Disc 2)
+      //@"SLES-00656", // Star Wars - Rebel Assault II - The Hidden Empire (France) (Disc 1)
+      //@"SLES-10656", // Star Wars - Rebel Assault II - The Hidden Empire (France) (Disc 2)
+      //@"SLES-00584", // Star Wars - Rebel Assault II - The Hidden Empire (Germany) (Disc 1)
+      //@"SLES-10584", // Star Wars - Rebel Assault II - The Hidden Empire (Germany) (Disc 2)
+      //@"SLES-00643", // Star Wars - Rebel Assault II - The Hidden Empire (Italy) (Disc 1)
+      //@"SLES-10643", // Star Wars - Rebel Assault II - The Hidden Empire (Italy) (Disc 2)
+      //@"SLPS-00638", // Star Wars - Rebel Assault II - The Hidden Empire (Japan) (Disc 1)
+      //@"SLPS-00639", // Star Wars - Rebel Assault II - The Hidden Empire (Japan) (Disc 2)
+      //@"SLES-00644", // Star Wars - Rebel Assault II - The Hidden Empire (Spain) (Disc 1)
+      //@"SLES-10644", // Star Wars - Rebel Assault II - The Hidden Empire (Spain) (Disc 2)
+      //@"SLUS-00381", // Star Wars - Rebel Assault II - The Hidden Empire (USA) (Disc 1)
+      //@"SLUS-00386", // Star Wars - Rebel Assault II - The Hidden Empire (USA) (Disc 2)
+      ];
+
+    // PlayStation GunCon supported games
+    NSArray<NSString *> *psxGunConGames =
+    @[
+      //@"SLES-02746", // Die Hard Trilogy 2 - Viva Las Vegas (Europe)
+      //@"SLES-02747", // Die Hard Trilogy 2 - Viva Las Vegas (France)
+      //@"SLES-02748", // Die Hard Trilogy 2 - Viva Las Vegas (Germany)
+      //@"SLES-02749", // Die Hard Trilogy 2 - Viva Las Vegas (Italy)
+      //@"SLUS-01015", // Die Hard Trilogy 2 - Viva Las Vegas (USA)
+      @"SLUS-00654", // Elemental Gearbolt (USA)
+      @"SLES-03990", // Extreme Ghostbusters - The Ultimate Invasion (Europe)
+      @"SCES-02543", // Ghoul Panic (Europe)
+      @"SLPS-02680", // Oh! Bakyuuun (Japan)
+      @"SCPS-10038", // Gensei Kyokou Seirei Kidoudan - Elemental Gearbolt (Japan)
+      @"SLES-03689", // Gunfighter - The Legend of Jesse James (Europe)
+      @"SLUS-01398", // Gunfighter - The Legend of Jesse James (USA)
+      @"SLPS-01106", // Guntu - Western Front June, 1944 - Tetsu no Kioku (Japan)
+      @"SLES-00755", // Judge Dredd (Europe)
+      @"SLUS-00630", // Judge Dredd (USA)
+      @"SLES-01001", // Maximum Force (Europe)
+      @"SLUS-00503", // Maximum Force (USA)
+      @"SLES-02244", // Mighty Hits Special (Europe)
+      @"SLPS-02165", // Mighty Hits Special (Japan)
+      @"SLES-03278", // Moorhuhn 2 - Die Jagd geht weiter (Germany)
+      @"SLES-03846", // Moorhen 3 - Chicken Chase (Europe) (En,Fr,De)
+      @"SLES-03898", // Moorhen 3 - Chicken Chase (Europe) (Es,It)
+      @"SLES-04174", // Moorhuhn X (Germany) (En,De)
+      @"SCES-00886", // Point Blank (Europe) (En,Fr,De) / (Rev 1)
+      @"SLPS-00929", // GunBullet (Japan) (GunBullet + GunCon)
+      @"SLPS-00930", // GunBullet (Japan) / (Rev 1)
+      @"SLUS-00481", // Point Blank (USA)
+      @"SCES-02180", // Point Blank 2 (Europe, Australia)
+      @"SLPS-01500", // Gunbarl (Japan, Asia)
+      @"SLUS-00796", // Point Blank 2 (USA)
+      @"SCES-03383", // Point Blank 3 (Europe)
+      @"SLPS-03100", // Gunbalina (Japan)
+      @"SLUS-01354", // Point Blank 3 (USA)
+      @"SCES-02569", // Rescue Shot (Europe)
+      @"SLPS-02555", // Rescue Shot Bubibo (Japan)
+      @"SLES-02732", // Resident Evil - Survivor (Europe)
+      @"SLES-02744", // Resident Evil - Survivor (France)
+      @"SLPS-02553", // Biohazard - Gun Survivor (Japan)
+      @"SLPS-02474", // Simple 1500 Series Vol. 24 - The Gun Shooting (Japan)
+      @"SLPM-86816", // Simple 1500 Series Vol. 63 - The Gun Shooting 2 (Japan)
+      //@"SLPS-00154", // Snatcher (Japan)
+      @"SCES-00657", // Time Crisis (Europe)
+      @"SLPS-00635", // Time Crisis (Japan) (Time Crisis + GunCon)
+      @"SLPS-00666", // Time Crisis (Japan)
+      @"SLUS-00405", // Time Crisis (USA)
+      @"SCES-02776", // Time Crisis - Project Titan (Europe)
+      @"SLPS-03188", // Time Crisis - Project Titan (Japan)
+      @"SLUS-01336", // Time Crisis - Project Titan (USA)
+      ];
+
     // Saturn multi-disc games
     NSDictionary<NSString *, NSNumber *> *ssMultiDiscGames =
     @{
@@ -2889,6 +2980,18 @@ static __weak MednafenGameCore *_current;
         {
             MDFNI_SetSetting("psx.input.port2.memcard", "0"); // Disable memory card on PSX port 2
         }
+
+        // PSX: Check if Konami Justifier is supported
+        if ([psxJustifierExclusiveGames containsObject:self.ROMSerial])
+        {
+            _isPSXJustifierSupportedGame = YES;
+        }
+
+        // PSX: Check if Namco GunCon is supported
+        if ([psxGunConGames containsObject:self.ROMSerial])
+        {
+            _isPSXGunConSupportedGame = YES;
+        }
     }
 
     if ([_mednafenCoreModule isEqualToString:@"ss"])
@@ -3154,13 +3257,34 @@ static __weak MednafenGameCore *_current;
         for(unsigned i = 0; i < _multiTapPlayerCount; i++)
         {
             game->SetInput(i, "dualshock", (uint8_t *)_inputBuffer[i]);
-            
+
             //Center the analog inputs
             uint8_t *buf = (uint8_t *)_inputBuffer[i];
             MDFN_en16lsb(&buf[3], 32767);
             MDFN_en16lsb(&buf[5], 32767);
             MDFN_en16lsb(&buf[7], 32767);
             MDFN_en16lsb(&buf[9], 32767);
+        }
+
+        if(_isPSXJustifierSupportedGame)
+        {
+            // Force Justifier to Port 1 and Gamepad to Port 2
+            game->SetInput(0, "justifier", (uint8_t *)_inputBuffer[0]);
+            game->SetInput(1, "dualshock", (uint8_t *)_inputBuffer[1]);
+
+            // Clear mouse inputs
+            uint8_t *buf = (uint8_t *)_inputBuffer[0];
+            MDFN_enlsb<uint8_t>(&buf[4], 0);
+        }
+        else if(_isPSXGunConSupportedGame)
+        {
+            // Force GunCon to Port 1 and Gamepad to Port 2
+            game->SetInput(0, "guncon", (uint8_t *)_inputBuffer[0]);
+            game->SetInput(1, "dualshock", (uint8_t *)_inputBuffer[1]);
+
+            // Clear mouse inputs
+            uint8_t *buf = (uint8_t *)_inputBuffer[0];
+            MDFN_enlsb<uint8_t>(&buf[4], 0);
         }
     }
     else if ([_mednafenCoreModule isEqualToString:@"ss"])
@@ -3247,6 +3371,15 @@ static __weak MednafenGameCore *_current;
     spec.SoundBufMaxSize = sizeof(sound_buf) / 2;
     spec.SoundVolume = 1.0;
     spec.soundmultiplier = 1.0;
+
+    // PS1 Justifier and GunCon: need to refresh X/Y coords before MDFNI_Emulate()
+    // See TransformInput() and GPU_GetGunXTranslation()
+    if (_isPSXJustifierSupportedGame || _isPSXGunConSupportedGame)
+    {
+        uint8_t *buf = (uint8_t *)_inputBuffer[0];
+        MDFN_en16lsb(&buf[0], _mouseScaledX); // X coord
+        MDFN_en16lsb(&buf[2], _mouseScaledY); // Y coord
+    }
 
     MDFNI_Emulate(&spec);
 
@@ -3556,12 +3689,40 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)didPushPSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player
 {
-    *_inputBuffer[player-1] |= 1 << PSXMap[button];
+    if((_isPSXJustifierSupportedGame || _isPSXGunConSupportedGame) && player == 1)
+    {
+        if (button == OEPSXButtonSquare || button == OEPSXButtonCircle)
+        {
+            uint8_t *buf = (uint8_t *)_inputBuffer[0];
+            MDFN_enlsb<uint8_t>(&buf[4], buf[4] |= 1 << 1); // GunCon "A" button or Justifier rear "auxiliary" button
+        }
+        else if (button == OEPSXButtonCross || button == OEPSXButtonTriangle || button == OEPSXButtonStart)
+        {
+            uint8_t *buf = (uint8_t *)_inputBuffer[0];
+            MDFN_enlsb<uint8_t>(&buf[4], buf[4] |= 1 << 2); // GunCon "B" button or Justifier START button
+        }
+    }
+    else
+        *_inputBuffer[player-1] |= 1 << PSXMap[button];
 }
 
 - (oneway void)didReleasePSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player
 {
-    *_inputBuffer[player-1] &= ~(1 << PSXMap[button]);
+    if((_isPSXJustifierSupportedGame || _isPSXGunConSupportedGame) && player == 1)
+    {
+        if (button == OEPSXButtonSquare || button == OEPSXButtonCircle)
+        {
+            uint8_t *buf = (uint8_t *)_inputBuffer[0];
+            MDFN_enlsb<uint8_t>(&buf[4], buf[4] &= ~(1 << 1)); // Release GunCon "A" button or Justifier rear "auxiliary" button
+        }
+        else if (button == OEPSXButtonCross || button == OEPSXButtonTriangle || button == OEPSXButtonStart)
+        {
+            uint8_t *buf = (uint8_t *)_inputBuffer[0];
+            MDFN_enlsb<uint8_t>(&buf[4], buf[4] &= ~(1 << 2)); // Release GunCon "B" button or Justifier START button
+        }
+    }
+    else
+        *_inputBuffer[player-1] &= ~(1 << PSXMap[button]);
 }
 
 - (oneway void)didMovePSXJoystickDirection:(OEPSXButton)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
@@ -3600,7 +3761,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)mouseMovedAtPoint:(OEIntPoint)point
 {
-    if(_isSSVirtuaGunSupportedGame)
+    if(_isSSVirtuaGunSupportedGame || _isPSXJustifierSupportedGame || _isPSXGunConSupportedGame)
     {
         [self scaleMouseCoordsAtPoint:point];
         _mouseScaledX = (_mouseScaledX + game->mouse_offs_x) * (game->mouse_scale_x / game->nominal_width);
@@ -3614,7 +3775,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)leftMouseDownAtPoint:(OEIntPoint)point
 {
-    if(_isSSVirtuaGunSupportedGame)
+    if(_isSSVirtuaGunSupportedGame || _isPSXJustifierSupportedGame || _isPSXGunConSupportedGame)
     {
         [self mouseMovedAtPoint:point];
 
@@ -3625,7 +3786,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)leftMouseUp
 {
-    if(_isSSVirtuaGunSupportedGame)
+    if(_isSSVirtuaGunSupportedGame || _isPSXJustifierSupportedGame || _isPSXGunConSupportedGame)
     {
         uint8_t *buf = (uint8_t *)_inputBuffer[0];
         MDFN_enlsb<uint8_t>(&buf[4], buf[4] &= ~(1 << 0)); // release TRIGGER
@@ -3639,6 +3800,11 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         uint8_t *buf = (uint8_t *)_inputBuffer[0];
         MDFN_enlsb<uint8_t>(&buf[4], buf[4] |= 1 << 2); // Offscreen Shot aka RELOAD
     }
+    else if(_isPSXJustifierSupportedGame || _isPSXGunConSupportedGame)
+    {
+        uint8_t *buf = (uint8_t *)_inputBuffer[0];
+        MDFN_enlsb<uint8_t>(&buf[4], buf[4] |= 1 << 3); // Offscreen Shot aka RELOAD
+    }
 }
 
 - (oneway void)rightMouseUp
@@ -3647,6 +3813,11 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     {
         uint8_t *buf = (uint8_t *)_inputBuffer[0];
         MDFN_enlsb<uint8_t>(&buf[4], buf[4] &= ~(1 << 2)); // release Offscreen Shot aka RELOAD
+    }
+    else if(_isPSXJustifierSupportedGame || _isPSXGunConSupportedGame)
+    {
+        uint8_t *buf = (uint8_t *)_inputBuffer[0];
+        MDFN_enlsb<uint8_t>(&buf[4], buf[4] &= ~(1 << 3)); // release Offscreen Shot aka RELOAD
     }
 }
 
