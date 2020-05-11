@@ -3187,7 +3187,7 @@ static __weak MednafenGameCore *_current;
                 game->SetInput(i, "3dpad", (uint8_t *)_inputBuffer[i]);
                 // Toggle default position of analog mode switch to Analog(○)
                 // "Analog mode is not compatible with all games.  For some compatible games, analog mode reportedly must be enabled before the game boots up for the game to recognize it properly."
-                //_inputBuffer[i][0] |= 1 << SS3DMap[OESaturnButtonAnalogMode];
+                //*_inputBuffer[i] |= 1 << SS3DMap[OESaturnButtonAnalogMode];
 
                 //Center the analog axis inputs
                 uint8_t *buf = (uint8_t *)_inputBuffer[i];
@@ -3265,9 +3265,9 @@ static __weak MednafenGameCore *_current;
 {
     if ([_mednafenCoreModule isEqualToString:@"ss"])
     {
-        _inputBuffer[12][0] = 1;
+        *_inputBuffer[12] = 1;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            _inputBuffer[12][0] = 0;
+            *_inputBuffer[12] = 0;
         });
     }
 
@@ -3418,22 +3418,22 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 
 - (oneway void)didPushLynxButton:(OELynxButton)button forPlayer:(NSUInteger)player
 {
-    _inputBuffer[player-1][0] |= 1 << LynxMap[button];
+    *_inputBuffer[player-1] |= 1 << LynxMap[button];
 }
 
 - (oneway void)didReleaseLynxButton:(OELynxButton)button forPlayer:(NSUInteger)player
 {
-    _inputBuffer[player-1][0] &= ~(1 << LynxMap[button]);
+    *_inputBuffer[player-1] &= ~(1 << LynxMap[button]);
 }
 
 - (oneway void)didPushNGPButton:(OENGPButton)button
 {
-    _inputBuffer[0][0] |= 1 << NGPMap[button];
+    *_inputBuffer[0] |= 1 << NGPMap[button];
 }
 
 - (oneway void)didReleaseNGPButton:(OENGPButton)button
 {
-    _inputBuffer[0][0] &= ~(1 << NGPMap[button]);
+    *_inputBuffer[0] &= ~(1 << NGPMap[button]);
 }
 
 - (oneway void)didPushPCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player
@@ -3442,15 +3442,15 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         return;
 
     if (button != OEPCEButtonMode) // Check for six button mode toggle
-        _inputBuffer[player-1][0] |= 1 << PCEMap[button];
+        *_inputBuffer[player-1] |= 1 << PCEMap[button];
     else
-        _inputBuffer[player-1][0] ^= 1 << PCEMap[button];
+        *_inputBuffer[player-1] ^= 1 << PCEMap[button];
 }
 
 - (oneway void)didReleasePCEButton:(OEPCEButton)button forPlayer:(NSUInteger)player
 {
     if (button != OEPCEButtonMode)
-        _inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
+        *_inputBuffer[player-1] &= ~(1 << PCEMap[button]);
 }
 
 - (oneway void)didPushPCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player
@@ -3459,25 +3459,25 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         return;
 
     if (button != OEPCECDButtonMode) // Check for six button mode toggle
-        _inputBuffer[player-1][0] |= 1 << PCEMap[button];
+        *_inputBuffer[player-1] |= 1 << PCEMap[button];
     else
-        _inputBuffer[player-1][0] ^= 1 << PCEMap[button];
+        *_inputBuffer[player-1] ^= 1 << PCEMap[button];
 }
 
 - (oneway void)didReleasePCECDButton:(OEPCECDButton)button forPlayer:(NSUInteger)player
 {
     if (button != OEPCECDButtonMode)
-        _inputBuffer[player-1][0] &= ~(1 << PCEMap[button]);
+        *_inputBuffer[player-1] &= ~(1 << PCEMap[button]);
 }
 
 - (oneway void)didPushPCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player
 {
-    _inputBuffer[player-1][0] |= 1 << PCFXMap[button];
+    *_inputBuffer[player-1] |= 1 << PCFXMap[button];
 }
 
 - (oneway void)didReleasePCFXButton:(OEPCFXButton)button forPlayer:(NSUInteger)player
 {
-    _inputBuffer[player-1][0] &= ~(1 << PCFXMap[button]);
+    *_inputBuffer[player-1] &= ~(1 << PCFXMap[button]);
 }
 
 - (oneway void)didPushSaturnButton:(OESaturnButton)button forPlayer:(NSUInteger)player
@@ -3489,9 +3489,9 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         if (button == OESaturnButtonR) [self didMoveSaturnJoystickDirection:OESaturnAnalogR withValue:1.0 forPlayer:player];
 
         if (button != OESaturnButtonAnalogMode) // Check for mode toggle
-            _inputBuffer[player-1][0] |= 1 << SS3DMap[button];
+            *_inputBuffer[player-1] |= 1 << SS3DMap[button];
         else
-            _inputBuffer[player-1][0] ^= 1 << SS3DMap[button];
+            *_inputBuffer[player-1] ^= 1 << SS3DMap[button];
     }
     else if(_isSSVirtuaGunSupportedGame && player == 1)
     {
@@ -3503,7 +3503,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         }
     }
     else
-        _inputBuffer[player-1][0] |= 1 << SSMap[button];
+        *_inputBuffer[player-1] |= 1 << SSMap[button];
 
 }
 
@@ -3515,7 +3515,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         if (button == OESaturnButtonR) [self didMoveSaturnJoystickDirection:OESaturnAnalogR withValue:0.0 forPlayer:player];
 
         if (button != OESaturnButtonAnalogMode)
-            _inputBuffer[player-1][0] &= ~(1 << SS3DMap[button]);
+            *_inputBuffer[player-1] &= ~(1 << SS3DMap[button]);
     }
     else if(_isSSVirtuaGunSupportedGame && player == 1)
     {
@@ -3527,37 +3527,37 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         }
     }
     else
-        _inputBuffer[player-1][0] &= ~(1 << SSMap[button]);
+        *_inputBuffer[player-1] &= ~(1 << SSMap[button]);
 }
 
 - (oneway void)didPushVBButton:(OEVBButton)button forPlayer:(NSUInteger)player
 {
-    _inputBuffer[player-1][0] |= 1 << VBMap[button];
+    *_inputBuffer[player-1] |= 1 << VBMap[button];
 }
 
 - (oneway void)didReleaseVBButton:(OEVBButton)button forPlayer:(NSUInteger)player
 {
-    _inputBuffer[player-1][0] &= ~(1 << VBMap[button]);
+    *_inputBuffer[player-1] &= ~(1 << VBMap[button]);
 }
 
 - (oneway void)didPushWSButton:(OEWSButton)button forPlayer:(NSUInteger)player
 {
-    _inputBuffer[player-1][0] |= 1 << WSMap[button];
+    *_inputBuffer[player-1] |= 1 << WSMap[button];
 }
 
 - (oneway void)didReleaseWSButton:(OEWSButton)button forPlayer:(NSUInteger)player
 {
-    _inputBuffer[player-1][0] &= ~(1 << WSMap[button]);
+    *_inputBuffer[player-1] &= ~(1 << WSMap[button]);
 }
 
 - (oneway void)didPushPSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player
 {
-    _inputBuffer[player-1][0] |= 1 << PSXMap[button];
+    *_inputBuffer[player-1] |= 1 << PSXMap[button];
 }
 
 - (oneway void)didReleasePSXButton:(OEPSXButton)button forPlayer:(NSUInteger)player
 {
-    _inputBuffer[player-1][0] &= ~(1 << PSXMap[button]);
+    *_inputBuffer[player-1] &= ~(1 << PSXMap[button]);
 }
 
 - (oneway void)didMovePSXJoystickDirection:(OEPSXButton)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
