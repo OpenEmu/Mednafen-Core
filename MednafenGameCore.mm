@@ -3199,6 +3199,10 @@ static __weak MednafenGameCore *_current;
                 // Force Stunner / Virtua Gun to Port 1 and Gamepad to Port 2
                 game->SetInput(0, "gun", (uint8_t *)_inputBuffer[0]);
                 game->SetInput(1, "gamepad", (uint8_t *)_inputBuffer[1]);
+
+                // Clear mouse inputs
+                uint8_t *buf = (uint8_t *)_inputBuffer[0];
+                MDFN_enlsb<uint8_t>(&buf[4], 0);
             }
             else
             {
@@ -3615,7 +3619,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
         [self mouseMovedAtPoint:point];
 
         uint8_t *buf = (uint8_t *)_inputBuffer[0];
-        MDFN_enlsb<uint8_t>(&buf[4], 1 << 0); // TRIGGER
+        MDFN_enlsb<uint8_t>(&buf[4], buf[4] |= 1 << 0); // TRIGGER
     }
 }
 
@@ -3624,7 +3628,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     if(_isSSVirtuaGunSupportedGame)
     {
         uint8_t *buf = (uint8_t *)_inputBuffer[0];
-        MDFN_enlsb<uint8_t>(&buf[4], 0); // release TRIGGER
+        MDFN_enlsb<uint8_t>(&buf[4], buf[4] &= ~(1 << 0)); // release TRIGGER
     }
 }
 
@@ -3633,7 +3637,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     if(_isSSVirtuaGunSupportedGame)
     {
         uint8_t *buf = (uint8_t *)_inputBuffer[0];
-        MDFN_enlsb<uint8_t>(&buf[4], 1 << 2); // Offscreen Shot aka RELOAD
+        MDFN_enlsb<uint8_t>(&buf[4], buf[4] |= 1 << 2); // Offscreen Shot aka RELOAD
     }
 }
 
@@ -3642,7 +3646,7 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
     if(_isSSVirtuaGunSupportedGame)
     {
         uint8_t *buf = (uint8_t *)_inputBuffer[0];
-        MDFN_enlsb<uint8_t>(&buf[4], 0); // release Offscreen Shot aka RELOAD
+        MDFN_enlsb<uint8_t>(&buf[4], buf[4] &= ~(1 << 2)); // release Offscreen Shot aka RELOAD
     }
 }
 
