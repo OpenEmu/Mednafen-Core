@@ -81,7 +81,6 @@
 		87A30A471E57CBF700114B03 /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87A30A451E57CBF700114B03 /* string.cpp */; };
 		87C6560320B9D7A400D25A97 /* ZIPReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87C6560120B9D7A300D25A97 /* ZIPReader.cpp */; };
 		87C6560620B9DA8300D25A97 /* jpkeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87C6560520B9DA8200D25A97 /* jpkeyboard.cpp */; };
-		87C6561020B9F13F00D25A97 /* Makefile.am.inc in Sources */ = {isa = PBXBuildFile; fileRef = 87C6560B20B9F13E00D25A97 /* Makefile.am.inc */; };
 		87C6561220B9F13F00D25A97 /* minilzo.c in Sources */ = {isa = PBXBuildFile; fileRef = 87C6560E20B9F13E00D25A97 /* minilzo.c */; };
 		87D380E91D962E8800FC657D /* bios.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7C717F1DE5B0090372A /* bios.cpp */; };
 		87D380EA1D962E8800FC657D /* biosHLE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D7C917F1DE5B0090372A /* biosHLE.cpp */; };
@@ -4399,7 +4398,6 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 0700;
 			};
 			buildConfigurationList = 1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "Mednafen" */;
@@ -4683,7 +4681,6 @@
 				87D380EF1D962E8800FC657D /* gfx_scanline_mono.cpp in Sources */,
 				87D380F01D962E8800FC657D /* interrupt.cpp in Sources */,
 				87D380F11D962E8800FC657D /* mem.cpp in Sources */,
-				87C6561020B9F13F00D25A97 /* Makefile.am.inc in Sources */,
 				87D380F21D962E8800FC657D /* neopop.cpp in Sources */,
 				87D380F31D962E8800FC657D /* rom.cpp in Sources */,
 				87D380F41D962E8800FC657D /* rtc.cpp in Sources */,
@@ -4882,7 +4879,10 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_OPTIMIZATION_LEVEL = 1;
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					GL_SILENCE_DEPRECATION,
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -4892,7 +4892,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14.4;
 				OTHER_LDFLAGS = (
 					"-fwrapv",
 					"-mllvm",
@@ -4925,6 +4925,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = GL_SILENCE_DEPRECATION;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -4934,7 +4935,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14.4;
 				OTHER_LDFLAGS = (
 					"-fwrapv",
 					"-mllvm",
