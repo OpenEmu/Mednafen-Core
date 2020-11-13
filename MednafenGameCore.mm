@@ -3362,7 +3362,7 @@ static __weak MednafenGameCore *_current;
     int32 rects[game->fb_height];
 
     memset(rects, 0, game->fb_height*sizeof(int32));
-
+    rects[0] = ~0;
     EmulateSpecStruct spec;
     spec.surface = surf;
     spec.SoundRate = _sampleRate;
