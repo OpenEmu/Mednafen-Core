@@ -3141,14 +3141,14 @@ static __weak MednafenGameCore *_current;
 
     if([_mednafenCoreModule isEqualToString:@"lynx"])
     {
-        _mednafenCoreAspect = OEIntSizeMake(80, 51);
-        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        //_mednafenCoreAspect = OEIntSizeMake(80, 51);
+        _mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 48000;
     }
     else if([_mednafenCoreModule isEqualToString:@"ngp"])
     {
-        _mednafenCoreAspect = OEIntSizeMake(20, 19);
-        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        //_mednafenCoreAspect = OEIntSizeMake(20, 19);
+        _mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 48000;
     }
     else if([_mednafenCoreModule isEqualToString:@"pce"])
@@ -3174,14 +3174,14 @@ static __weak MednafenGameCore *_current;
     }
     else if([_mednafenCoreModule isEqualToString:@"vb"])
     {
-        _mednafenCoreAspect = OEIntSizeMake(12, 7);
-        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        //_mednafenCoreAspect = OEIntSizeMake(12, 7);
+        _mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 48000;
     }
     else if([_mednafenCoreModule isEqualToString:@"wswan"])
     {
-        _mednafenCoreAspect = OEIntSizeMake(14, 9);
-        //_mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
+        //_mednafenCoreAspect = OEIntSizeMake(14, 9);
+        _mednafenCoreAspect = OEIntSizeMake(game->nominal_width, game->nominal_height);
         _sampleRate         = 48000;
     }
 
