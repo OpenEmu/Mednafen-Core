@@ -1,0 +1,15 @@
+[submodule "3rd/ogg"]
+	path = 3rd/ogg
+	url = https://github.com/xiph/ogg.git
+[submodule "3rd/vorbis"]
+	path = 3rd/vorbis
+	url = https://github.com/xiph/vorbis.git
+[submodule "3rd/flac"]
+	path = 3rd/flac
+	url = https://github.com/xiph/flac.git
+[submodule "3rd/opus"]
+	path = 3rd/opus
+	url = https://github.com/xiph/opus.git
+[submodule "3rd/libsndfile"]
+	path = 3rd/libsndfile
+	url = https://github.com/libsndfile/libsndfile.git
