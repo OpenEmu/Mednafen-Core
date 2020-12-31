@@ -4,26 +4,26 @@ THISDIR=$(pwd)
 SYSROOT=${THISDIR}/../sysroot
 
 OGG_SOURCE="https://github.com/xiph/ogg.git"
-OGG_DIR="../external/ogg"
+OGG_DIR="../3rd/ogg"
 OGG_TAG="v1.3.4"
 OGG_BUILDDIR="build-ogg"
 
 VORBIS_SOURCE="https://github.com/xiph/vorbis.git"
-VORBIS_DIR="../external/vorbis"
+VORBIS_DIR="../3rd/vorbis"
 VORBIS_TAG="v1.3.7"
 VORBIS_BUILDDIR="build-vorbis"
 
 FLAC_SOURCE="https://github.com/xiph/flac.git"
-FLAC_DIR="../external/flac"
+FLAC_DIR="../3rd/flac"
 FLAC_TAG="1.3.3"
 FLAC_BUILDDIR="build-flac"
 
 OPUS_SOURCE="https://github.com/xiph/opus.git"
-OPUS_DIR="../external/opus"
+OPUS_DIR="../3rd/opus"
 OPUS_TAG="v1.3.1"
 OPUS_BUILDDIR="build-opus"
 
 SNDFILE_SOURCE="https://github.com/libsndfile/libsndfile.git"
-SNDFILE_DIR="../external/sndfile"
+SNDFILE_DIR="../3rd/sndfile"
 SNDFILE_TAG="v1.0.30"
 SNDFILE_BUILDDIR="build-sndfile"
