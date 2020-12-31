@@ -17,3 +17,5 @@ xcuserdata
 profile
 *.moved-aside
 icon?
+deps/*.log
+sysroot
