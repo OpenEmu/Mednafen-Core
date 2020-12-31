@@ -4734,7 +4734,7 @@
 					"\"$(SRCROOT)/mednafen/hw_sound\"",
 					"\"$(SRCROOT)/mednafen/hw_video\"",
 					"\"$(SRCROOT)/mednafen/trio\"",
-					"\"$(SRCROOT/sysroot/include\"/**",
+					"\"$(SRCROOT)/sysroot/include\"/**",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "\"$(USER_LIBRARY_DIR)/Application Support/OpenEmu/Cores\"";
@@ -4797,7 +4797,7 @@
 					"\"$(SRCROOT)/mednafen/hw_sound\"",
 					"\"$(SRCROOT)/mednafen/hw_video\"",
 					"\"$(SRCROOT)/mednafen/trio\"",
-					"\"$(SRCROOT/sysroot/include\"/**",
+					"\"$(SRCROOT)/sysroot/include\"/**",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "\"$(USER_LIBRARY_DIR)/Application Support/OpenEmu/Cores\"";
