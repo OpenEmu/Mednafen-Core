@@ -22,12 +22,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		3DCDE7191BD2D8FD00392D0D /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9453E37C1AC5E1E9004F42AD /* libvorbis.a */; };
 		3DDC76191BD2D825002E7674 /* CDAFReader_SF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94B082471A8697EF00D3C0BC /* CDAFReader_SF.cpp */; };
-		3DDC761A1BD2D86B002E7674 /* libsndfile_FLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27FF3AC11B1CF78F002F941E /* libsndfile_FLAC.a */; };
-		8240861B0FFDD64600F0FE7D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8240861A0FFDD64600F0FE7D /* libz.dylib */; };
 		824088360FFDDCF400F0FE7D /* MednafenGameCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 824088350FFDDCF400F0FE7D /* MednafenGameCore.mm */; };
-		8305628C1A98C6AD0030F6DB /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8305628B1A98C6AD0030F6DB /* libiconv.dylib */; };
 		8715A8F51D6E421E003ADE26 /* gb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A8EF1D6E421E003ADE26 /* gb.cpp */; };
 		8715A8F61D6E421E003ADE26 /* psx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A8F11D6E421E003ADE26 /* psx.cpp */; };
 		8715A8F71D6E421E003ADE26 /* snes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A8F31D6E421E003ADE26 /* snes.cpp */; };
@@ -254,7 +250,6 @@
 		8CB3E10C17F216B60090372A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3DC9817F1DE5D0090372A /* main.cpp */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 		94454E3E17852F23006C057B /* OpenEmuBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94454E3D17852F23006C057B /* OpenEmuBase.framework */; };
-		9453E37F1AC5E305004F42AD /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9453E37E1AC5E305004F42AD /* libvorbisenc.a */; };
 		9454E32B19516301005A5CFE /* comm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9454E32919516301005A5CFE /* comm.cpp */; };
 		94817C2D1922B45500FDFC99 /* cdplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94817C2A1922B45500FDFC99 /* cdplay.cpp */; };
 		94817C3B1922B53900FDFC99 /* okiadpcm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94817C381922B53900FDFC99 /* okiadpcm.cpp */; };
@@ -298,12 +293,9 @@
 		089C167EFE841241C02AAC07 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		27FF3AC11B1CF78F002F941E /* libsndfile_FLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile_FLAC.a; path = libsndfile/libsndfile_FLAC.a; sourceTree = "<group>"; };
-		8240861A0FFDD64600F0FE7D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		824088340FFDDCF400F0FE7D /* MednafenGameCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MednafenGameCore.h; sourceTree = "<group>"; };
 		824088350FFDDCF400F0FE7D /* MednafenGameCore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MednafenGameCore.mm; sourceTree = "<group>"; };
 		82CFBC510FFEF432002B6C7C /* Mednafen.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Mednafen.icns; sourceTree = "<group>"; };
-		8305628B1A98C6AD0030F6DB /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		8715A8ED1D6E4190003ADE26 /* Makefile.am.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; path = Makefile.am.inc; sourceTree = "<group>"; };
 		8715A8EF1D6E421E003ADE26 /* gb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gb.cpp; path = cheat_formats/gb.cpp; sourceTree = "<group>"; };
 		8715A8F01D6E421E003ADE26 /* gb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gb.h; path = cheat_formats/gb.h; sourceTree = "<group>"; };
@@ -1657,11 +1649,6 @@
 		94454E3717852E44006C057B /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
 		94454E3B17852E61006C057B /* stubs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stubs.cpp; sourceTree = "<group>"; };
 		94454E3D17852F23006C057B /* OpenEmuBase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenEmuBase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9453E3761AC5DA22004F42AD /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile.a; path = libsndfile/libsndfile.a; sourceTree = "<group>"; };
-		9453E3791AC5DA93004F42AD /* sndfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sndfile.h; path = libsndfile/sndfile.h; sourceTree = "<group>"; };
-		9453E37A1AC5E051004F42AD /* libFLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFLAC.a; path = libsndfile/libFLAC.a; sourceTree = "<group>"; };
-		9453E37C1AC5E1E9004F42AD /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = libsndfile/libvorbis.a; sourceTree = "<group>"; };
-		9453E37E1AC5E305004F42AD /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = libsndfile/libvorbisenc.a; sourceTree = "<group>"; };
 		9454E32919516301005A5CFE /* comm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = comm.cpp; sourceTree = "<group>"; };
 		9454E32A19516301005A5CFE /* comm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = comm.h; sourceTree = "<group>"; };
 		94817C2A1922B45500FDFC99 /* cdplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cdplay.cpp; sourceTree = "<group>"; };
@@ -1742,6 +1729,13 @@
 		94FD853018C7F53C001B426D /* pcecd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pcecd.cpp; sourceTree = "<group>"; };
 		94FD853118C7F53C001B426D /* pcecd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pcecd.h; sourceTree = "<group>"; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		FEA2F393259E5B3D00E46D3A /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = sysroot/lib/libvorbisenc.a; sourceTree = "<group>"; };
+		FEA2F394259E5B3D00E46D3A /* libFLAC++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libFLAC++.a"; path = "sysroot/lib/libFLAC++.a"; sourceTree = "<group>"; };
+		FEA2F395259E5B3D00E46D3A /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = sysroot/lib/libvorbisfile.a; sourceTree = "<group>"; };
+		FEA2F396259E5B3D00E46D3A /* libopus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopus.a; path = sysroot/lib/libopus.a; sourceTree = "<group>"; };
+		FEA2F397259E5B3D00E46D3A /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = sysroot/lib/libogg.a; sourceTree = "<group>"; };
+		FEA2F398259E5B3D00E46D3A /* libFLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFLAC.a; path = sysroot/lib/libFLAC.a; sourceTree = "<group>"; };
+		FEA2F399259E5B3D00E46D3A /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = sysroot/lib/libvorbis.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1749,12 +1743,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9453E37F1AC5E305004F42AD /* libvorbisenc.a in Frameworks */,
-				8305628C1A98C6AD0030F6DB /* libiconv.dylib in Frameworks */,
 				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
-				3DDC761A1BD2D86B002E7674 /* libsndfile_FLAC.a in Frameworks */,
-				3DCDE7191BD2D8FD00392D0D /* libvorbis.a in Frameworks */,
-				8240861B0FFDD64600F0FE7D /* libz.dylib in Frameworks */,
 				94454E3E17852F23006C057B /* OpenEmuBase.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1765,12 +1754,12 @@
 		089C166AFE841209C02AAC07 /* Mednafen */ = {
 			isa = PBXGroup;
 			children = (
-				27FF3AC11B1CF78F002F941E /* libsndfile_FLAC.a */,
 				08FB77AFFE84173DC02AAC07 /* Classes */,
 				32C88E010371C26100C91783 /* Other Sources */,
 				089C167CFE841241C02AAC07 /* Resources */,
 				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
 				19C28FB8FE9D52D311CA2CBB /* Products */,
+				FEA2F392259E5B3C00E46D3A /* Frameworks */,
 			);
 			name = Mednafen;
 			sourceTree = "<group>";
@@ -1779,14 +1768,7 @@
 		089C1671FE841209C02AAC07 /* Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				9453E37E1AC5E305004F42AD /* libvorbisenc.a */,
-				9453E37C1AC5E1E9004F42AD /* libvorbis.a */,
-				9453E37A1AC5E051004F42AD /* libFLAC.a */,
-				9453E3791AC5DA93004F42AD /* sndfile.h */,
-				9453E3761AC5DA22004F42AD /* libsndfile.a */,
-				8305628B1A98C6AD0030F6DB /* libiconv.dylib */,
 				94454E3D17852F23006C057B /* OpenEmuBase.framework */,
-				8240861A0FFDD64600F0FE7D /* libz.dylib */,
 				1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */,
 				1058C7AEFEA557BF11CA2CBB /* Other Frameworks */,
 			);
@@ -4371,6 +4353,20 @@
 			path = sdsp;
 			sourceTree = "<group>";
 		};
+		FEA2F392259E5B3C00E46D3A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FEA2F398259E5B3D00E46D3A /* libFLAC.a */,
+				FEA2F394259E5B3D00E46D3A /* libFLAC++.a */,
+				FEA2F397259E5B3D00E46D3A /* libogg.a */,
+				FEA2F396259E5B3D00E46D3A /* libopus.a */,
+				FEA2F399259E5B3D00E46D3A /* libvorbis.a */,
+				FEA2F393259E5B3D00E46D3A /* libvorbisenc.a */,
+				FEA2F395259E5B3D00E46D3A /* libvorbisfile.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -4738,14 +4734,11 @@
 					"\"$(SRCROOT)/mednafen/hw_sound\"",
 					"\"$(SRCROOT)/mednafen/hw_video\"",
 					"\"$(SRCROOT)/mednafen/trio\"",
-					"\"$(SRCROOT)/libsndfile\"",
+					"\"$(SRCROOT/sysroot/include\"/**",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "\"$(USER_LIBRARY_DIR)/Application Support/OpenEmu/Cores\"";
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/libsndfile",
-					"$(PROJECT_DIR)/libsndfile",
-				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/sysroot/lib";
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
@@ -4804,14 +4797,11 @@
 					"\"$(SRCROOT)/mednafen/hw_sound\"",
 					"\"$(SRCROOT)/mednafen/hw_video\"",
 					"\"$(SRCROOT)/mednafen/trio\"",
-					"\"$(SRCROOT)/libsndfile\"",
+					"\"$(SRCROOT/sysroot/include\"/**",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "\"$(USER_LIBRARY_DIR)/Application Support/OpenEmu/Cores\"";
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/libsndfile",
-					"$(PROJECT_DIR)/libsndfile",
-				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/sysroot/lib";
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
