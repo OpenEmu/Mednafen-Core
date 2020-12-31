@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+source vars
+
+echo "cleaning sysroot"
+rm -rf ${SYSROOT}
+
+echo "cleaning build logs"
+rm -rf *.log

@@ -1,0 +1,111 @@
+#!/usr/bin/env zsh
+source vars
+
+# cmake variables
+CMAKE_BUILD=-DCMAKE_BUILD_TYPE="Release"
+CMAKE_PREFIX="-DCMAKE_INSTALL_PREFIX=${SYSROOT}"
+
+# Build ogg source
+echo "generating ogg build tree"
+cmake \
+-S ${OGG_DIR} \
+-B ${OGG_BUILDDIR} \
+${CMAKE_BUILD} \
+${CMAKE_PREFIX} \
+-DINSTALL_DOCS=off \
+-DINSTALL_PKG_CONFIG_MODULE=off \
+-DINSTALL_CMAKE_PACKAGE_MODULE=on \
+&>ogg.cmake.log
+
+echo "compiling ogg"
+make V=0 -C ${OGG_BUILDDIR} -j &>ogg.build.log
+echo "installing ogg"
+make V=0 -C ${OGG_BUILDDIR} install &>ogg.install.log
+
+# Build vorbis source
+echo "generating vorbis build tree"
+cmake \
+-S ${VORBIS_DIR} \
+-B ${VORBIS_BUILDDIR} \
+${CMAKE_BUILD} \
+${CMAKE_PREFIX} \
+-DOGG_INCLUDE_DIR=${SYSROOT}/include \
+-DOGG_LIBRARY=${SYSROOT}/lib \
+&>vorbis.cmake.log
+
+echo "compiling vorbis"
+make V=0 -C ${VORBIS_BUILDDIR} -j &>vorbis.build.log
+echo "installing vorbis"
+make V=0 -C ${VORBIS_BUILDDIR} install &>vorbis.install.log
+
+# Build flac source
+echo "generating flac build tree"
+cmake \
+-S ${FLAC_DIR} \
+-B ${FLAC_BUILDDIR} \
+${CMAKE_BUILD} \
+${CMAKE_PREFIX} \
+-DBUILD_PROGRAMS=off \
+-DBUILD_EXAMPLES=off \
+-DBUILD_DOCS=off \
+-DINSTALL_MANPAGES=off \
+-DINSTALL_PKGCONFIG_MODULES=off \
+-DBUILD_TESTING=off \
+-DWITH_OGG=on \
+&>flac.cmake.log
+
+echo "compiling flac"
+make V=0 -C ${FLAC_BUILDDIR} -j &>flac.build.log
+echo "installing flac"
+make V=0 -C ${FLAC_BUILDDIR} install &>flac.install.log
+
+# Build opus source
+echo "generating opus build tree"
+cmake \
+-S ${OPUS_DIR} \
+-B ${OPUS_BUILDDIR} \
+${CMAKE_BUILD} \
+${CMAKE_PREFIX} \
+-DOPUS_BUILD_PROGRAMS=off \
+-DOPUS_INSTALL_PKG_CONFIG_MODULE=off \
+&>opus.cmake.log
+
+echo "compiling opus"
+make V=0 -C ${OPUS_BUILDDIR} -j &>opus.build.log
+echo "installing opus"
+make V=0 -C ${OPUS_BUILDDIR} install &>opus.install.log
+
+
+# Build sndfile source
+echo "generating sndfile build tree"
+cmake \
+-S ${SNDFILE_DIR} \
+-B ${SNDFILE_BUILDDIR} \
+${CMAKE_BUILD} \
+${CMAKE_PREFIX} \
+-DENABLE_EXTERNAL_LIBS=on \
+-DBUILD_EXAMPLES=off \
+-DBUILD_PROGRAMS=off \
+-DBUILD_REGTEST=off \
+-DBUILD_TESTING=off \
+-DENABLE_CPACK=off \
+-DENABLE_PACKAGE_CONFIG=on \
+-DINSTALL_PKGCONFIG_MODULE=off \
+-DINSTALL_MANPAGES=off \
+&>sndfile.cmake.log
+
+echo "compiling sndfile"
+make V=0 -C ${SNDFILE_BUILDDIR} -j &>sndfile.build.log
+echo "installing sndfile"
+make V=0 -C ${SNDFILE_BUILDDIR} install &>sndfile.install.log
+
+echo "build complete."
+
+echo "Cleaning temporary folders..."
+
+rm -rf \
+${OGG_BUILDDIR} \
+${VORBIS_BUILDDIR} \
+${FLAC_BUILDDIR} \
+${OPUS_BUILDDIR} \
+${SNDFILE_BUILDDIR}
