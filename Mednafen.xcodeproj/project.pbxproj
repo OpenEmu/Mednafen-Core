@@ -4730,6 +4730,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
+					"$(inherited)",
+					ARCH_X86_64,
+					ARCH_X86,
+				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/include\"",
@@ -4754,8 +4759,6 @@
 					"-DMEDNAFEN_VERSION_NUMERIC=0x00102601",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
-					"-DARCH_X86",
-					"-DARCH_X86_64",
 					"-DWANT_LYNX_EMU",
 					"-DWANT_NGP_EMU",
 					"-DWANT_PCE_EMU",
@@ -4796,6 +4799,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
+					"$(inherited)",
+					ARCH_X86_64,
+					ARCH_X86,
+				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/include\"",
@@ -4820,8 +4828,6 @@
 					"-DMEDNAFEN_VERSION_NUMERIC=0x00102601",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
-					"-DARCH_X86",
-					"-DARCH_X86_64",
 					"-DWANT_LYNX_EMU",
 					"-DWANT_NGP_EMU",
 					"-DWANT_PCE_EMU",
