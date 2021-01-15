@@ -25,6 +25,7 @@
 		3DCDE7191BD2D8FD00392D0D /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9453E37C1AC5E1E9004F42AD /* libvorbis.a */; };
 		3DDC76191BD2D825002E7674 /* CDAFReader_SF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94B082471A8697EF00D3C0BC /* CDAFReader_SF.cpp */; };
 		3DDC761A1BD2D86B002E7674 /* libsndfile_FLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27FF3AC11B1CF78F002F941E /* libsndfile_FLAC.a */; };
+		55758F5225B16CDA002C812D /* cputest_cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 55758F5125B16CDA002C812D /* cputest_cpu.c */; };
 		8240861B0FFDD64600F0FE7D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8240861A0FFDD64600F0FE7D /* libz.dylib */; };
 		824088360FFDDCF400F0FE7D /* MednafenGameCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 824088350FFDDCF400F0FE7D /* MednafenGameCore.mm */; };
 		8305628C1A98C6AD0030F6DB /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8305628B1A98C6AD0030F6DB /* libiconv.dylib */; };
@@ -260,7 +261,6 @@
 		94817C3B1922B53900FDFC99 /* okiadpcm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94817C381922B53900FDFC99 /* okiadpcm.cpp */; };
 		94817C3F1922B75000FDFC99 /* v810_fp_ops.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94817C3D1922B75000FDFC99 /* v810_fp_ops.cpp */; };
 		94817C441922C8E400FDFC99 /* cputest.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D55217F1DE5A0090372A /* cputest.c */; };
-		94817C451922C8E400FDFC99 /* x86_cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D55717F1DE5A0090372A /* x86_cpu.c */; };
 		94817C461922D29B00FDFC99 /* demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3D55C17F1DE5A0090372A /* demo.cpp */; };
 		94817C471922D36300FDFC99 /* primitives.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3DC7517F1DE5D0090372A /* primitives.cpp */; };
 		948D5B4618C805E500346504 /* OwlResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 948D5B4418C805E500346504 /* OwlResampler.cpp */; };
@@ -299,19 +299,20 @@
 		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		27FF3AC11B1CF78F002F941E /* libsndfile_FLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile_FLAC.a; path = libsndfile/libsndfile_FLAC.a; sourceTree = "<group>"; };
+		55758F5125B16CDA002C812D /* cputest_cpu.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = cputest_cpu.c; sourceTree = "<group>"; };
 		8240861A0FFDD64600F0FE7D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		824088340FFDDCF400F0FE7D /* MednafenGameCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MednafenGameCore.h; sourceTree = "<group>"; };
 		824088350FFDDCF400F0FE7D /* MednafenGameCore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MednafenGameCore.mm; sourceTree = "<group>"; };
 		82CFBC510FFEF432002B6C7C /* Mednafen.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Mednafen.icns; sourceTree = "<group>"; };
 		8305628B1A98C6AD0030F6DB /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		8715A8ED1D6E4190003ADE26 /* Makefile.am.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; path = Makefile.am.inc; sourceTree = "<group>"; };
-		8715A8EF1D6E421E003ADE26 /* gb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gb.cpp; path = cheat_formats/gb.cpp; sourceTree = "<group>"; };
-		8715A8F01D6E421E003ADE26 /* gb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gb.h; path = cheat_formats/gb.h; sourceTree = "<group>"; };
-		8715A8F11D6E421E003ADE26 /* psx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = psx.cpp; path = cheat_formats/psx.cpp; sourceTree = "<group>"; };
-		8715A8F21D6E421E003ADE26 /* psx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = psx.h; path = cheat_formats/psx.h; sourceTree = "<group>"; };
-		8715A8F31D6E421E003ADE26 /* snes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = snes.cpp; path = cheat_formats/snes.cpp; sourceTree = "<group>"; };
-		8715A8F41D6E421E003ADE26 /* snes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = snes.h; path = cheat_formats/snes.h; sourceTree = "<group>"; };
-		8715A8F81D6E4245003ADE26 /* Makefile.am.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; name = Makefile.am.inc; path = cheat_formats/Makefile.am.inc; sourceTree = "<group>"; };
+		8715A8EF1D6E421E003ADE26 /* gb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gb.cpp; sourceTree = "<group>"; };
+		8715A8F01D6E421E003ADE26 /* gb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gb.h; sourceTree = "<group>"; };
+		8715A8F11D6E421E003ADE26 /* psx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = psx.cpp; sourceTree = "<group>"; };
+		8715A8F21D6E421E003ADE26 /* psx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = psx.h; sourceTree = "<group>"; };
+		8715A8F31D6E421E003ADE26 /* snes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = snes.cpp; sourceTree = "<group>"; };
+		8715A8F41D6E421E003ADE26 /* snes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = snes.h; sourceTree = "<group>"; };
+		8715A8F81D6E4245003ADE26 /* Makefile.am.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; path = Makefile.am.inc; sourceTree = "<group>"; };
 		8715A8F91D6E431F003ADE26 /* Makefile.am.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; path = Makefile.am.inc; sourceTree = "<group>"; };
 		8715A8FA1D6E43C9003ADE26 /* Makefile.am.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; path = Makefile.am.inc; sourceTree = "<group>"; };
 		8715A8FB1D6E43E8003ADE26 /* Makefile.am.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; path = Makefile.am.inc; sourceTree = "<group>"; };
@@ -1822,6 +1823,7 @@
 				94454E3B17852E61006C057B /* stubs.cpp */,
 				94454E3617852E44006C057B /* thread.cpp */,
 				94454E3717852E44006C057B /* thread.h */,
+				55758F5125B16CDA002C812D /* cputest_cpu.c */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1870,7 +1872,7 @@
 				8715A8F31D6E421E003ADE26 /* snes.cpp */,
 				8715A8F41D6E421E003ADE26 /* snes.h */,
 			);
-			name = cheat_formats;
+			path = cheat_formats;
 			sourceTree = "<group>";
 		};
 		8715A8FC1D6E44CD003ADE26 /* m68k */ = {
@@ -4527,6 +4529,7 @@
 				8CB3DE9917F1DE5E0090372A /* guncon.cpp in Sources */,
 				94817C3F1922B75000FDFC99 /* v810_fp_ops.cpp in Sources */,
 				8CB3DD6917F1DE5E0090372A /* system.cpp in Sources */,
+				55758F5225B16CDA002C812D /* cputest_cpu.c in Sources */,
 				8CB3E10A17F216950090372A /* text.cpp in Sources */,
 				8715A8F61D6E421E003ADE26 /* psx.cpp in Sources */,
 				8CB3E0CF17F211950090372A /* z80.cpp in Sources */,
@@ -4644,7 +4647,6 @@
 				8CB3E07817F1DE5E0090372A /* resolve.cpp in Sources */,
 				948D5B4718C8083D00346504 /* Stereo_Buffer.cpp in Sources */,
 				94817C441922C8E400FDFC99 /* cputest.c in Sources */,
-				94817C451922C8E400FDFC99 /* x86_cpu.c in Sources */,
 				94817C461922D29B00FDFC99 /* demo.cpp in Sources */,
 				94CFB6341A75D740001F174F /* sha256.cpp in Sources */,
 				94817C471922D36300FDFC99 /* primitives.cpp in Sources */,
