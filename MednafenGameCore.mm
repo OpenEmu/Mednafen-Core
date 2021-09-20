@@ -3444,8 +3444,8 @@ static __weak MednafenGameCore *_current;
 {
     if (!surf) {
         // BGRA pixel format
-        MDFN_PixelFormat pix_fmt(MDFN_COLORSPACE_RGB, 16, 8, 0, 24);
-        surf = new MDFN_Surface(hint, game->fb_width, game->fb_height, game->fb_width, pix_fmt);
+        //MDFN_PixelFormat pix_fmt(MDFN_COLORSPACE_RGB, 4, 16, 8, 0, 24);
+        surf = new MDFN_Surface(hint, game->fb_width, game->fb_height, game->fb_width, MDFN_PixelFormat::ARGB32_8888);
     }
 
     return surf->pixels;

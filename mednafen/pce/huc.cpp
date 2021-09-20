@@ -191,11 +191,10 @@ static void LoadSaveMemory(const std::string& path, uint8* const data, const uin
  try
  {
   std::unique_ptr<Stream> fp(possibly_gz ? (Stream*)(new GZFileStream(path, GZFileStream::MODE::READ)) : (Stream*)(new FileStream(path, FileStream::MODE_READ)));
-     // OpenEmu work around 10.11 zlib bug
-//  const uint64 fp_size_tmp = fp->size();
-//
-//  if(fp_size_tmp != len)
-//   throw MDFN_Error(0, _("Save game memory file \"%s\" is an incorrect size(%llu bytes).  The correct size is %llu bytes."), path.c_str(), (unsigned long long)fp_size_tmp, (unsigned long long)len);
+  const uint64 fp_size_tmp = fp->size();
+
+  if(fp_size_tmp != len)
+   throw MDFN_Error(0, _("Save game memory file \"%s\" is an incorrect size(%llu bytes).  The correct size is %llu bytes."), path.c_str(), (unsigned long long)fp_size_tmp, (unsigned long long)len);
 
   fp->read(data, len);
  }
@@ -511,9 +510,9 @@ void HuC_StateAction(StateMem *sm, const unsigned load, const bool data_only)
 {
  SFORMAT StateRegs[] =
  {
-  SFPTR8(PopRAM, IsPopulous ? 32768 : 0),
-  SFPTR8(TsushinRAM, IsTsushin ? 32768 : 0),
-  SFPTR8(SaveRAM, (IsPopulous || IsTsushin || BRAM_Disabled) ? 0 : 2048),
+  SFPTR8(PopRAM, IsPopulous ? 32768 : 0, SFORMAT::FORM::NVMEM),
+  SFPTR8(TsushinRAM, IsTsushin ? 32768 : 0, SFORMAT::FORM::NVMEM),
+  SFPTR8(SaveRAM, (IsPopulous || IsTsushin || BRAM_Disabled) ? 0 : 2048, SFORMAT::FORM::NVMEM),
   SFPTR8(CDRAM, CDRAM ? (8192 * 8) : 0),
   SFPTR8(SysCardRAM, SysCardRAM ? (8192 * 24) : 0),
   SFVAR(HuCSF2Latch),

@@ -38,8 +38,6 @@
 
 #include <trio/trio.h>
 
-extern MDFNGI EmulatedPCFX;
-
 namespace MDFN_IEN_PCFX
 {
 
@@ -731,11 +729,10 @@ static MDFN_COLD void LoadCommon(std::vector<CDInterface*> *CDInterfaces)
   {
    std::string save_path = MDFN_MakeFName(MDFNMKF_SAV, 0, "sav");
    GZFileStream savefp(save_path, GZFileStream::MODE::READ);
-      // OpenEmu work around 10.11 zlib bug
-//   const uint64 fp_size_tmp = savefp.size();
-//
-//   if(fp_size_tmp != 65536)
-//    throw MDFN_Error(0, _("Save game memory file \"%s\" is an incorrect size(%llu bytes).  The correct size is %llu bytes."), save_path.c_str(), (unsigned long long)fp_size_tmp, (unsigned long long)65536);
+   const uint64 fp_size_tmp = savefp.size();
+
+   if(fp_size_tmp != 65536)
+    throw MDFN_Error(0, _("Save game memory file \"%s\" is an incorrect size(%llu bytes).  The correct size is %llu bytes."), save_path.c_str(), (unsigned long long)fp_size_tmp, (unsigned long long)65536);
 
    savefp.read(BackupRAM, 0x8000);
    savefp.read(ExBackupRAM, 0x8000);
@@ -929,7 +926,7 @@ static MDFN_COLD void LoadCD(std::vector<CDInterface*> *CDInterfaces)
 
 static void SetMedia(uint32 drive_idx, uint32 state_idx, uint32 media_idx, uint32 orientation_idx)
 {
- const RMD_Layout* rmd = EmulatedPCFX.RMD;
+ const RMD_Layout* rmd = MDFNGameInfo->RMD;
  const RMD_Drive* rd = &rmd->Drives[drive_idx];
  const RMD_State* rs = &rd->PossibleStates[state_idx];
 
@@ -991,8 +988,8 @@ static void StateAction(StateMem *sm, const unsigned load, const bool data_only)
   SFVAR(RAM_LPA),
   SFVAR(BackupControl),
   SFVAR(ExBusReset),
-  SFPTR8(BackupRAM, BRAMDisabled ? 0 : 0x8000),
-  SFPTR8(ExBackupRAM, BRAMDisabled ? 0 : 0x8000),
+  SFPTR8(BackupRAM, BRAMDisabled ? 0 : 0x8000, SFORMAT::FORM::NVMEM),
+  SFPTR8(ExBackupRAM, BRAMDisabled ? 0 : 0x8000, SFORMAT::FORM::NVMEM),
 
   SFEND
  };
@@ -1089,7 +1086,7 @@ static const FileExtensionSpecStruct KnownExtensions[] =
 
 using namespace MDFN_IEN_PCFX;
 
-MDFNGI EmulatedPCFX =
+MDFN_HIDE extern const MDFNGI EmulatedPCFX =
 {
  "pcfx",
  "PC-FX",
@@ -1130,6 +1127,9 @@ MDFNGI EmulatedPCFX =
  PCFXSettings,
  MDFN_MASTERCLOCK_FIXED(PCFX_MASTER_CLOCK),
  0,
+
+ EVFSUPPORT_NONE,
+
  true,  // Multires possible?
 
  0,   // lcm_width

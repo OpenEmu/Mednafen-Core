@@ -23,7 +23,6 @@
 
 /* Begin PBXBuildFile section */
 		3DCDE7191BD2D8FD00392D0D /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9453E37C1AC5E1E9004F42AD /* libvorbis.a */; };
-		3DDC76191BD2D825002E7674 /* CDAFReader_SF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94B082471A8697EF00D3C0BC /* CDAFReader_SF.cpp */; };
 		3DDC761A1BD2D86B002E7674 /* libsndfile_FLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27FF3AC11B1CF78F002F941E /* libsndfile_FLAC.a */; };
 		55758F5225B16CDA002C812D /* cputest_cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 55758F5125B16CDA002C812D /* cputest_cpu.c */; };
 		8240861B0FFDD64600F0FE7D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8240861A0FFDD64600F0FE7D /* libz.dylib */; };
@@ -54,6 +53,11 @@
 		8715A97D1D6E54E3003ADE26 /* gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A93B1D6E5273003ADE26 /* gamepad.cpp */; };
 		8715A97E1D6E54E3003ADE26 /* mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A93D1D6E5273003ADE26 /* mouse.cpp */; };
 		87179166244CBA8900DA5B87 /* MTStreamReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87179165244CBA8900DA5B87 /* MTStreamReader.cpp */; };
+		872FABF126F706C9009BB457 /* testsexp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 872FABF026F706C9009BB457 /* testsexp.cpp */; };
+		872FABF726F70748009BB457 /* Time_POSIX.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 872FABF426F70748009BB457 /* Time_POSIX.cpp */; };
+		872FABFB26F70896009BB457 /* convert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 872FABF926F70896009BB457 /* convert.cpp */; };
+		872FABFE26F708B7009BB457 /* CDAFReader_FLAC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 872FABFD26F708B7009BB457 /* CDAFReader_FLAC.cpp */; };
+		872FAC0126F708C1009BB457 /* CDAFReader_PCM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 872FAC0026F708C1009BB457 /* CDAFReader_PCM.cpp */; };
 		872FC2B422A96F6800AF67DE /* ExtMemStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 872FC2B222A96F6700AF67DE /* ExtMemStream.cpp */; };
 		872FC2B822A96FF300AF67DE /* NativeVFS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 872FC2B622A96FF300AF67DE /* NativeVFS.cpp */; };
 		872FC2BC22A9713200AF67DE /* VirtualFS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 872FC2BB22A9713200AF67DE /* VirtualFS.cpp */; };
@@ -78,7 +82,6 @@
 		8795543F1EB66E2E00A08C56 /* extram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 879554381EB66E2E00A08C56 /* extram.cpp */; };
 		879554401EB66E2E00A08C56 /* rom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8795543A1EB66E2E00A08C56 /* rom.cpp */; };
 		879554411EB6796100A08C56 /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 879554361EB66E2E00A08C56 /* debug.cpp */; };
-		87A30A421E57A44500114B03 /* Time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87A30A401E57A44500114B03 /* Time.cpp */; };
 		87A30A471E57CBF700114B03 /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87A30A451E57CBF700114B03 /* string.cpp */; };
 		87C6560320B9D7A400D25A97 /* ZIPReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87C6560120B9D7A300D25A97 /* ZIPReader.cpp */; };
 		87C6560620B9DA8300D25A97 /* jpkeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87C6560520B9DA8200D25A97 /* jpkeyboard.cpp */; };
@@ -424,6 +427,16 @@
 		8715A97F1D6E557F003ADE26 /* OESaturnSystemResponderClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OESaturnSystemResponderClient.h; path = ../OpenEmu/SystemPlugins/Saturn/OESaturnSystemResponderClient.h; sourceTree = "<group>"; };
 		87179164244CBA8800DA5B87 /* MTStreamReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTStreamReader.h; sourceTree = "<group>"; };
 		87179165244CBA8900DA5B87 /* MTStreamReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MTStreamReader.cpp; sourceTree = "<group>"; };
+		872FABEF26F706C9009BB457 /* testsexp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testsexp.h; sourceTree = "<group>"; };
+		872FABF026F706C9009BB457 /* testsexp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testsexp.cpp; sourceTree = "<group>"; };
+		872FABF426F70748009BB457 /* Time_POSIX.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Time_POSIX.cpp; sourceTree = "<group>"; };
+		872FABF526F70748009BB457 /* Time_Win32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Time_Win32.cpp; sourceTree = "<group>"; };
+		872FABF926F70896009BB457 /* convert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = convert.cpp; sourceTree = "<group>"; };
+		872FABFA26F70896009BB457 /* convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = convert.h; sourceTree = "<group>"; };
+		872FABFC26F708B7009BB457 /* CDAFReader_FLAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAFReader_FLAC.h; sourceTree = "<group>"; };
+		872FABFD26F708B7009BB457 /* CDAFReader_FLAC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CDAFReader_FLAC.cpp; sourceTree = "<group>"; };
+		872FABFF26F708C1009BB457 /* CDAFReader_PCM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAFReader_PCM.h; sourceTree = "<group>"; };
+		872FAC0026F708C1009BB457 /* CDAFReader_PCM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CDAFReader_PCM.cpp; sourceTree = "<group>"; };
 		872FC2B222A96F6700AF67DE /* ExtMemStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtMemStream.cpp; sourceTree = "<group>"; };
 		872FC2B322A96F6800AF67DE /* ExtMemStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtMemStream.h; sourceTree = "<group>"; };
 		872FC2B522A96FF200AF67DE /* MThreading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MThreading.h; sourceTree = "<group>"; };
@@ -505,7 +518,6 @@
 		87A30A3D1E57A41300114B03 /* Net_POSIX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Net_POSIX.h; sourceTree = "<group>"; };
 		87A30A3E1E57A41300114B03 /* Net_WS2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Net_WS2.cpp; sourceTree = "<group>"; };
 		87A30A3F1E57A41300114B03 /* Net_WS2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Net_WS2.h; sourceTree = "<group>"; };
-		87A30A401E57A44500114B03 /* Time.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Time.cpp; sourceTree = "<group>"; };
 		87A30A411E57A44500114B03 /* Time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Time.h; sourceTree = "<group>"; };
 		87A30A431E57AE4D00114B03 /* shader_scale2x.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; path = shader_scale2x.inc; sourceTree = "<group>"; };
 		87A30A441E57BCCC00114B03 /* 190.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = 190.cpp; sourceTree = "<group>"; };
@@ -1991,6 +2003,15 @@
 			name = notes;
 			sourceTree = "<group>";
 		};
+		872FABF226F70748009BB457 /* time */ = {
+			isa = PBXGroup;
+			children = (
+				872FABF426F70748009BB457 /* Time_POSIX.cpp */,
+				872FABF526F70748009BB457 /* Time_Win32.cpp */,
+			);
+			path = time;
+			sourceTree = "<group>";
+		};
 		872FC2C922A9761800AF67DE /* mthreading */ = {
 			isa = PBXGroup;
 			children = (
@@ -2216,7 +2237,9 @@
 				8CB3DC1717F1DE5D0090372A /* string */,
 				8CB3DC1F17F1DE5D0090372A /* tests.cpp */,
 				8CB3DC2017F1DE5D0090372A /* tests.h */,
-				87A30A401E57A44500114B03 /* Time.cpp */,
+				872FABF026F706C9009BB457 /* testsexp.cpp */,
+				872FABEF26F706C9009BB457 /* testsexp.h */,
+				872FABF226F70748009BB457 /* time */,
 				87A30A411E57A44500114B03 /* Time.h */,
 				8CB3DC2117F1DE5D0090372A /* tremor */,
 				8CB3DC4D17F1DE5D0090372A /* trio */,
@@ -2241,8 +2264,12 @@
 				8CB3D52717F1DE5A0090372A /* CDAccess_CCD.h */,
 				8CB3D52817F1DE5A0090372A /* CDAccess_Image.cpp */,
 				8CB3D52917F1DE5A0090372A /* CDAccess_Image.h */,
+				872FABFD26F708B7009BB457 /* CDAFReader_FLAC.cpp */,
+				872FABFC26F708B7009BB457 /* CDAFReader_FLAC.h */,
 				94B082451A8697EF00D3C0BC /* CDAFReader_MPC.cpp */,
 				94B082461A8697EF00D3C0BC /* CDAFReader_MPC.h */,
+				872FAC0026F708C1009BB457 /* CDAFReader_PCM.cpp */,
+				872FABFF26F708C1009BB457 /* CDAFReader_PCM.h */,
 				94B082471A8697EF00D3C0BC /* CDAFReader_SF.cpp */,
 				94B082481A8697EF00D3C0BC /* CDAFReader_SF.h */,
 				94B082491A8697EF00D3C0BC /* CDAFReader_Vorbis.cpp */,
@@ -4200,6 +4227,8 @@
 		8CB3DC6517F1DE5D0090372A /* video */ = {
 			isa = PBXGroup;
 			children = (
+				872FABF926F70896009BB457 /* convert.cpp */,
+				872FABFA26F70896009BB457 /* convert.h */,
 				8CB3DC6617F1DE5D0090372A /* Deinterlacer.cpp */,
 				8CB3DC6717F1DE5D0090372A /* Deinterlacer.h */,
 				872FC2DF22A97A9C00AF67DE /* Deinterlacer_Blend.cpp */,
@@ -4453,12 +4482,14 @@
 				824088360FFDDCF400F0FE7D /* MednafenGameCore.mm in Sources */,
 				8CB3E10B17F2169A0090372A /* video.cpp in Sources */,
 				872FC2BC22A9713200AF67DE /* VirtualFS.cpp in Sources */,
+				872FABF126F706C9009BB457 /* testsexp.cpp in Sources */,
 				8CB3DE9E17F1DE5E0090372A /* negcon.cpp in Sources */,
 				94CFB6251A75D6CB001F174F /* ZLInflateFilter.cpp in Sources */,
 				8715A9121D6E49A3003ADE26 /* huc6280.cpp in Sources */,
 				8CB3DE8517F1DE5E0090372A /* soundbox.cpp in Sources */,
 				8CB3E0BA17F20F6F0090372A /* galois.cpp in Sources */,
 				8CB3E0EA17F214030090372A /* PSFLoader.cpp in Sources */,
+				872FABF726F70748009BB457 /* Time_POSIX.cpp in Sources */,
 				8CB3DE5A17F1DE5E0090372A /* input.cpp in Sources */,
 				8CB3E04F17F1DE5E0090372A /* res012.c in Sources */,
 				8CB3DE5517F1DE5E0090372A /* hes.cpp in Sources */,
@@ -4474,7 +4505,6 @@
 				8CB3DE7517F1DE5E0090372A /* huc6273.cpp in Sources */,
 				8CB3E0BC17F20F810090372A /* crc32.cpp in Sources */,
 				8CB3DEA717F1DE5E0090372A /* sio.cpp in Sources */,
-				3DDC76191BD2D825002E7674 /* CDAFReader_SF.cpp in Sources */,
 				8CB3E0FF17F216370090372A /* mapping0.c in Sources */,
 				8CB3E0FB17F2161B0090372A /* registry.c in Sources */,
 				94817C3B1922B53900FDFC99 /* okiadpcm.cpp in Sources */,
@@ -4483,6 +4513,7 @@
 				8CB3DEA217F1DE5E0090372A /* mdec.cpp in Sources */,
 				8CB3E08417F1DE5E0090372A /* tcache.cpp in Sources */,
 				8CB3E0C717F210B70090372A /* general.cpp in Sources */,
+				872FAC0126F708C1009BB457 /* CDAFReader_PCM.cpp in Sources */,
 				8CB3E06417F1DE5E0090372A /* vsu.cpp in Sources */,
 				8CB3DE8E17F1DE5E0090372A /* frontio.cpp in Sources */,
 				8CB3E04517F1DE5E0090372A /* framing.c in Sources */,
@@ -4561,6 +4592,7 @@
 				8CB3E10417F216630090372A /* Deinterlacer.cpp in Sources */,
 				8CB3E07B17F1DE5E0090372A /* gfx.cpp in Sources */,
 				8CB3DE7317F1DE5E0090372A /* fxscsi.cpp in Sources */,
+				872FABFE26F708B7009BB457 /* CDAFReader_FLAC.cpp in Sources */,
 				87179166244CBA8900DA5B87 /* MTStreamReader.cpp in Sources */,
 				94CFB6471A75DB60001F174F /* gpu_sprite.cpp in Sources */,
 				8CB3DE7817F1DE5E0090372A /* input.cpp in Sources */,
@@ -4597,7 +4629,6 @@
 				8CB3DE5D17F1DE5E0090372A /* mcgenjin.cpp in Sources */,
 				8CB3DE8317F1DE5E0090372A /* pcfx.cpp in Sources */,
 				94CFB6461A75DB60001F174F /* gpu_polygon.cpp in Sources */,
-				87A30A421E57A44500114B03 /* Time.cpp in Sources */,
 				8CB3DE9817F1DE5E0090372A /* gamepad.cpp in Sources */,
 				8CB3E0D317F211FE0090372A /* vdc.cpp in Sources */,
 				8CB3DE8417F1DE5E0090372A /* rainbow.cpp in Sources */,
@@ -4650,6 +4681,7 @@
 				94817C461922D29B00FDFC99 /* demo.cpp in Sources */,
 				94CFB6341A75D740001F174F /* sha256.cpp in Sources */,
 				94817C471922D36300FDFC99 /* primitives.cpp in Sources */,
+				872FABFB26F70896009BB457 /* convert.cpp in Sources */,
 				8715A96C1D6E547C003ADE26 /* cart.cpp in Sources */,
 				8715A96D1D6E547C003ADE26 /* cdb.cpp in Sources */,
 				8715A96E1D6E547C003ADE26 /* db.cpp in Sources */,
@@ -4745,20 +4777,21 @@
 					"\"$(SRCROOT)/mednafen/hw_sound\"",
 					"\"$(SRCROOT)/mednafen/hw_video\"",
 					"\"$(SRCROOT)/mednafen/trio\"",
-					"\"$(SRCROOT)/libsndfile\"",
+					"\"$(SRCROOT)/FLAC\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "\"$(USER_LIBRARY_DIR)/Application Support/OpenEmu/Cores\"";
 				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/FLAC",
 					"$(SRCROOT)/libsndfile",
 					"$(PROJECT_DIR)/libsndfile",
 				);
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"1.26.1\\\"",
+					"-DMEDNAFEN_VERSION=\\\"1.27.0-UNSTABLE\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00102601",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00102700",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DWANT_LYNX_EMU",
@@ -4783,7 +4816,7 @@
 					"-DSIZEOF_SIZE_T=8",
 					"-DSIZEOF_VOID_P=8",
 					"-DSIZEOF_DOUBLE=8",
-					"-DHAVE_LIBSNDFILE",
+					"-DHAVE_LIBFLAC",
 					"-DHAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE_NP",
 					"-DMDFN_PCE_VCE_AWESOMEMODE",
 					"-mllvm",
@@ -4814,20 +4847,21 @@
 					"\"$(SRCROOT)/mednafen/hw_sound\"",
 					"\"$(SRCROOT)/mednafen/hw_video\"",
 					"\"$(SRCROOT)/mednafen/trio\"",
-					"\"$(SRCROOT)/libsndfile\"",
+					"\"$(SRCROOT)/FLAC\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "\"$(USER_LIBRARY_DIR)/Application Support/OpenEmu/Cores\"";
 				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/FLAC",
 					"$(SRCROOT)/libsndfile",
 					"$(PROJECT_DIR)/libsndfile",
 				);
 				OTHER_CFLAGS = (
 					"-fwrapv",
 					"-DHAVE_MKDIR",
-					"-DMEDNAFEN_VERSION=\\\"1.26.1\\\"",
+					"-DMEDNAFEN_VERSION=\\\"1.27.0-UNSTABLE\\\"",
 					"-DPACKAGE=\\\"mednafen\\\"",
-					"-DMEDNAFEN_VERSION_NUMERIC=0x00102601",
+					"-DMEDNAFEN_VERSION_NUMERIC=0x00102700",
 					"-DPSS_STYLE=1",
 					"-DMPC_FIXED_POINT",
 					"-DWANT_LYNX_EMU",
@@ -4852,7 +4886,7 @@
 					"-DSIZEOF_SIZE_T=8",
 					"-DSIZEOF_VOID_P=8",
 					"-DSIZEOF_DOUBLE=8",
-					"-DHAVE_LIBSNDFILE",
+					"-DHAVE_LIBFLAC",
 					"-DHAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE_NP",
 					"-DMDFN_PCE_VCE_AWESOMEMODE",
 					"-mllvm",
