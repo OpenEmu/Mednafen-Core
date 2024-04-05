@@ -26,7 +26,6 @@
  */
 
 #include "mednafen.h"
-#include "settings-driver.h"
 #include "state-driver.h"
 #include "mednafen-driver.h"
 #include "MemoryStream.h"
@@ -104,14 +103,10 @@ static __weak MednafenGameCore *_current;
 
 - (void)initializeMednafen
 {
-    MDFNI_InitializeModules();
-
-    std::vector<MDFNSetting> settings;
-
     NSString *batterySavesDirectory = self.batterySavesDirectoryPath;
     NSString *biosPath = self.biosDirectoryPath;
 
-    MDFNI_Initialize(biosPath.fileSystemRepresentation, settings);
+    MDFNI_InitFinalize(biosPath.fileSystemRepresentation);
 
     // Set bios/system file and memcard save paths
     MDFNI_SetSetting("pce.cdbios", [[biosPath stringByAppendingPathComponent:@"syscard3"] stringByAppendingPathExtension:@"pce"].fileSystemRepresentation); // PCE CD BIOS
@@ -510,7 +505,8 @@ static __weak MednafenGameCore *_current;
       @"SLUS-01293" : @4, // Hot Wheels - Extreme Racing (USA)
       @"SLPM-86651" : @4, // Hunter X Hunter - Maboroshi no Greed Island (Japan)
       @"SLES-00309" : @4, // Hyper Tennis - Final Match (Europe)
-      @"SLES-00309" : @4, // Hyper Final Match Tennis (Japan)
+      // "Duplicate key in dictionary literal"
+//      @"SLES-00309" : @4, // Hyper Final Match Tennis (Japan)
       @"SLES-02550" : @4, // International Superstar Soccer (Europe) (En,De)
       @"SLES-03149" : @4, // International Superstar Soccer (Europe) (Fr,Es,It)
       @"SLPM-86317" : @4, // Jikkyou J. League 1999 - Perfect Striker (Japan)
@@ -1838,8 +1834,10 @@ static __weak MednafenGameCore *_current;
       @"SLPM-86936" : @3, // Mermaid no Kisetsu (Japan) (Disc 3)
       @"SLPS-00680" : @2, // Meta-Ph-List Gamma X 2297 (Japan) (Disc 1)
       @"SLPS-00681" : @2, // Meta-Ph-List Gamma X 2297 (Japan) (Disc 2)
-      @"SLPS-00680" : @2, // Meta-Ph-List Mu.X.2297 (Japan) (Disc 1)
-      @"SLPS-00681" : @2, // Meta-Ph-List Mu.X.2297 (Japan) (Disc 2)
+      // "Duplicate key in dictionary literal"
+//      @"SLPS-00680" : @2, // Meta-Ph-List Mu.X.2297 (Japan) (Disc 1)
+      // "Duplicate key in dictionary literal"
+//      @"SLPS-00681" : @2, // Meta-Ph-List Mu.X.2297 (Japan) (Disc 2)
       @"SLPS-00867" : @2, // Metal Angel 3 (Japan) (Disc 1)
       @"SLPS-00868" : @2, // Metal Angel 3 (Japan) (Disc 2)
       @"SLPM-86247" : @2, // Metal Gear Solid - Integral (Japan) (En,Ja) (Disc 1)
@@ -1989,8 +1987,10 @@ static __weak MednafenGameCore *_current;
       @"SLES-13752" : @2, // Quiz Show (Italy) (Disc 2)
       @"SLES-00519" : @2, // Raven Project, The (Europe) (En,Fr,De) (Disc 1)
       @"SLES-10519" : @2, // Raven Project, The (Europe) (En,Fr,De) (Disc 2)
-      @"SLES-00519" : @2, // Raven Project, The (Germany) (En,Fr,De) (Disc 1)
-      @"SLES-10519" : @2, // Raven Project, The (Germany) (En,Fr,De) (Disc 2)
+      // "Duplicate key in dictionary literal"
+//      @"SLES-00519" : @2, // Raven Project, The (Germany) (En,Fr,De) (Disc 1)
+      // "Duplicate key in dictionary literal"
+//      @"SLES-10519" : @2, // Raven Project, The (Germany) (En,Fr,De) (Disc 2)
       @"SLPS-01840" : @2, // Refrain Love 2 (Japan) (Disc 1)
       @"SLPS-01841" : @2, // Refrain Love 2 (Japan) (Disc 2)
       @"SLPS-01588" : @2, // Renai Kouza - Real Age (Japan) (Disc 1)
