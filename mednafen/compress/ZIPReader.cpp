@@ -2,7 +2,7 @@
 /* Mednafen - Multi-system Emulator                                           */
 /******************************************************************************/
 /* ZIPReader.cpp:
-**  Copyright (C) 2018-2021 Mednafen Team
+**  Copyright (C) 2018-2024 Mednafen Team
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -81,11 +81,11 @@ StreamViewFilter::~StreamViewFilter()
 
 uint64 StreamViewFilter::read(void *data, uint64 count, bool error_on_eos)
 {
+ const uint64 size_ = ss_bound_pos - ss_start_pos;
  uint64 cc = count;
  uint64 ret;
 
- cc = std::min<uint64>(cc, ss_bound_pos - ss_start_pos);
- cc = std::min<uint64>(cc, ss_bound_pos - std::min<uint64>(ss_bound_pos, pos));
+ cc = std::min<uint64>(cc, size_ - std::min<uint64>(size_, pos));
 
  if(cc < count && error_on_eos)
   throw MDFN_Error(0, _("Error reading from %s: %s"), vfcontext.c_str(), _("Unexpected EOF"));

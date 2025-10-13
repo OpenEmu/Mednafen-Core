@@ -918,10 +918,11 @@ static void LoadWOZ(Stream* sp, FloppyDisk* disk)
  {
   const uint32 chunk_id = MDFN_de32lsb(&chunk_header[0]);
   const uint32 chunk_size = MDFN_de32lsb(&chunk_header[4]);
+  const uint64 chunk_data_pos = sp->tell();
 
   if(chunk_id == 0x4F464E49)	// INFO
   {
-   if(sp->tell() != 20)
+   if(chunk_data_pos != 20)
     throw MDFN_Error(0, _("Required chunk \"%s\" is at the wrong offset."), "INFO");
 
    if(chunk_size != 60)
@@ -1006,7 +1007,7 @@ static void LoadWOZ(Stream* sp, FloppyDisk* disk)
   }
   else if(chunk_id == 0x50414D54)	// TMAP
   {
-   if(sp->tell() != 88)
+   if(chunk_data_pos != 88)
     throw MDFN_Error(0, _("Required chunk \"%s\" is at the wrong offset."), "TMAP");
 
    if(chunk_size != 160)
@@ -1024,7 +1025,7 @@ static void LoadWOZ(Stream* sp, FloppyDisk* disk)
   }
   else if(chunk_id == 0x534B5254)	// TRKS
   {
-   if(sp->tell() != 256)
+   if(chunk_data_pos != 256)
     throw MDFN_Error(0, _("Required chunk \"%s\" is at the wrong offset."), "TRKS");
 
    src_tracks.reset(new FloppyDisk::Track[num_src_tracks]);
@@ -1139,6 +1140,7 @@ static void LoadWOZ(Stream* sp, FloppyDisk* disk)
     printf("%c", sp->get_u8());
   }
 */
+  sp->seek(chunk_data_pos + chunk_size, SEEK_SET);
  }
 
  if(!(required_chunks & 1))

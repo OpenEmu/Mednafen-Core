@@ -2619,7 +2619,7 @@ static void Load(GameFile* gf)
    for(unsigned A = 0xC05E; A < 0xC060; A++)
     SetRWHandlers(A, RWSoftSwitch_AN3_IIE, RWSoftSwitch_AN3_IIE);
 
-   for(unsigned A = 0xC080; A < 0xC08F; A++)
+   for(unsigned A = 0xC080; A < 0xC090; A++)
     SetRWHandlers(A, RWLangCardControl_IIE<true>, RWLangCardControl_IIE<false>);
 
    for(unsigned A = 0xD000; A < 0xE000; A++)
@@ -2632,7 +2632,7 @@ static void Load(GameFile* gf)
   {
    assert(!EnableROMCard);
 
-   for(unsigned A = 0xC080; A < 0xC08F; A++)
+   for(unsigned A = 0xC080; A < 0xC090; A++)
     SetRWHandlers(A, RWLangCardControl<true>, RWLangCardControl<false>);
 
    for(unsigned A = 0xD000; A < 0xE000; A++)
@@ -2645,7 +2645,7 @@ static void Load(GameFile* gf)
   {
    if(EnableROMCard)
    {
-    for(unsigned A = 0xC080; A < 0xC08F; A++)
+    for(unsigned A = 0xC080; A < 0xC090; A++)
      SetRWHandlers(A, RWROMCardControl, RWROMCardControl);
    }
 
