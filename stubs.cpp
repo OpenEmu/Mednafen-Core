@@ -1,8 +1,8 @@
 #include "driver.h"
 
-void Mednafen::MDFND_OutputNotice(MDFN_NoticeType t, const char* s) noexcept {}
+//void Mednafen::MDFND_OutputNotice(MDFN_NoticeType t, const char* s) noexcept {}
 
-void Mednafen::MDFND_OutputInfo(const char *s) noexcept {}
+//void Mednafen::MDFND_OutputInfo(const char *s) noexcept {}
 
 void Mednafen::MDFND_MidSync(EmulateSpecStruct *espec, const unsigned flags) {}
 

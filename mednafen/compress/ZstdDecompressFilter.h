@@ -24,7 +24,7 @@
 
 #include "DecompressFilter.h"
 
-#include "zstd/zstd.h"
+#include <zstd/zstd.h>
 
 namespace Mednafen
 {

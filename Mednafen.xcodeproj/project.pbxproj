@@ -54,7 +54,6 @@
 		8715A8F51D6E421E003ADE26 /* gb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A8EF1D6E421E003ADE26 /* gb.cpp */; };
 		8715A8F61D6E421E003ADE26 /* psx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A8F11D6E421E003ADE26 /* psx.cpp */; };
 		8715A8F71D6E421E003ADE26 /* snes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A8F31D6E421E003ADE26 /* snes.cpp */; };
-		8715A9001D6E4606003ADE26 /* m68k.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A8FE1D6E4606003ADE26 /* m68k.cpp */; };
 		8715A9121D6E49A3003ADE26 /* huc6280.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A9101D6E49A3003ADE26 /* huc6280.cpp */; settings = {COMPILER_FLAGS = "-O1"; }; };
 		8715A96C1D6E547C003ADE26 /* cart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A9301D6E524E003ADE26 /* cart.cpp */; };
 		8715A96D1D6E547C003ADE26 /* cdb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A9321D6E524E003ADE26 /* cdb.cpp */; };
@@ -306,6 +305,7 @@
 		94CFB6581A75DC2D001F174F /* quicklz.c in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6541A75DC2D001F174F /* quicklz.c */; };
 		94CFB65B1A75DC7C001F174F /* state_rewind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94CFB6591A75DC7B001F174F /* state_rewind.cpp */; };
 		94FD853218C7F53C001B426D /* pcecd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94FD853018C7F53C001B426D /* pcecd.cpp */; };
+		DB93EA6E2E9D901D00416716 /* m68k.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8715A8FE1D6E4606003ADE26 /* m68k.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -4773,7 +4773,6 @@
 				8CB3DE9C17F1DE5E0090372A /* mouse.cpp in Sources */,
 				8CB3E0BB17F20F750090372A /* lec.cpp in Sources */,
 				8CB3E07417F1DE5E0090372A /* dis_decode.cpp in Sources */,
-				8715A9001D6E4606003ADE26 /* m68k.cpp in Sources */,
 				8CB3DE7917F1DE5E0090372A /* interrupt.cpp in Sources */,
 				8CB3DE8D17F1DE5E0090372A /* dma.cpp in Sources */,
 				8CB3E0F517F215DF0090372A /* tests.cpp in Sources */,
@@ -4900,6 +4899,7 @@
 				87D381001D962E8800FC657D /* TLCS900h_interpret_src.cpp in Sources */,
 				87D381011D962E8800FC657D /* TLCS900h_registers.cpp in Sources */,
 				87D381021D962E8800FC657D /* Z80_interface.cpp in Sources */,
+				DB93EA6E2E9D901D00416716 /* m68k.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4930,7 +4930,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.32.0;
+				CURRENT_PROJECT_VERSION = 1.32.1;
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					"$(inherited)",
 					ARCH_X86_64,
@@ -5002,7 +5002,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.32.0;
+				CURRENT_PROJECT_VERSION = 1.32.1;
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					"$(inherited)",
 					ARCH_X86_64,

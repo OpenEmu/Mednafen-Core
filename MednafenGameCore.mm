@@ -103,6 +103,8 @@ static __weak MednafenGameCore *_current;
 
 - (void)initializeMednafen
 {
+    MDFNI_Init();
+    
     NSString *batterySavesDirectory = self.batterySavesDirectoryPath;
     NSString *biosPath = self.biosDirectoryPath;
 
@@ -3982,3 +3984,12 @@ const int WSMap[]   = { 0, 2, 3, 1, 4, 6, 7, 5, 9, 10, 8, 11 };
 }
 
 @end
+
+void Mednafen::MDFND_OutputNotice(MDFN_NoticeType t, const char* s) noexcept {
+    NSLog(@"[Mednafen] Notice: %s", s);
+}
+
+void Mednafen::MDFND_OutputInfo(const char *s) noexcept {
+    NSLog(@"[Mednafen] Info: %s", s);
+
+}
